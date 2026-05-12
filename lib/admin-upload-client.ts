@@ -1,6 +1,11 @@
 /** Client-side upload to `/api/admin/upload` (cookie session). */
 
+const MAX_BYTES = 3 * 1024 * 1024;
+
 export async function uploadAdminImage(file: File): Promise<string> {
+  if (file.size > MAX_BYTES) {
+    throw new Error('Image must be 3MB or smaller.');
+  }
   const fd = new FormData();
   fd.append('file', file);
   const res = await fetch('/api/admin/upload', {

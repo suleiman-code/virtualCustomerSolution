@@ -433,7 +433,7 @@ export function MongoBlogsAdminPanel() {
                   id="blog-image"
                   value={form.image}
                   onChange={(e) => setForm((f) => ({ ...f, image: e.target.value }))}
-                  placeholder="/uploads/... or https://"
+                  placeholder="/api/cms-image/... or https://"
                   className="border-white/15 bg-white/[0.04] text-white"
                 />
               </div>

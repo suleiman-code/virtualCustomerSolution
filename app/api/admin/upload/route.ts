@@ -1,12 +1,12 @@
-import { mkdir, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
-import { randomUUID } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { requireAdminApi } from '@/lib/require-admin-api';
+import { insertCmsImage } from '@/lib/cms-images';
+import { mongoUnavailablePayload } from '@/lib/mongodb';
 
 export const runtime = 'nodejs';
 
-const MAX_BYTES = 8 * 1024 * 1024;
+/** Max upload size (MongoDB + Vercel-friendly; filesystem is not used on serverless). */
+const MAX_BYTES = 3 * 1024 * 1024;
 
 /** MIME types we persist after validation + sniffing. */
 const ALLOWED = new Set([
@@ -158,7 +158,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Empty file' }, { status: 400 });
   }
   if (buf.length > MAX_BYTES) {
-    return NextResponse.json({ error: 'File too large (max 8MB)' }, { status: 400 });
+    return NextResponse.json({ error: 'File too large (max 3MB)' }, { status: 400 });
   }
 
   let type = ((file as File).type || '').trim().toLowerCase();
@@ -193,10 +193,22 @@ export async function POST(req: Request) {
   }
 
   const ext = MIME_TO_EXT[type] ?? 'bin';
-  const name = `${randomUUID()}.${ext}`;
-  const dir = join(process.cwd(), 'public', 'uploads');
-  await mkdir(dir, { recursive: true });
-  await writeFile(join(dir, name), buf);
+  const safeBase =
+    fileName.replace(/[^a-zA-Z0-9._-]+/g, '_').slice(0, 120) || `upload.${ext}`;
 
-  return NextResponse.json({ url: `/uploads/${name}` });
+  try {
+    const { publicId } = await insertCmsImage({
+      buffer: buf,
+      contentType: type,
+      filename: safeBase,
+    });
+    return NextResponse.json({ url: `/api/cms-image/${publicId}` });
+  } catch (err: unknown) {
+    console.error('[admin/upload] Mongo save failed:', err);
+    const msg = err instanceof Error ? err.message : String(err);
+    if (msg.includes('Database') || msg.includes('unavailable')) {
+      return NextResponse.json(mongoUnavailablePayload({ code: 'database_connect' }), { status: 503 });
+    }
+    return NextResponse.json({ error: 'Failed to store image' }, { status: 500 });
+  }
 }
