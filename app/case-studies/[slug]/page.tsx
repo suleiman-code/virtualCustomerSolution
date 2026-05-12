@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { caseStudies, getCaseStudyBySlug, getAllSlugs } from "@/lib/case-studies";
+import { FREE_AUDIT_CONTACT_HREF } from "@/lib/paths";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -313,7 +314,7 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
               audit and we will show you where the biggest opportunities are.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
-              <a href="/free-growth-audit" className="btn-primary">
+              <a href={FREE_AUDIT_CONTACT_HREF} className="btn-primary">
                 Get Your Free Growth Audit
               </a>
               <Link href="/case-studies" className="btn-outline">

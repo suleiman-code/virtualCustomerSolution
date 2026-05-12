@@ -1,14 +1,15 @@
 'use client'
 
 import { Suspense, useState } from 'react'
+import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Lock, Loader2, ShieldCheck, User as UserIcon } from 'lucide-react'
+import { ArrowLeft, Lock, Loader2, ShieldCheck, User as UserIcon } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 function LoginInner() {
   const router = useRouter()
   const search = useSearchParams()
-  const next = search.get('next') || '/admin/leads'
+  const next = search.get('next') || '/admin'
 
   const [user, setUser] = useState('')
   const [pass, setPass] = useState('')
@@ -40,7 +41,14 @@ function LoginInner() {
   }
 
   return (
-    <div className="relative min-h-screen bg-[#050505] flex items-center justify-center px-4">
+    <div className="relative flex min-h-screen items-center justify-center bg-[#050505] px-4">
+      <Link
+        href="/"
+        className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-medium text-white/60 transition hover:border-white/20 hover:text-white md:left-8 md:top-8"
+      >
+        <ArrowLeft className="h-3.5 w-3.5" />
+        Back to site
+      </Link>
       {/* Ambient glow */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute left-1/2 top-1/3 h-[500px] w-[700px] -translate-x-1/2 rounded-full bg-[#22C55E]/[0.05] blur-[130px]" />
@@ -57,10 +65,10 @@ function LoginInner() {
             <ShieldCheck className="h-7 w-7 text-[#22C55E]" />
           </div>
           <h1 className="font-display text-2xl font-bold text-white">
-            VCS Admin
+            Admin panel
           </h1>
           <p className="mt-1 text-sm text-white/50">
-            Sign in to manage leads
+            Sign in to view and manage leads
           </p>
         </div>
 
@@ -71,15 +79,15 @@ function LoginInner() {
                 Username
               </label>
               <div className="relative">
-                <UserIcon className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
+                <UserIcon className="pointer-events-none absolute left-3.5 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-[#22C55E] drop-shadow-[0_0_8px_rgba(34,197,94,0.35)]" />
                 <input
                   type="text"
                   value={user}
                   onChange={(e) => setUser(e.target.value)}
                   autoComplete="username"
                   required
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.02] py-3.5 pl-11 pr-4 text-sm text-white placeholder:text-white/30 focus:border-[#22C55E] focus:outline-none focus:ring-2 focus:ring-[#22C55E]/20"
-                  placeholder="admin"
+                  className="relative z-0 w-full rounded-xl border border-white/10 bg-white/[0.02] py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-zinc-400 focus:border-[#22C55E] focus:outline-none focus:ring-2 focus:ring-[#22C55E]/20"
+                  placeholder="Enter your username"
                 />
               </div>
             </div>
@@ -89,15 +97,15 @@ function LoginInner() {
                 Password
               </label>
               <div className="relative">
-                <Lock className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
+                <Lock className="pointer-events-none absolute left-3.5 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-[#22C55E] drop-shadow-[0_0_8px_rgba(34,197,94,0.35)]" />
                 <input
                   type="password"
                   value={pass}
                   onChange={(e) => setPass(e.target.value)}
                   autoComplete="current-password"
                   required
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.02] py-3.5 pl-11 pr-4 text-sm text-white placeholder:text-white/30 focus:border-[#22C55E] focus:outline-none focus:ring-2 focus:ring-[#22C55E]/20"
-                  placeholder="••••••••"
+                  className="relative z-0 w-full rounded-xl border border-white/10 bg-white/[0.02] py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-zinc-400 focus:border-[#22C55E] focus:outline-none focus:ring-2 focus:ring-[#22C55E]/20"
+                  placeholder="Enter your password"
                 />
               </div>
             </div>
@@ -126,7 +134,7 @@ function LoginInner() {
         </div>
 
         <p className="mt-6 text-center text-xs text-white/30">
-          Protected area · Session expires after 8 hours
+          Protected admin area
         </p>
       </motion.div>
     </div>

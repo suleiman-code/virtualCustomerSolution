@@ -1,4 +1,4 @@
----
+﻿---
 title: "Build a Marketing Dashboard Your CEO Will Love"
 excerpt: "Most marketing dashboards are built for marketers. Here's how to design dashboards that executives understand, trust, and use to make decisions."
 category: "technology"

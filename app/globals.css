@@ -24,6 +24,9 @@
 }
 
 :root {
+  /* Fixed site header — keep in sync with Navigation bar + logo height */
+  --site-header-height: 8.75rem;
+
   /* Core Colors — Matte Dark */
   --bg-primary: #0A0A0A;
   --bg-secondary: #111111;
@@ -107,6 +110,7 @@
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  scroll-padding-top: var(--site-header-height);
 }
 
 body {
@@ -322,21 +326,21 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .section-padding {
-  padding-top: 5rem;
-  padding-bottom: 5rem;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
 }
 
 @media (min-width: 768px) {
   .section-padding {
-    padding-top: 7rem;
-    padding-bottom: 7rem;
+    padding-top: 4.25rem;
+    padding-bottom: 4.25rem;
   }
 }
 
 @media (min-width: 1024px) {
   .section-padding {
-    padding-top: 8rem;
-    padding-bottom: 8rem;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
   }
 }
 
@@ -636,36 +640,6 @@ input:focus, textarea:focus, select:focus {
 }
 
 @keyframes loading { from { width: 0; } to { width: 100%; } }
-
-/* ── WhatsApp Button ────────────────────────────────── */
-
-.whatsapp-btn {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  width: 56px;
-  height: 56px;
-  background: #25D366;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
-  z-index: 50;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  animation: pulse-green 2s ease-in-out infinite;
-}
-
-.whatsapp-btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 30px rgba(37, 211, 102, 0.6);
-}
-
-@keyframes pulse-green {
-  0%, 100% { box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); }
-  50% { box-shadow: 0 4px 30px rgba(37, 211, 102, 0.8); }
-}
 
 /* ── Scroll to Top ──────────────────────────────────── */
 

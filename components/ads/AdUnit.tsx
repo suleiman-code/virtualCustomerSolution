@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useRef } from 'react';
 
-const CONSENT_KEY = 'vcs-cookie-consent';
 const ADSENSE_CLIENT = 'ca-pub-XXXXXXXXXX'; // Replace with your AdSense publisher ID
 
 type AdFormat = 'auto' | 'rectangle' | 'horizontal' | 'vertical';
@@ -40,20 +39,12 @@ export function AdUnit({
   responsive = true,
   className,
 }: AdUnitProps) {
-  const [hasConsent, setHasConsent] = useState(false);
   const [adLoaded, setAdLoaded] = useState(false);
   const adRef = useRef<HTMLModElement>(null);
   const pushed = useRef(false);
 
-  // Check cookie consent
   useEffect(() => {
-    const consent = localStorage.getItem(CONSENT_KEY);
-    setHasConsent(consent === 'accepted');
-  }, []);
-
-  // Push ad when consent is given
-  useEffect(() => {
-    if (!hasConsent || pushed.current) return;
+    if (pushed.current) return;
 
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
@@ -61,11 +52,10 @@ export function AdUnit({
     } catch {
       // AdSense not loaded yet or ad blocker active
     }
-  }, [hasConsent]);
+  }, []);
 
-  // Observe when ad content fills the slot
   useEffect(() => {
-    if (!adRef.current || !hasConsent) return;
+    if (!adRef.current) return;
 
     const observer = new MutationObserver(() => {
       if (adRef.current && adRef.current.children.length > 0) {
@@ -76,12 +66,7 @@ export function AdUnit({
 
     observer.observe(adRef.current, { childList: true, subtree: true });
     return () => observer.disconnect();
-  }, [hasConsent]);
-
-  // Don't render anything if user hasn't consented
-  if (!hasConsent) {
-    return null;
-  }
+  }, []);
 
   const inlineStyle: React.CSSProperties =
     responsive && format === 'auto'

@@ -1,4 +1,4 @@
----
+﻿---
 title: "SEO Benchmarks: What Good Actually Looks Like"
 excerpt: "Forget vague promises. Here's what realistic SEO results look like at 3, 6, and 12 months — with benchmark data broken down by industry."
 category: "digital-marketing"

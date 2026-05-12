@@ -1,11 +1,9 @@
 import type { ReactNode } from 'react';
 import { Navigation } from '@/components/layout/Navigation';
+import { ScrollToHashOnMount } from '@/components/layout/ScrollToHashOnMount';
 import { Footer } from '@/components/layout/footer';
-import { WhatsAppButton } from '@/components/sections/WhatsAppButton';
 import { ExitIntentPopup } from '@/components/sections/ExitIntentPopup';
-import { CookieConsent } from '@/components/CookieConsent';
 import { StickyCTABar } from '@/components/sections/StickyCTABar';
-import { ChatbotLoader } from '@/components/ui/ChatbotLoader';
 
 export function SiteShell({ children }: { children: ReactNode }) {
   return (
@@ -24,13 +22,11 @@ export function SiteShell({ children }: { children: ReactNode }) {
       <div className="noise-overlay pointer-events-none fixed inset-0 z-[1] hidden md:block" />
       <div className="relative z-10 flex min-h-screen flex-col">
         <Navigation />
-        <main className="flex-1">{children}</main>
+        <ScrollToHashOnMount />
+        <main className="flex-1 pt-[var(--site-header-height)]">{children}</main>
         <Footer />
-        <WhatsAppButton />
         <ExitIntentPopup />
-        <CookieConsent />
         <StickyCTABar />
-        <ChatbotLoader />
       </div>
     </div>
   );

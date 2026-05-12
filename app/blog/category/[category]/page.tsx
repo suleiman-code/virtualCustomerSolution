@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+﻿import { Metadata } from 'next';
 import Link from 'next/link';
 import { Calendar, Clock, Tag, ArrowLeft } from 'lucide-react';
 
@@ -13,7 +13,7 @@ interface PageProps {
 const CATEGORY_DESCRIPTIONS: Record<string, string> = {
   'digital-marketing':
     'Strategies, tips, and insights to grow your online presence and maximize ROI from digital marketing campaigns.',
-  'remote-workforce':
+  'virtual-workforce':
     'Best practices for building, managing, and scaling remote teams that deliver results.',
   'remote-work':
     'Tips and strategies for building, managing, and scaling remote teams from our 8+ years of experience.',

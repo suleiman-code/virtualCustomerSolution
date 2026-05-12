@@ -1,7 +1,7 @@
 export const serviceSlugs = [
   "growth-systems",
   "performance-marketing",
-  "remote-workforce",
+  "virtual-workforce",
 ] as const;
 
 export const industries = [
@@ -31,7 +31,7 @@ export type City = (typeof cities)[number];
 export const serviceNames: Record<ServiceSlug, string> = {
   "growth-systems": "Growth Systems & Reporting",
   "performance-marketing": "Performance Marketing",
-  "remote-workforce": "Remote Workforce Solutions",
+  "virtual-workforce": "Virtual Workforce Solutions",
 };
 
 export const industryNames: Record<Industry, string> = {
@@ -141,11 +141,11 @@ export function generateServiceIndustryContent(
       { title: "Landing Page and Conversion Optimization", description: "Build dedicated landing pages with messaging that resonates with your specific audience, tested and optimized for maximum conversion." },
       { title: "Budget Optimization and Scaling", description: "We allocate your budget based on data, not guesswork. Continuous optimization ensures every dollar works as hard as possible." },
     ],
-    "remote-workforce": (ind) => [
-      { title: `${ind} Operations Team`, description: `We recruit, train, and manage remote professionals who understand ${ind.toLowerCase()} workflows and can hit the ground running.` },
-      { title: "Process Documentation and SOPs", description: "We document your workflows step by step so your remote team stays consistent and new hires get up to speed fast." },
-      { title: "Performance Management System", description: "Weekly KPI scorecards, regular check-ins, and clear accountability structures keep your remote team aligned and productive." },
-      { title: "Scalable Team Architecture", description: "We design team structures that scale — from your first remote hire to a full distributed operations team." },
+    "virtual-workforce": (ind) => [
+      { title: `${ind} Operations Team`, description: `We recruit, train, and manage virtual professionals who understand ${ind.toLowerCase()} workflows and can hit the ground running.` },
+      { title: "Process Documentation and SOPs", description: "We document your workflows step by step so your virtual team stays consistent and new hires get up to speed fast." },
+      { title: "Performance Management System", description: "Weekly KPI scorecards, regular check-ins, and clear accountability structures keep your virtual team aligned and productive." },
+      { title: "Scalable Team Architecture", description: "We design team structures that scale — from your first virtual hire to a full distributed operations team." },
     ],
   };
 
@@ -166,7 +166,7 @@ export function generateServiceIndustryContent(
       "Continuous optimization based on real data",
       "Scalable campaigns that maintain efficiency",
     ],
-    "remote-workforce": [
+    "virtual-workforce": [
       "40-60% cost savings vs. equivalent local hires",
       "Access to global talent pools",
       "Faster hiring — 2-4 weeks vs. 2-4 months",
@@ -250,8 +250,8 @@ export function generateServiceCityContent(
       { title: "Conversion Rate Optimization", description: "Landing page design, A/B testing, and funnel optimization that turn more of your existing traffic into paying customers." },
       { title: "Marketing Analytics & Attribution", description: "End-to-end tracking and attribution modeling so you know exactly which channels, campaigns, and creatives drive real revenue." },
     ],
-    "remote-workforce": [
-      { title: "Dedicated Remote Team Members", description: "Full-time professionals who work exclusively on your business — recruited, trained, and managed by our team so you can focus on growth." },
+    "virtual-workforce": [
+      { title: "Dedicated Virtual Team Members", description: "Full-time professionals who work exclusively on your business — recruited, trained, and managed by our team so you can focus on growth." },
       { title: "Virtual Assistants & Admin Support", description: "Reliable administrative, scheduling, and coordination support that frees your leadership team from low-value tasks." },
       { title: "Marketing & Operations Specialists", description: "Skilled marketing coordinators, content creators, and operations professionals who integrate into your workflows seamlessly." },
       { title: "Managed Team Scaling", description: "As your needs grow, we scale your team — adding roles, training new members, and maintaining quality without disrupting your operations." },
@@ -273,7 +273,7 @@ export function generateServiceCityContent(
       "Clear attribution from first touch to closed deal",
       "Predictable lead flow that your sales team can count on",
     ],
-    "remote-workforce": [
+    "virtual-workforce": [
       "40-60% cost savings compared to local hiring",
       "Access to vetted, skilled professionals globally",
       "Full management handled by our team",

@@ -1,11 +1,10 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { FadeUp, GlassCard, SignalPoint, StaggerContainer, StaggerItem } from '@/components/ui-dp/AnimatedElements';
 import { RevealOnScroll } from '@/components/animations/ScrollAnimations';
-import { Mascot } from '@/components/layout/Mascot';
 
 const faqs = [
   {
@@ -17,7 +16,7 @@ const faqs = [
     answer: 'The usual stuff — SEO, Google Ads, social media, content, email campaigns. The difference is you get a dedicated person (or team) who actually knows your business, not a revolving door of freelancers.',
   },
   {
-    question: 'How does the remote staff thing work?',
+    question: 'How does virtual staff work?',
     answer: 'You tell us what role you need — VA, customer support, marketer, whatever. We match you with someone from our trained team. They work your hours, use your tools, and report directly to you. Think of it like hiring, minus the headache.',
   },
   {
@@ -30,7 +29,7 @@ const faqs = [
   },
   {
     question: 'How long before I see something happening?',
-    answer: 'Depends on what you need. Remote staff can start within a week. Marketing results usually start showing up in 30-60 days. We\'ll set clear expectations upfront so there are no surprises.',
+    answer: 'Depends on what you need. Virtual staff can start within a week. Marketing results usually start showing up in 30-60 days. We\'ll set clear expectations upfront so there are no surprises.',
   },
 ];
 
@@ -72,10 +71,6 @@ export function FAQSection() {
           <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--text-primary)] leading-tight">
             Questions we get asked a lot
           </h2>
-          {/* Mascot peeking from the right */}
-          <div className="hidden md:block absolute -right-4 lg:-right-16 top-0">
-            <Mascot size={72} variant="peeking" speechBubble="Got questions?" speechBubblePosition="left" disableInteraction />
-          </div>
         </FadeUp>
 
         <div className="space-y-3 max-w-3xl mx-auto">

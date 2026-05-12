@@ -453,16 +453,14 @@ export default function LeadForm() {
           className="relative z-10 mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row"
         >
           <a
-            href="https://wa.me/923151407896"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="tel:+923151407896"
             className="inline-flex items-center gap-2 rounded-full border border-[#22C55E]/40 bg-[#22C55E]/10 px-6 py-3 text-sm font-semibold text-[#22C55E] transition-all hover:bg-[#22C55E]/20"
           >
             <Phone className="h-4 w-4" />
-            WhatsApp us now
+            Call us
           </a>
           <a
-            href="/services"
+            href="/services#offerings"
             className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-6 py-3 text-sm font-semibold text-white/80 transition-all hover:bg-white/[0.06]"
           >
             Explore our services
@@ -534,7 +532,7 @@ export default function LeadForm() {
 
                   <div className="grid gap-5 sm:grid-cols-2">
                     <div>
-                      <FieldLabel>Phone / WhatsApp</FieldLabel>
+                      <FieldLabel>Phone</FieldLabel>
                       <div className="relative">
                         <Phone className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
                         <input

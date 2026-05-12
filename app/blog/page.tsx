@@ -1,40 +1,92 @@
-import { Metadata } from 'next';
+﻿import { Metadata } from 'next';
 import Link from 'next/link';
 import { Calendar, Clock, Tag, ArrowRight } from 'lucide-react';
 
 import { SiteShell } from '@/components/layout/SiteShell';
 import { getAllPosts, getAllCategories } from '@/lib/blog';
 import { BlogListClient } from './BlogListClient';
+import { getDb } from '@/lib/db';
+import { plainTextFromAnyContent } from '@/lib/markdown-excerpt';
 
 export const metadata: Metadata = {
-  title: { absolute: 'Marketing, Remote Work & Growth Blog | VCS' },
+  title: { absolute: 'Marketing, Virtual Work & Growth Blog | VCS' },
   description:
-    'Practical tips on marketing, remote teams, and growing your business. Written by our team based on what we actually do for clients.',
+    'Practical tips on marketing, virtual teams, and growing your business. Written by our team based on what we actually do for clients.',
   alternates: {
     canonical: 'https://virtualcustomersolution.com/blog',
   },
 };
 
 const breadcrumbSchema = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
   itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: "https://virtualcustomersolution.com" },
-    { "@type": "ListItem", position: 2, name: "Blog", item: "https://virtualcustomersolution.com/blog" },
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://virtualcustomersolution.com' },
+    { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://virtualcustomersolution.com/blog' },
   ],
 };
 
-export default function BlogPage() {
-  const posts = getAllPosts();
-  const categories = getAllCategories();
+export type MongoBlogCard = {
+  kind: 'mongo';
+  mongoId: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  category: string;
+  tags: string[];
+  date: string;
+  author: string;
+  readingTime: number;
+  featured: boolean;
+  image: string;
+};
 
-  // Separate featured post
-  const featuredPost = posts.find((p) => p.featured) || posts[0];
-  const remainingPosts = posts.filter((p) => p.slug !== featuredPost?.slug);
+async function getMongoBlogCards(): Promise<MongoBlogCard[]> {
+  const db = await getDb();
+  if (!db) return [];
 
-  // Serialize posts for client component
-  const serializedPosts = posts.map((post) => ({
+  const rows = await db.collection('blogs').find({}).sort({ isPinned: -1, date: -1 }).toArray();
+
+  return rows.map((doc) => {
+    const id = doc._id.toString();
+    const content = String(doc.content ?? '');
+    const words = content.trim().split(/\s+/).filter(Boolean).length;
+    const readingTime = Math.max(1, Math.ceil(words / 225));
+    const excerptField = String(doc.excerpt ?? '').trim();
+    const excerpt = excerptField || plainTextFromAnyContent(content, 220);
+
+    const rawDate = doc.date;
+    let dateStr = '';
+    if (rawDate instanceof Date) {
+      dateStr = rawDate.toISOString().slice(0, 10);
+    } else if (typeof rawDate === 'string') {
+      dateStr = rawDate.slice(0, 10);
+    }
+
+    return {
+      kind: 'mongo' as const,
+      mongoId: id,
+      slug: id,
+      title: String(doc.title ?? ''),
+      excerpt,
+      category: String(doc.category ?? 'General'),
+      tags: [] as string[],
+      date: dateStr,
+      author: String(doc.authorName ?? ''),
+      readingTime,
+      featured: !!doc.isPinned,
+      image: typeof doc.image === 'string' ? doc.image : '',
+    };
+  });
+}
+
+export default async function BlogPage() {
+  const [mongoCards, posts] = await Promise.all([getMongoBlogCards(), Promise.resolve(getAllPosts())]);
+
+  const serializedMarkdown = posts.map((post) => ({
+    kind: 'markdown' as const,
     slug: post.slug,
+    mongoId: undefined as string | undefined,
     title: post.title,
     excerpt: post.excerpt,
     category: post.category,
@@ -43,7 +95,32 @@ export default function BlogPage() {
     author: post.author,
     readingTime: post.readingTime,
     featured: post.featured,
+    image: '' as string,
   }));
+
+  const combinedPosts = [...mongoCards, ...serializedMarkdown];
+
+  const mdCategories = getAllCategories();
+  const mongoCats = mongoCards.map((c) => c.category).filter(Boolean);
+  const categories = Array.from(new Set([...mongoCats, ...mdCategories])).sort((a, b) =>
+    a.localeCompare(b, undefined, { sensitivity: 'base' })
+  );
+
+  const featuredMongo = mongoCards.find((p) => p.featured) ?? mongoCards[0];
+  const featuredMarkdown = posts.find((p) => p.featured) ?? posts[0];
+
+  const showMongoFeatured = mongoCards.length > 0 && featuredMongo;
+  const featuredPost = showMongoFeatured ? featuredMongo : null;
+  const featuredMarkdownPost = !showMongoFeatured && featuredMarkdown ? featuredMarkdown : null;
+
+  const featuredMongoId = featuredPost?.mongoId ?? null;
+  const featuredFileSlug = featuredMarkdownPost?.slug ?? null;
+
+  const listPosts = combinedPosts.filter((p) => {
+    if (p.kind === 'mongo' && featuredMongoId && p.mongoId === featuredMongoId) return false;
+    if (p.kind === 'markdown' && featuredFileSlug && p.slug === featuredFileSlug) return false;
+    return true;
+  });
 
   return (
     <SiteShell>
@@ -51,56 +128,64 @@ export default function BlogPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      <div className="pt-28 pb-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="pb-20 pt-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Header */}
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-[#F5F5F5] mb-4">
+          <div className="mx-auto mb-12 max-w-3xl text-center">
+            <h1 className="font-display mb-4 text-4xl font-bold text-[#F5F5F5] md:text-5xl lg:text-6xl">
               Our Blog
             </h1>
-            <p className="text-white/60 text-lg">
-              Insights, tips, and strategies to help your business grow. Written
-              by our team of digital marketing and remote workforce experts.
+            <p className="text-lg text-white/60">
+              Insights, tips, and strategies to help your business grow. Written by our team of digital marketing and
+              virtual workforce experts.
             </p>
           </div>
 
           {/* Featured Post */}
           {featuredPost && (
             <Link
-              href={`/blog/${featuredPost.slug}`}
-              className="block glass-panel p-6 md:p-8 mb-12 group hover:border-[rgba(34,197,94,0.2)] transition-all"
+              href={`/insight/${featuredPost.mongoId}`}
+              className="glass-panel group mb-12 block p-6 transition-all hover:border-[rgba(34,197,94,0.2)] md:p-8"
             >
-              <div className="flex flex-col md:flex-row gap-6 md:gap-10">
-                {/* Thumbnail placeholder */}
-                <div className="shrink-0 w-full md:w-80 h-48 md:h-auto rounded-xl bg-gradient-to-br from-[rgba(34,197,94,0.1)] to-[rgba(29,78,216,0.05)] border border-[rgba(255,255,255,0.04)] flex items-center justify-center">
-                  <Tag className="w-10 h-10 text-[#22C55E] opacity-40" />
+              <div className="flex flex-col gap-6 md:flex-row md:gap-10">
+                <div className="flex h-48 w-full shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[rgba(255,255,255,0.04)] bg-gradient-to-br from-[rgba(34,197,94,0.1)] to-[rgba(29,78,216,0.05)] md:h-auto md:w-80">
+                  {featuredPost.image ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={featuredPost.image}
+                      alt=""
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <Tag className="h-10 w-10 text-[#22C55E] opacity-40" />
+                  )}
                 </div>
-                <div className="flex-1 min-w-0 flex flex-col justify-center">
-                  <div className="flex flex-wrap items-center gap-3 mb-3">
-                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[rgba(34,197,94,0.1)] text-[#22C55E] border border-[rgba(34,197,94,0.2)]">
+                <div className="flex min-w-0 flex-1 flex-col justify-center">
+                  <div className="mb-3 flex flex-wrap items-center gap-3">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(34,197,94,0.2)] bg-[rgba(34,197,94,0.1)] px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-[#22C55E]">
                       {featuredPost.featured ? 'Featured' : featuredPost.category}
                     </span>
                     <span className="text-sm text-white/40">
-                      {new Date(featuredPost.date).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })}
+                      {featuredPost.date
+                        ? new Date(featuredPost.date).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                          })
+                        : ''}
                     </span>
                   </div>
-                  <h2 className="font-display text-2xl md:text-3xl font-bold text-[#F5F5F5] mb-3 group-hover:text-[#22C55E] transition-colors">
+                  <h2 className="font-display mb-3 text-2xl font-bold text-[#F5F5F5] transition-colors group-hover:text-[#22C55E] md:text-3xl">
                     {featuredPost.title}
                   </h2>
-                  <p className="text-white/60 leading-relaxed mb-4 line-clamp-3">
-                    {featuredPost.excerpt}
-                  </p>
+                  <p className="mb-4 line-clamp-3 leading-relaxed text-white/60">{featuredPost.excerpt}</p>
                   <div className="flex items-center gap-4">
                     <span className="flex items-center gap-1.5 text-sm text-white/40">
-                      <Clock className="w-3.5 h-3.5" />
+                      <Clock className="h-3.5 w-3.5" />
                       {featuredPost.readingTime} min read
                     </span>
-                    <span className="inline-flex items-center gap-1 text-sm text-[#22C55E] font-medium group-hover:gap-2 transition-all">
-                      Read article <ArrowRight className="w-3.5 h-3.5" />
+                    <span className="inline-flex items-center gap-1 text-sm font-medium text-[#22C55E] transition-all group-hover:gap-2">
+                      Read article <ArrowRight className="h-3.5 w-3.5" />
                     </span>
                   </div>
                 </div>
@@ -108,27 +193,66 @@ export default function BlogPage() {
             </Link>
           )}
 
-          {/* Client-side filter + grid */}
-          <BlogListClient posts={serializedPosts} categories={categories} />
+          {featuredMarkdownPost && (
+            <Link
+              href={`/blog/${featuredMarkdownPost.slug}`}
+              className="glass-panel group mb-12 block p-6 transition-all hover:border-[rgba(34,197,94,0.2)] md:p-8"
+            >
+              <div className="flex flex-col gap-6 md:flex-row md:gap-10">
+                <div className="flex h-48 w-full shrink-0 items-center justify-center rounded-xl border border-[rgba(255,255,255,0.04)] bg-gradient-to-br from-[rgba(34,197,94,0.1)] to-[rgba(29,78,216,0.05)] md:h-auto md:w-80">
+                  <Tag className="h-10 w-10 text-[#22C55E] opacity-40" />
+                </div>
+                <div className="flex min-w-0 flex-1 flex-col justify-center">
+                  <div className="mb-3 flex flex-wrap items-center gap-3">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(34,197,94,0.2)] bg-[rgba(34,197,94,0.1)] px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-[#22C55E]">
+                      {featuredMarkdownPost.featured ? 'Featured' : featuredMarkdownPost.category}
+                    </span>
+                    <span className="text-sm text-white/40">
+                      {new Date(featuredMarkdownPost.date).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })}
+                    </span>
+                  </div>
+                  <h2 className="font-display mb-3 text-2xl font-bold text-[#F5F5F5] transition-colors group-hover:text-[#22C55E] md:text-3xl">
+                    {featuredMarkdownPost.title}
+                  </h2>
+                  <p className="mb-4 line-clamp-3 leading-relaxed text-white/60">{featuredMarkdownPost.excerpt}</p>
+                  <div className="flex items-center gap-4">
+                    <span className="flex items-center gap-1.5 text-sm text-white/40">
+                      <Clock className="h-3.5 w-3.5" />
+                      {featuredMarkdownPost.readingTime} min read
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-sm font-medium text-[#22C55E] transition-all group-hover:gap-2">
+                      Read article <ArrowRight className="h-3.5 w-3.5" />
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          )}
+
+          <BlogListClient posts={listPosts} categories={categories} />
 
           {/* Newsletter CTA */}
-          <div className="mt-16 glass-panel p-8 text-center">
-            <h2 className="font-display text-2xl font-bold text-[#F5F5F5] mb-4">
+          <div className="glass-panel mt-16 p-8 text-center">
+            <h2 className="font-display mb-4 text-2xl font-bold text-[#F5F5F5]">
               Subscribe for Marketing Tips & Exclusive Offers
             </h2>
-            <p className="text-white/60 mb-6 max-w-xl mx-auto">
-              Get the latest insights on digital marketing, remote workforce
-              strategies, and growth tips delivered to your inbox.
+            <p className="mx-auto mb-6 max-w-xl text-white/60">
+              Get the latest insights on digital marketing, virtual workforce strategies, and growth tips delivered to
+              your inbox.
             </p>
-            <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+            <form className="mx-auto flex max-w-md flex-col gap-4 sm:flex-row">
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 h-12 px-4 rounded-lg bg-[rgba(34,197,94,0.04)] border border-[rgba(255,255,255,0.08)] text-[#F5F5F5] placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#22C55E]"
+                className="h-12 flex-1 rounded-lg border border-[rgba(255,255,255,0.08)] bg-[rgba(34,197,94,0.04)] px-4 text-[#F5F5F5] placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#22C55E]"
               />
               <button
                 type="submit"
-                className="bg-[#22C55E] hover:bg-[#059669] text-white font-semibold px-6 py-3 rounded-lg transition-all"
+                className="rounded-lg bg-[#22C55E] px-6 py-3 font-semibold text-white transition-all hover:bg-[#059669]"
               >
                 Subscribe
               </button>

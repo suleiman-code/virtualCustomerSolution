@@ -1,4 +1,4 @@
----
+﻿---
 title: "Content Marketing That Generates Leads, Not Traffic"
 excerpt: "Traffic is vanity. Leads are sanity. The content marketing framework we use to turn blog readers into paying customers — with real campaign numbers."
 category: "digital-marketing"

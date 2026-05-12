@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -55,11 +55,11 @@ const caseStudies = [
   {
     id: 3,
     category: 'Growth-stage Agency',
-    headline: '12-Person Remote Team, 60% Founder Time Saved',
+    headline: '12-Person Virtual Team, 60% Founder Time Saved',
     challenge: 'Founder overwhelmed with execution, hiring bottlenecks, no capacity to scale without burnout.',
-    scope: ['Remote Team Build', 'Process Documentation', 'Oversight System'],
+    scope: ['Virtual Team Build', 'Process Documentation', 'Oversight System'],
     outcomes: [
-      { metric: '12', label: 'Remote Team Members Deployed' },
+      { metric: '12', label: 'Virtual Team Members Deployed' },
       { metric: '-60%', label: 'Founder Operational Involvement' },
       { metric: '24/48h', label: 'Turnaround Time Improvement' },
     ],
@@ -69,7 +69,7 @@ const caseStudies = [
       author: 'Agency Owner',
       company: '[Company Type]',
     },
-    services: ['Remote Workforce', 'Systems & Reporting'],
+    services: ['Virtual Workforce', 'Systems & Reporting'],
   },
   {
     id: 4,
@@ -114,11 +114,11 @@ const caseStudies = [
     category: 'SaaS Company',
     headline: 'Integrated Model: Acquisition + Systems + Execution',
     challenge: 'Multiple vendors, no coordination, founder managing everything, no clear performance picture.',
-    scope: ['Performance Marketing', 'Attribution', 'Remote Execution Pod'],
+    scope: ['Performance Marketing', 'Attribution', 'Virtual Execution Pod'],
     outcomes: [
       { metric: '+89%', label: 'MQL Volume' },
       { metric: '-35%', label: 'CAC Reduction' },
-      { metric: '8', label: 'Remote Team Members' },
+      { metric: '8', label: 'Virtual Team Members' },
     ],
     timeline: '6 months',
     quote: {
@@ -126,11 +126,11 @@ const caseStudies = [
       author: 'CEO',
       company: '[Company Type]',
     },
-    services: ['Performance Marketing', 'Systems & Reporting', 'Remote Workforce'],
+    services: ['Performance Marketing', 'Systems & Reporting', 'Virtual Workforce'],
   },
 ];
 
-const filters = ['All', 'Performance Marketing', 'Systems & Reporting', 'Remote Workforce'];
+const filters = ['All', 'Performance Marketing', 'Systems & Reporting', 'Virtual Workforce'];
 
 export function ResultsPage() {
   const [activeFilter, setActiveFilter] = useState('All');

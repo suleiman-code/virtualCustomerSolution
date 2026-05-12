@@ -7,6 +7,7 @@ import {
   verifyCredentials,
 } from '@/lib/admin-auth'
 import { rateLimit } from '@/lib/rate-limit'
+import { getClientIp } from '@/lib/client-ip'
 
 const loginSchema = z.object({
   user: z.string().min(1).max(200),
@@ -15,9 +16,11 @@ const loginSchema = z.object({
 
 export async function POST(request: Request) {
   try {
-    const ip =
-      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
-    const { success } = await rateLimit(ip, 'admin-login', 10, 15 * 60 * 1000)
+    const ip = getClientIp(request)
+    const isDev = process.env.NODE_ENV === 'development'
+    const max = isDev ? 80 : 25
+    const windowMs = isDev ? 10 * 60 * 1000 : 15 * 60 * 1000
+    const { success } = await rateLimit(ip, 'admin-login', max, windowMs)
 
     if (!success) {
       return NextResponse.json(

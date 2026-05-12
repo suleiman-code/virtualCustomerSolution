@@ -4,6 +4,7 @@ import { rateLimit } from '@/lib/rate-limit'
 import { db } from '@/lib/db'
 import { sendAdminNotification } from '@/lib/email'
 import { forwardTicketToCRM } from '@/lib/crm-webhook'
+import { mirrorSubmissionToLeads } from '@/lib/lead-sync'
 
 // Strip HTML tags from a string
 function sanitize(input: string): string {
@@ -78,6 +79,15 @@ export async function POST(request: NextRequest) {
       // Continue without DB — generate a fallback ID
       ticketId = `ticket_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`
     }
+
+    void mirrorSubmissionToLeads({
+      kind: 'ticket',
+      name: sanitized.name,
+      email: sanitized.email,
+      service: 'Support ticket',
+      description: `Subject: ${sanitized.subject}\n\n${sanitized.message}\n\nPriority: ${sanitized.priority}`,
+      source: 'Support ticket form',
+    })
 
     // Send admin email notification
     try {

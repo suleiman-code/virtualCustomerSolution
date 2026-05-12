@@ -1,4 +1,4 @@
----
+﻿---
 title: "Email Marketing in 2026: What's Actually Working"
 excerpt: "Forget what you knew about email marketing two years ago. Here's what's driving opens, clicks, and revenue right now — based on real campaign data."
 category: "digital-marketing"

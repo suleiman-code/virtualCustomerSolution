@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import Link from 'next/link';
+import { FREE_AUDIT_CONTACT_HREF } from '@/lib/paths';
 
 export function StickyCTABar() {
   const [visible, setVisible] = useState(false);
@@ -45,11 +46,10 @@ export function StickyCTABar() {
 
               <div className="flex items-center gap-2">
                 <Link
-                  href="/free-audit"
-                  className="inline-flex items-center gap-2 rounded-full bg-[#22C55E] px-5 py-2 text-sm font-semibold text-black shadow-lg shadow-[#22C55E]/20 transition hover:bg-[#4ADE80] hover:shadow-[#22C55E]/30"
+                  href={FREE_AUDIT_CONTACT_HREF}
+                  className="inline-flex items-center justify-center rounded-full bg-[#22C55E] px-5 py-2 text-sm font-semibold text-black shadow-lg shadow-[#22C55E]/20 transition hover:bg-[#4ADE80] hover:shadow-[#22C55E]/30"
                 >
                   Get Started
-                  <ArrowRight className="h-4 w-4" />
                 </Link>
 
                 <button

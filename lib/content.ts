@@ -7,14 +7,14 @@ export const siteConfig = {
   primaryCtaHref: "#strategy-call-form",
   bookingEmailHref: "mailto:contact@virtualcustomersolution.com?subject=Strategy%20Call%20Request",
   email: "contact@virtualcustomersolution.com",
-  formApiPath: "/api/free-audit",
+  formApiPath: "/api/contact",
   formSubmitBrowserAction: "https://formsubmit.co/contact@virtualcustomersolution.com",
   formSubmitAction: "https://formsubmit.co/ajax/contact@virtualcustomersolution.com",
 };
 
 export const navigation = [
-  { label: "Services", href: "#services" },
-  { label: "Results", href: "#case-studies" },
+  { label: "Services", href: "/services#offerings" },
+  { label: "Stories", href: "#testimonials" },
   { label: "Process", href: "#process" },
   { label: "FAQ", href: "#faq" },
 ];

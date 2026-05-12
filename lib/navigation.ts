@@ -1,17 +1,30 @@
 'use client';
 
 import { useCallback, useMemo } from 'react';
+import { FREE_AUDIT_CONTACT_HREF } from '@/lib/paths';
 import { usePathname, useRouter } from 'next/navigation';
+
+/** Force document to scroll top (avoids smooth-only scroll failing on same-route). */
+export function scrollDocumentToTop() {
+  if (typeof window === 'undefined') return;
+  const root = document.scrollingElement ?? document.documentElement;
+  root.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+  window.scrollTo(0, 0);
+}
+
+function pathOnly(url: string) {
+  const s = url.split('#')[0]?.split('?')[0];
+  return s && s.length > 0 ? s : '/';
+}
 
 export type PageRoute =
   | 'home'
   | 'services'
-  | 'pricing'
   | 'about'
   | 'blog'
   | 'contact'
-  | 'careers'
-  | 'support'
   | 'free-audit'
   | 'performance-marketing'
   | 'remote-workforce'
@@ -22,13 +35,9 @@ export type PageRoute =
 export const pathToPage: Record<string, PageRoute> = {
   '/': 'home',
   '/services': 'services',
-  '/pricing': 'pricing',
   '/about': 'about',
   '/blog': 'blog',
   '/contact': 'contact',
-  '/careers': 'careers',
-  '/support': 'support',
-  '/free-audit': 'free-audit',
   '/performance-marketing': 'performance-marketing',
   '/remote-workforce': 'remote-workforce',
   '/systems-reporting': 'systems-reporting',
@@ -38,30 +47,24 @@ export const pathToPage: Record<string, PageRoute> = {
 
 export const pageToPath: Record<PageRoute, string> = {
   home: '/',
-  services: '/services',
-  pricing: '/pricing',
+  services: '/services#offerings',
   about: '/about',
   blog: '/blog',
   contact: '/contact',
-  careers: '/careers',
-  support: '/support',
-  'free-audit': '/free-audit',
+  'free-audit': FREE_AUDIT_CONTACT_HREF,
   'performance-marketing': '/performance-marketing',
   'remote-workforce': '/remote-workforce',
   'systems-reporting': '/systems-reporting',
   results: '/results',
-  'free-growth-audit': '/free-growth-audit',
+  'free-growth-audit': FREE_AUDIT_CONTACT_HREF,
 };
 
 export const pageNames: Record<PageRoute, string> = {
   home: 'Home',
   services: 'Services',
-  pricing: 'Pricing',
   about: 'About',
   blog: 'Blog',
   contact: 'Contact',
-  careers: 'Careers',
-  support: 'Support',
   'free-audit': 'Free Audit',
   'performance-marketing': 'Performance Marketing',
   'remote-workforce': 'Remote Workforce',
@@ -74,17 +77,56 @@ export function useNavigation() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const currentPage = useMemo<PageRoute>(() => pathToPage[pathname] || 'home', [pathname]);
+  const currentPage = useMemo<PageRoute>(() => {
+    if (!pathname || pathname === '/') return 'home';
+    if (pathname.startsWith('/blog')) return 'blog';
+    if (pathname.startsWith('/services')) return 'services';
+    return pathToPage[pathname] ?? 'home';
+  }, [pathname]);
 
   const navigateTo = useCallback(
     (page: PageRoute) => {
-      router.push(pageToPath[page]);
-      if (typeof window !== 'undefined') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (page === 'home') {
+        if (typeof window === 'undefined') return;
+
+        const onHomePath = pathname === '/' || pathname === '';
+
+        scrollDocumentToTop();
+        if (onHomePath) {
+          window.history.replaceState(null, '', '/');
+          requestAnimationFrame(() => scrollDocumentToTop());
+        } else {
+          router.push('/');
+          requestAnimationFrame(() => {
+            scrollDocumentToTop();
+            requestAnimationFrame(scrollDocumentToTop);
+          });
+        }
+        return;
       }
+
+      if (page === 'services') {
+        if (typeof window !== 'undefined' && pathOnly(pathname || '/') === '/services') {
+          window.history.replaceState(null, '', '/services#offerings');
+          const go = () =>
+            document.getElementById('offerings')?.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start',
+            });
+          go();
+          requestAnimationFrame(go);
+          return;
+        }
+        router.push('/services#offerings');
+        return;
+      }
+
+      router.push(pageToPath[page]);
+      scrollDocumentToTop();
+      requestAnimationFrame(scrollDocumentToTop);
     },
-    [router],
+    [router, pathname],
   );
 
-  return { currentPage, navigateTo };
+  return { currentPage, navigateTo, pathname };
 }

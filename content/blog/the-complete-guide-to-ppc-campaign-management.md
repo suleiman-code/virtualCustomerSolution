@@ -1,4 +1,4 @@
----
+﻿---
 title: "The Complete Guide to PPC Campaign Management"
 excerpt: "Google Ads can drain your wallet or fill your pipeline. Covers bidding strategies, keyword research, ad copy, quality score, and everything between."
 category: "digital-marketing"
@@ -196,7 +196,7 @@ Each ad group should be tightly themed around a single cluster of keywords. If y
 
 - Campaign: IT Support Services
   - Ad Group: Managed IT Support (managed IT support, managed IT services, outsourced IT management)
-  - Ad Group: Help Desk Support (IT help desk, help desk outsourcing, remote help desk)
+  - Ad Group: Help Desk Support (IT help desk, help desk outsourcing, virtual.help desk)
   - Ad Group: Network Management (network management services, network monitoring, network support)
 
 This structure ensures every ad is highly relevant to every keyword in its group, which boosts quality score and reduces costs.

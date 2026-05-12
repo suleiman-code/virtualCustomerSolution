@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+﻿import { Metadata } from "next";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { Shield, Mail, MapPin, Calendar, Cookie, Database, UserCheck, Eye, Trash2, Lock } from "lucide-react";
 import Link from "next/link";
@@ -55,7 +55,7 @@ const sections = [
       {
         subtitle: null,
         items: [
-          "To provide, maintain, and improve our services including Growth Systems & Reporting, Performance Marketing, and Remote Workforce Solutions",
+          "To provide, maintain, and improve our services including Growth Systems & Reporting, Performance Marketing, and Virtual Workforce Solutions",
           "To respond to your inquiries, process service requests, and communicate about your account",
           "To send relevant marketing communications (only with your consent, and you may opt out at any time)",
           "To analyze website usage patterns and improve our site experience",

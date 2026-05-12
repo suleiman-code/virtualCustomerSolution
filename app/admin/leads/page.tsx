@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { db } from '@/lib/db'
 import { getCurrentAdmin } from '@/lib/admin-auth'
+import { AdminShell } from '@/components/admin/AdminShell'
 import LeadsDashboard from './LeadsDashboard'
 
 export const metadata = {
@@ -35,5 +36,9 @@ export default async function AdminLeadsPage() {
     createdAt: l.createdAt.toISOString(),
   }))
 
-  return <LeadsDashboard initialLeads={serialized} adminUser={admin.user} />
+  return (
+    <AdminShell adminUser={admin.user}>
+      <LeadsDashboard initialLeads={serialized} adminUser={admin.user} />
+    </AdminShell>
+  )
 }

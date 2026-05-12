@@ -15,12 +15,12 @@ export default function OpenGraphImage() {
             <div style={{ width: 74, height: 74, borderRadius: 24, display: "flex", alignItems: "center", justifyContent: "center", background: "#22C55E", fontSize: 28, fontWeight: 700, color: "#000000" }}>VCS</div>
             <div style={{ display: "flex", flexDirection: "column" }}>
               <span style={{ fontSize: 18, letterSpacing: 5, textTransform: "uppercase", opacity: 0.76, color: "#FFFFFF" }}>Virtual Customer Solution</span>
-              <span style={{ fontSize: 22, opacity: 0.6, color: "#9CA3AF" }}>IT, Marketing & Remote Workforce Solutions</span>
+              <span style={{ fontSize: 22, opacity: 0.6, color: "#9CA3AF" }}>IT, Marketing & Virtual Workforce Solutions</span>
             </div>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 24, maxWidth: 820 }}>
-            <div style={{ fontSize: 78, lineHeight: 0.98, fontWeight: 700, color: "#FFFFFF" }}>Scale with smarter systems, remote support, and performance-driven marketing.</div>
-            <div style={{ fontSize: 28, lineHeight: 1.45, opacity: 0.7, color: "#D1D5DB" }}>Virtual Customer Solution helps businesses grow through marketing, operations, technology, and expert remote execution.</div>
+            <div style={{ fontSize: 78, lineHeight: 0.98, fontWeight: 700, color: "#FFFFFF" }}>Scale with smarter systems, virtual support, and performance-driven marketing.</div>
+            <div style={{ fontSize: 28, lineHeight: 1.45, opacity: 0.7, color: "#D1D5DB" }}>Virtual Customer Solution helps businesses grow through marketing, operations, technology, and expert virtual execution.</div>
           </div>
         </div>
       </div>

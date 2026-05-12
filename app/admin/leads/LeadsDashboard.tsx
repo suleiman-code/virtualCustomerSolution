@@ -1,16 +1,13 @@
 'use client'
 
 import { Fragment, useMemo, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import {
   Crown,
   Download,
   Filter,
-  LogOut,
   Mail,
   Phone,
   Search,
-  ShieldCheck,
   Trash2,
   Users,
   ChevronLeft,
@@ -109,7 +106,6 @@ export default function LeadsDashboard({
   initialLeads: SerializedLead[]
   adminUser: string
 }) {
-  const router = useRouter()
   const [leads, setLeads] = useState(initialLeads)
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
@@ -193,12 +189,6 @@ export default function LeadsDashboard({
     }
   }
 
-  const logout = async () => {
-    await fetch('/api/admin/logout', { method: 'POST' })
-    router.push('/admin/login')
-    router.refresh()
-  }
-
   const exportCsv = () => {
     const csv = toCsv(filtered)
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
@@ -211,35 +201,14 @@ export default function LeadsDashboard({
   }
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white">
-      {/* ── Header ─────────────────────────────────────────────────────── */}
-      <header className="sticky top-0 z-20 border-b border-white/10 bg-[#050505]/90 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6">
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#22C55E]/30 bg-[#22C55E]/10">
-              <ShieldCheck className="h-5 w-5 text-[#22C55E]" />
-            </div>
-            <div>
-              <h1 className="font-display text-lg font-bold leading-tight">
-                Leads Dashboard
-              </h1>
-              <p className="text-xs text-white/40">
-                Signed in as{' '}
-                <span className="text-white/70">{adminUser}</span>
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={logout}
-            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.02] px-4 py-2 text-xs font-semibold text-white/70 transition-colors hover:bg-white/[0.06]"
-          >
-            <LogOut className="h-3.5 w-3.5" />
-            Sign out
-          </button>
+    <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-[#050505] text-white">
+      <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col overflow-y-auto px-4 py-6 sm:px-6 md:py-8">
+        <div className="mb-6 md:mb-8">
+          <h1 className="font-display text-xl font-bold md:text-2xl">Leads dashboard</h1>
+          <p className="mt-1 text-xs text-white/45 md:hidden">
+            Signed in as <span className="text-white/70">{adminUser}</span>
+          </p>
         </div>
-      </header>
-
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
         {/* ── Stats ────────────────────────────────────────────────────── */}
         <section className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
           <StatCard

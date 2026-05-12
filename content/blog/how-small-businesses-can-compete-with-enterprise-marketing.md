@@ -1,4 +1,4 @@
----
+﻿---
 title: "How Small Businesses Can Beat Enterprise Marketing"
 excerpt: "You don't need a Fortune 500 budget. These guerrilla tactics, niche strategies, and agility plays can put you ahead of companies 100x your size."
 category: "business-growth"

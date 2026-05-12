@@ -1,4 +1,4 @@
----
+﻿---
 title: "7 Signs You're Overpaying for Digital Marketing"
 excerpt: "Are you getting ripped off? Here are the warning signs that your digital marketing agency might be charging you too much."
 category: "Digital Marketing"
@@ -100,4 +100,4 @@ If you are paying significantly above these ranges without exceptional results, 
 
 The best protection against overpaying is knowledge. Understand what services you need, what fair rates look like, and what results to expect.
 
-At Virtual Customer Solution, we believe in transparent pricing and measurable results. Our packages start at $499/month because we leverage remote talent and efficient processes to deliver premium service at honest prices.
+At Virtual Customer Solution, we believe in transparent pricing and measurable results. Our packages start at $499/month because we leverage virtual talent and efficient processes to deliver premium service at honest prices.

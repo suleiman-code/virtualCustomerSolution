@@ -1,4 +1,4 @@
----
+﻿---
 title: "LinkedIn Marketing Strategies for B2B Revenue"
 excerpt: "How B2B companies use LinkedIn's organic reach, paid campaigns, and lead gen forms to build real pipeline — with specific tactics we've tested."
 category: "digital-marketing"

@@ -1,4 +1,4 @@
----
+﻿---
 title: "Why Your Business Needs a Fractional Marketing Team"
 excerpt: "Full-time marketing hires are expensive and risky. The fractional model gives you senior-level expertise at a fraction of the cost. Here's how it works."
 category: "business-growth"
@@ -143,9 +143,9 @@ Do you, though? I've audited how in-house marketing teams spend their time, and 
 
 A fractional team works on your business for focused, productive hours. No office politics. No mandatory company picnic. No three-hour all-hands meeting. Every hour you're paying for is spent on actual marketing work.
 
-### "It'll be hard to manage a remote team."
+### "It'll be hard to manage a virtual team."
 
-It's 2026. If your company hasn't figured out how to work with remote teams, that's a bigger problem than your marketing. We use shared project management tools, async video updates, and scheduled syncs. Our clients consistently tell us communication is better than what they had with in-house teams.
+It's 2026. If your company hasn't figured out how to work with virtual teams, that's a bigger problem than your marketing. We use shared project management tools, async video updates, and scheduled syncs. Our clients consistently tell us communication is better than what they had with in-house teams.
 
 ### "What about confidentiality?"
 

@@ -1,4 +1,4 @@
-import type { MetadataRoute } from 'next';
+﻿import type { MetadataRoute } from 'next';
 import fs from 'fs';
 import path from 'path';
 
@@ -43,7 +43,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/performance-marketing',
     '/remote-workforce',
     '/systems-reporting',
-    '/pricing',
   ].map((r) => ({ url: `${SITE_URL}${r}`, lastModified: now, changeFrequency: 'monthly' as const, priority: 0.9 }));
 
   // ── Blog ──
@@ -105,7 +104,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // ── Core pages ──
   const corePages = [
-    '/about', '/contact', '/results', '/careers', '/free-audit', '/free-growth-audit',
+    '/about', '/contact', '/results',
   ].map((r) => ({ url: `${SITE_URL}${r}`, lastModified: now, changeFrequency: 'monthly' as const, priority: 0.7 }));
 
   // ── Research ──

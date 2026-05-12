@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+﻿import { Metadata } from "next";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { Scale, Mail, MapPin, Calendar, FileText, AlertTriangle, ShieldCheck, Gavel, Ban, Globe, RefreshCw } from "lucide-react";
 import Link from "next/link";
@@ -19,7 +19,7 @@ const sections = [
     title: "1. Acceptance of Terms",
     paragraphs: [
       "By accessing or using the website and services of Virtual Customer Solution (\"VCS\", \"we\", \"our\", or \"us\"), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our website or services.",
-      "These terms apply to all visitors, users, clients, and others who access or use our services, including but not limited to Growth Systems & Reporting, Performance Marketing, and Remote Workforce Solutions.",
+      "These terms apply to all visitors, users, clients, and others who access or use our services, including but not limited to Growth Systems & Reporting, Performance Marketing, and Virtual Workforce Solutions.",
       "We reserve the right to update or modify these terms at any time. Changes become effective upon posting to this page. Your continued use of our services following any changes constitutes acceptance of the revised terms.",
     ],
   },
@@ -28,7 +28,7 @@ const sections = [
     icon: Globe,
     title: "2. Description of Services",
     paragraphs: [
-      "Virtual Customer Solution provides digital business services including Growth Systems & Reporting, Performance Marketing, and Remote Workforce Solutions. Specific deliverables, timelines, and scope of work are defined in individual service agreements or proposals agreed upon between VCS and the client.",
+      "Virtual Customer Solution provides digital business services including Growth Systems & Reporting, Performance Marketing, and Virtual Workforce Solutions. Specific deliverables, timelines, and scope of work are defined in individual service agreements or proposals agreed upon between VCS and the client.",
       "We reserve the right to modify, suspend, or discontinue any aspect of our services at any time, with reasonable notice to active clients. We are not liable for any modification, suspension, or discontinuation of services beyond the scope of active agreements.",
     ],
   },

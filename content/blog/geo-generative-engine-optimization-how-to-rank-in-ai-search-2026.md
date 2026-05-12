@@ -1,4 +1,4 @@
----
+﻿---
 title: "GEO: How to Rank in AI Search Engines in 2026"
 excerpt: "AI Overviews, ChatGPT search, and Perplexity now answer your customers' questions. Traditional SEO gets you ranked. GEO gets you cited. Here's what that means."
 category: "digital-marketing"

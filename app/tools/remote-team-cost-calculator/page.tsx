@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { FREE_AUDIT_CONTACT_HREF } from "@/lib/paths";
 import {
   ArrowLeft,
   ArrowRight,
@@ -529,7 +530,7 @@ export default function RemoteTeamCostCalculatorPage() {
                     </div>
                   </div>
 
-                  <Link href="/free-audit" className="btn-primary w-full gap-2">
+                  <Link href={FREE_AUDIT_CONTACT_HREF} className="btn-primary w-full gap-2">
                     Get Your Custom Cost Analysis
                     <ArrowRight className="w-4 h-4" />
                   </Link>

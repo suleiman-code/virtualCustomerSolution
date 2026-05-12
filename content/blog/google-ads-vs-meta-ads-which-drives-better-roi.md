@@ -1,4 +1,4 @@
----
+﻿---
 title: "Google Ads vs Meta Ads: Which Drives Better ROI?"
 excerpt: "We've spent over $2.3M managing ad campaigns across both platforms. Here's an honest breakdown of when each one wins — and when you're wasting your money."
 category: "digital-marketing"

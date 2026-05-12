@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { motion } from 'framer-motion';
 import { Search, Wrench, Rocket, LineChart } from 'lucide-react';
@@ -21,7 +21,7 @@ const steps = [
     number: '03',
     icon: Rocket,
     title: 'Scale',
-    description: 'Activate performance marketing and remote execution. Clear ownership, regular reporting, and continuous optimization.',
+    description: 'Activate performance marketing and virtual execution. Clear ownership, regular reporting, and continuous optimization.',
   },
   {
     number: '04',

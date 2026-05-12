@@ -1,4 +1,4 @@
----
+﻿---
 title: "How We Reduced Customer Acquisition Cost by 40%"
 excerpt: "We cut our CAC from $340 to $195 in seven months. Here's how — referral programs, content flywheels, CRO, and the retention math most companies ignore."
 category: "business-growth"

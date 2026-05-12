@@ -1,7 +1,8 @@
-import { Metadata } from "next";
+﻿import { Metadata } from "next";
 import Link from "next/link";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { guides } from "@/lib/guides";
+import { FREE_AUDIT_CONTACT_HREF } from "@/lib/paths";
 import {
   BookOpen,
   TrendingUp,
@@ -17,14 +18,14 @@ import {
 export const metadata: Metadata = {
   title: "Guides & Resources",
   description:
-    "In-depth guides on remote team management, performance marketing, business systems, and scaling globally. Practical advice from real-world experience.",
+    "In-depth guides on virtual team management, performance marketing, business systems, and scaling globally. Practical advice from real-world experience.",
   alternates: {
     canonical: "https://virtualcustomersolution.com/guides",
   },
   openGraph: {
     title: "Guides & Resources",
     description:
-      "In-depth guides on remote team management, performance marketing, business systems, and scaling globally.",
+      "In-depth guides on virtual team management, performance marketing, business systems, and scaling globally.",
     url: "https://virtualcustomersolution.com/guides",
     type: "website",
     images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
@@ -32,13 +33,13 @@ export const metadata: Metadata = {
 };
 
 const categoryIcons: Record<string, React.ReactNode> = {
-  "Remote Workforce": <Users className="h-5 w-5" />,
+  "Virtual Workforce": <Users className="h-5 w-5" />,
   "Performance Marketing": <TrendingUp className="h-5 w-5" />,
   "Growth Systems": <BarChart3 className="h-5 w-5" />,
 };
 
 const guideIcons: Record<string, React.ReactNode> = {
-  "complete-guide-remote-team-management": <Users className="h-8 w-8" />,
+  "complete-guide-virtual-team-management": <Users className="h-8 w-8" />,
   "performance-marketing-playbook-2025": <Target className="h-8 w-8" />,
   "business-systems-reporting-framework": <BarChart3 className="h-8 w-8" />,
   "scaling-your-business-globally": <Globe className="h-8 w-8" />,
@@ -79,7 +80,7 @@ export default function GuidesPage() {
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-lg text-[var(--text-secondary)] font-[family-name:var(--font-body)]">
             No fluff, no filler. Just practical, experience-backed guides on
-            growing your business, building remote teams, and running marketing
+            growing your business, building virtual teams, and running marketing
             that actually works.
           </p>
         </div>
@@ -145,10 +146,10 @@ export default function GuidesPage() {
           </h2>
           <p className="mt-4 text-lg text-[var(--text-secondary)] font-[family-name:var(--font-body)]">
             Our team can build and execute growth systems, performance marketing
-            campaigns, and remote workforce solutions tailored to your business.
+            campaigns, and virtual workforce solutions tailored to your business.
           </p>
           <Link
-            href="/free-growth-audit"
+            href={FREE_AUDIT_CONTACT_HREF}
             className="mt-8 inline-flex items-center gap-2 rounded-xl bg-[var(--red-primary)] px-8 py-3.5 text-sm font-semibold text-black shadow-lg shadow-[#22C55E]/20 transition-[background-color,box-shadow] hover:bg-[var(--red-dark)] hover:shadow-[#22C55E]/30 font-[family-name:var(--font-body)]"
           >
             Get a Free Growth Audit

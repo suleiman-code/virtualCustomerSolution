@@ -3,7 +3,6 @@ import { z } from 'zod/v4'
 export const SERVICE_OPTIONS = [
   'IT Staffing',
   'Digital Marketing Team',
-  'Cybersecurity',
   'Remote Workforce',
   'Custom Solution',
 ] as const
@@ -22,6 +21,7 @@ export const BUDGET_OPTIONS = [
   '$5K-$15K/mo',
   '$15K+/mo',
   "Let's Discuss",
+  'Other',
 ] as const
 
 export const SOURCE_OPTIONS = [

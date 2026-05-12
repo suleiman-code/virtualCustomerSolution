@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { guides, getGuideBySlug, getAllGuideSlugs } from "@/lib/guides";
+import { FREE_AUDIT_CONTACT_HREF } from "@/lib/paths";
 import ReactMarkdown from "react-markdown";
 import {
   ChevronRight,
@@ -347,7 +348,7 @@ export default async function GuidePage({
                   for you.
                 </p>
                 <Link
-                  href="/free-growth-audit"
+                  href={FREE_AUDIT_CONTACT_HREF}
                   className="mt-8 inline-flex items-center gap-2 rounded-xl bg-[var(--red-primary)] px-8 py-3.5 text-sm font-semibold text-black shadow-lg shadow-[#22C55E]/20 transition-[background-color,box-shadow] hover:bg-[var(--red-dark)] hover:shadow-[#22C55E]/30 font-[family-name:var(--font-body)]"
                 >
                   Get a Free Growth Audit

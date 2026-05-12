@@ -4,6 +4,7 @@ import { db } from '@/lib/db'
 import { sendAuditConfirmation, sendAdminNotification } from '@/lib/email'
 import { rateLimit } from '@/lib/rate-limit'
 import { forwardToCRM } from '@/lib/crm-webhook'
+import { mirrorSubmissionToLeads } from '@/lib/lead-sync'
 
 const auditSchema = z.object({
   name: z.string().min(1, 'Name is required').max(200),
@@ -55,6 +56,26 @@ export async function POST(request: Request) {
         utmMedium: data.utmMedium ?? null,
         utmCampaign: data.utmCampaign ?? null,
       },
+    })
+
+    const detailParts = [
+      data.company?.trim() ? `Company: ${data.company.trim()}` : '',
+      data.message?.trim() ?? '',
+      [data.utmSource, data.utmMedium, data.utmCampaign].some(Boolean)
+        ? `UTM: ${[data.utmSource, data.utmMedium, data.utmCampaign].filter(Boolean).join(' / ')}`
+        : '',
+      data.source?.trim() ? `Landing context: ${data.source.trim()}` : '',
+    ].filter(Boolean)
+
+    void mirrorSubmissionToLeads({
+      kind: 'audit',
+      name: data.name,
+      email: data.email,
+      phone: data.phone ?? null,
+      country: null,
+      service: 'Free consultation / audit',
+      description: detailParts.length ? detailParts.join('\n\n') : null,
+      source: 'Free audit request',
     })
 
     // Send emails + CRM forward (non-blocking)

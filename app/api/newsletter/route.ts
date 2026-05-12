@@ -4,6 +4,7 @@ import { db } from '@/lib/db'
 import { sendWelcomeEmail, sendAdminNotification } from '@/lib/email'
 import { rateLimit } from '@/lib/rate-limit'
 import { forwardToCRM } from '@/lib/crm-webhook'
+import { mirrorSubmissionToLeads } from '@/lib/lead-sync'
 
 const newsletterSchema = z.object({
   email: z.email('Please provide a valid email address.'),
@@ -48,6 +49,15 @@ export async function POST(request: Request) {
 
     const subscriber = await db.newsletterSubscriber.create({
       data: { email },
+    })
+
+    void mirrorSubmissionToLeads({
+      kind: 'newsletter',
+      name: 'Newsletter subscriber',
+      email,
+      service: 'Newsletter',
+      description: 'Signed up via website newsletter form.',
+      source: 'Newsletter',
     })
 
     Promise.allSettled([

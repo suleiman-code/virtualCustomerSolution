@@ -1,4 +1,4 @@
----
+﻿---
 title: "Data-Driven Decision Making: A Practical Framework"
 excerpt: "Stop drowning in data and start making decisions that move the needle. A hands-on framework for KPIs, dashboard design, and getting your team to use data."
 category: "technology"

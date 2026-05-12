@@ -154,7 +154,7 @@ export function ScrollLinked({
     <motion.div
       ref={ref}
       style={{ opacity, y: smoothY, willChange: 'transform, opacity' }}
-      className={className}
+      className={`relative ${className}`}
     >
       {children}
     </motion.div>

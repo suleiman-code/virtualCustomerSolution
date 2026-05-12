@@ -1,22 +1,34 @@
+﻿import Image from 'next/image';
 import { SiteShell } from '@/components/layout/SiteShell';
 import { Metadata } from 'next';
-// import Image from 'next/image'; // Ready for real images
+import { FREE_AUDIT_CONTACT_HREF } from '@/lib/paths';
+import { Check } from 'lucide-react';
 import { FadeUp, GlassCard } from '@/components/ui-dp/AnimatedElements';
 
 export const metadata: Metadata = {
   title: 'About Us — 8+ Years, 200+ Clients',
-  description: 'Learn about Virtual Customer Solution — 8+ years combining AI-powered digital marketing, remote teams & web development. 200+ clients across 15+ countries.',
+  description: 'Learn about Virtual Customer Solution — 8+ years combining AI-powered digital marketing, virtual teams & web development. 200+ clients across 15+ countries.',
   alternates: {
     canonical: 'https://virtualcustomersolution.com/about',
   },
   openGraph: {
     title: 'About Virtual Customer Solution',
-    description: '8+ years combining AI-powered digital marketing, remote teams & web development. 200+ clients across 15+ countries.',
+    description: '8+ years combining AI-powered digital marketing, virtual teams & web development. 200+ clients across 15+ countries.',
     url: 'https://virtualcustomersolution.com/about',
     type: 'website',
     images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'About Virtual Customer Solution' }],
   },
 };
+
+const servicesOffered = [
+  'SEO Services',
+  'PPC/Paid Advertising',
+  'Social Media Marketing',
+  'Content Marketing',
+  'Web Design & Development',
+  'Email & SMS Marketing',
+  'AI Services',
+];
 
 const values = [
   {
@@ -75,7 +87,7 @@ const team = [
   {
     name: 'Operations Manager',
     role: 'Operations Manager',
-    description: 'Managing remote team operations and client relationships.',
+    description: 'Managing virtual team operations and client relationships.',
   },
   {
     name: 'IT Director',
@@ -83,53 +95,74 @@ const team = [
     description: 'Leading technology solutions and software development.',
   },
   {
-    name: 'Security Expert',
-    role: 'Cybersecurity Lead',
-    description: 'Protecting businesses from digital threats.',
+    name: 'Technical Lead',
+    role: 'Engineering & Integrations',
+    description: 'Reliable delivery across systems, integrations, and web projects.',
   },
 ];
 
 export default function AboutPage() {
   return (
     <SiteShell>
-      <div className="pt-32 pb-20">
-        <div className="container-wide">
-          {/* Header */}
-          <div className="text-center max-w-4xl mx-auto mb-16">
-            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-text-primary mb-6">
-                  About Virtual Customer Solution
-            </h1>
-            <p className="text-text-secondary text-xl leading-relaxed">
-              We were born from a simple idea — businesses shouldn't have to choose between great marketing and affordable remote talent.
-            </p>
+      <div className="overflow-x-hidden pb-20">
+        {/* Full-bleed horizontal band — text left, wide image right (reference layout) */}
+        <section
+          className="relative w-screen max-w-[100vw] left-1/2 -translate-x-1/2 border-b border-white/[0.07] bg-[#090909]"
+          aria-labelledby="about-hero-heading"
+        >
+          <div className="pointer-events-none absolute inset-0 overflow-hidden">
+            <div className="absolute -left-6 top-8 h-24 w-24 rounded-full border border-white/[0.1] sm:h-32 sm:w-32 md:top-12 md:h-36 md:w-36" />
+            <div className="absolute left-2 top-14 h-16 w-16 rounded-full border border-white/[0.06] sm:top-16 md:h-24 md:w-24" />
+            <div className="absolute -right-[18%] top-1/2 hidden h-[min(95vw,380px)] w-[min(95vw,380px)] -translate-y-1/2 rotate-45 border border-white/[0.07] md:block" />
+            <div className="absolute inset-0 grid-bg opacity-[0.06]" />
+            <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/35 to-transparent md:h-32" />
+            <div className="absolute -bottom-20 right-[10%] h-56 w-56 rounded-full bg-[#22C55E]/[0.07] blur-[90px]" />
           </div>
 
-          {/* Hero Image Section */}
-          <div className="relative h-[400px] rounded-2xl overflow-hidden mb-20 group">
-            {/* Light background with subtle green glow */}
-            <div className="absolute inset-0 bg-[#111111]" />
-            {/* Decorative geometric elements */}
-            <div className="absolute top-12 left-12 w-40 h-40 rounded-full border border-white/10 group-hover:scale-105 transition-transform duration-700" />
-            <div className="absolute top-16 left-16 w-32 h-32 rounded-full border border-white/[0.07]" />
-            <div className="absolute bottom-16 right-16 w-64 h-64 rotate-45 border border-white/[0.05] group-hover:rotate-[50deg] transition-transform duration-700" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full bg-white/[0.04] blur-2xl" />
-            <div className="absolute -bottom-4 -right-4 w-80 h-80 rounded-full bg-[#22C55E]/10 blur-[100px]" />
-            {/* Grid pattern overlay */}
-            <div className="absolute inset-0 grid-bg opacity-10" />
-            {/* Gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/40 to-transparent" />
-            {/* Content overlay */}
-            <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12 z-10">
-              <p className="text-[#22C55E] text-sm font-semibold uppercase tracking-widest mb-2">Est. 2017</p>
-              <h2 className="font-display text-3xl md:text-4xl font-bold text-[#F5F5F5] mb-2">
-                8+ Years of Getting It Done
-              </h2>
-              <p className="text-[#A1A1AA] max-w-lg">
+          <div className="relative z-10 container-wide flex flex-col gap-10 py-12 md:flex-row md:items-center md:gap-12 md:py-16 lg:gap-16 lg:py-20">
+            <div className="min-w-0 flex-1 text-left">
+              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.32em] text-white/50 md:text-xs">
+                Est. 2017
+              </p>
+              <h1 id="about-hero-heading" className="font-display text-4xl font-extrabold leading-[1.08] tracking-tight text-[#F5F5F5] sm:text-5xl lg:text-6xl">
+                <span className="block text-lg font-semibold tracking-tight text-white/70 sm:text-xl md:mb-1">
+                  About Virtual Customer Solution
+                </span>
+                <span className="mt-2 block sm:mt-3">
+                  8+ Years of{' '}
+                  <span className="text-[#22C55E]">Getting It Done</span>
+                </span>
+              </h1>
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-[#A1A1AA] sm:text-lg">
                 200+ clients across 15+ countries rely on us to handle the work that matters.
               </p>
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/55 sm:text-base">
+                We were born from a simple idea — businesses shouldn&apos;t have to choose between great marketing and
+                affordable virtual talent. One team, one roof.
+              </p>
+            </div>
+
+            <div className="relative w-full shrink-0 md:w-[min(52%,520px)] lg:w-[min(46%,580px)]">
+              <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl border border-white/[0.1] bg-[#0f0f0f] shadow-[0_24px_80px_rgba(0,0,0,0.5)] ring-1 ring-white/[0.04] md:rounded-2xl">
+                {/* Anchor crop to top; gradient masks bottom edge */}
+                <Image
+                  src="/images/about-dashboard-hero.png"
+                  alt="Virtual Customer Solution — analytics and global operations"
+                  fill
+                  className="object-cover object-top origin-top scale-[1.08] sm:scale-110"
+                  sizes="(max-width: 768px) 100vw, 520px"
+                  priority
+                />
+                <div
+                  className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-14 bg-gradient-to-t from-[#090909] via-[#090909]/70 to-transparent sm:h-16"
+                  aria-hidden
+                />
+              </div>
             </div>
           </div>
+        </section>
 
+        <div className="container-wide pt-16 md:pt-20">
           {/* Story Section */}
           <div className="grid lg:grid-cols-2 gap-12 items-start mb-20">
             <div>
@@ -138,25 +171,34 @@ export default function AboutPage() {
               </h2>
               <div className="space-y-4 text-text-secondary leading-relaxed">
                 <p>
-                  Virtual Customer Solution was born from a simple idea — businesses shouldn't have to choose between great IT solutions and affordable remote talent. We combined both into one powerful solution.
+                  Virtual Customer Solution was born from a simple idea — businesses shouldn't have to choose between great IT solutions and affordable virtual talent. We combined both into one powerful solution.
                 </p>
                 <p>
-                  What started as a small remote staffing operation has grown into a full-service agency handling marketing, web development, and operations support for 200+ clients in 15+ countries.
+                  What started as a small virtual staffing operation has grown into a full-service agency handling marketing, web development, and operations support for 200+ clients in 15+ countries.
                 </p>
                 <p>
                   We saw businesses struggling to manage multiple vendors — one for marketing, another for staff, another for web design. The complexity was killing their growth. We fixed that by bringing everything under one roof.
                 </p>
                 <p>
-                  Today, we're the ONLY agency that offers marketing + remote staff in one package. Our clients save 50-75% compared to hiring these services separately — and they get better results because everything works together.
+                  Today, we're the ONLY agency that offers marketing + virtual staff in one package. Our clients save 50-75% compared to hiring these services separately — and they get better results because everything works together.
                 </p>
               </div>
             </div>
             <div className="bg-white/[0.03] border border-white/[0.08] rounded-2xl p-8">
+              <div className="relative -mx-2 mb-8 h-32 w-full overflow-hidden rounded-xl border border-white/[0.08] bg-[#0a0a0a] sm:h-36 md:mx-0">
+                <Image
+                  src="/Virtual.png"
+                  alt="Virtual Customer Solution logo"
+                  fill
+                  className="object-contain object-center p-6"
+                  sizes="(max-width: 1024px) 100vw, 480px"
+                />
+              </div>
               <h3 className="font-display text-xl font-bold text-text-primary mb-4">
                 Our Mission
               </h3>
               <p className="text-text-secondary mb-6">
-                Help businesses stop overpaying for marketing and remote staff by putting both under one roof — with people who actually care about results.
+                Help businesses stop overpaying for marketing and virtual staff by putting both under one roof — with people who actually care about results.
               </p>
               <h3 className="font-display text-xl font-bold text-text-primary mb-4">
                 Where We're Headed
@@ -165,6 +207,35 @@ export default function AboutPage() {
                 We want to be the first call when a business needs to grow but doesn't want to deal with five different agencies to make it happen.
               </p>
             </div>
+          </div>
+
+          {/* Services */}
+          <div className="mb-20">
+            <h2 className="font-display text-3xl font-bold text-text-primary text-center mb-4">
+              Our Services
+            </h2>
+            <p className="text-text-secondary text-center mb-10 max-w-2xl mx-auto leading-relaxed">
+              Full-stack digital capabilities — from search and paid media to web builds and AI-enabled workflows — delivered under one roof.
+            </p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
+              {servicesOffered.map((label) => (
+                <div
+                  key={label}
+                  className="flex items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.03] px-5 py-4 text-left transition-colors hover:border-[#22C55E]/25 hover:bg-white/[0.05]"
+                >
+                  <Check className="h-5 w-5 shrink-0 text-[#22C55E]" aria-hidden />
+                  <span className="font-medium text-text-primary">{label}</span>
+                </div>
+              ))}
+            </div>
+            <p className="text-center mt-8">
+              <a
+                href="/services"
+                className="text-sm font-semibold text-[#22C55E] hover:text-[#4ADE80] transition-colors"
+              >
+                Explore the full service catalog →
+              </a>
+            </p>
           </div>
 
           {/* Values Section */}
@@ -230,7 +301,7 @@ export default function AboutPage() {
               Let's discuss how we can help your business reach its full potential.
             </p>
             <a
-              href="/free-audit"
+              href={FREE_AUDIT_CONTACT_HREF}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#22C55E] hover:bg-[#4ADE80] text-black font-semibold px-8 py-4 rounded-lg transition-colors duration-300"
             >
               🎯 Get Your FREE Digital Audit

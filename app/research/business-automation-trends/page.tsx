@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { FREE_AUDIT_CONTACT_HREF } from "@/lib/paths";
 import { ArrowLeft, ArrowRight, TrendingUp, Zap, Clock, Cog } from "lucide-react";
 import { motion } from "framer-motion";
 import {
@@ -384,7 +385,7 @@ export default function BusinessAutomationTrendsPage() {
             Discover which processes in your business can benefit most from
             automation and start saving time and money.
           </p>
-          <Link href="/free-audit" className="btn-primary gap-2">
+          <Link href={FREE_AUDIT_CONTACT_HREF} className="btn-primary gap-2">
             Get a Free Growth Audit
             <ArrowRight className="w-4 h-4" />
           </Link>

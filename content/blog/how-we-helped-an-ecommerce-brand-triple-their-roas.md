@@ -1,4 +1,4 @@
----
+﻿---
 title: "How We Helped an E-Commerce Brand Triple Their ROAS"
 excerpt: "A behind-the-scenes case study of how we took a struggling DTC brand from 1.8x ROAS to 5.7x in seven months — with the exact tactics and timeline."
 category: "case-studies"

@@ -1,20 +1,21 @@
-import { Metadata } from "next";
+﻿import { Metadata } from "next";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { caseStudies, getAllServices, getAllIndustries } from "@/lib/case-studies";
 import { CaseStudyGrid } from "./CaseStudyGrid";
+import { FREE_AUDIT_CONTACT_HREF } from "@/lib/paths";
 import { BarChart3, TrendingUp } from "lucide-react";
 
 export const metadata: Metadata = {
   title: { absolute: "Case Studies — Real Results & ROI | VCS" },
   description:
-    "See how we helped e-commerce, SaaS & agencies grow with remote teams and performance marketing. Real ROI case studies.",
+    "See how we helped e-commerce, SaaS & agencies grow with virtual teams and performance marketing. Real ROI case studies.",
   alternates: {
     canonical: "https://virtualcustomersolution.com/case-studies",
   },
   openGraph: {
     title: "Case Studies — Real Results & ROI | VCS",
     description:
-      "See how we helped e-commerce, SaaS & agencies grow with remote teams and performance marketing. Real ROI case studies.",
+      "See how we helped e-commerce, SaaS & agencies grow with virtual teams and performance marketing. Real ROI case studies.",
     url: "https://virtualcustomersolution.com/case-studies",
     type: "website",
     images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'VCS Case Studies — Real Results & ROI' }],
@@ -108,7 +109,7 @@ export default function CaseStudiesPage() {
               Every case study started with a conversation. Let us show you what is possible
               for your business.
             </p>
-            <a href="/free-growth-audit" className="btn-primary">
+            <a href={FREE_AUDIT_CONTACT_HREF} className="btn-primary">
               Get Your Free Growth Audit
             </a>
           </div>

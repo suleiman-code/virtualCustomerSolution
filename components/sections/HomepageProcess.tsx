@@ -2,9 +2,6 @@
 
 import { Search, Lightbulb, Rocket, BarChart3 } from 'lucide-react';
 import { RevealOnScroll, StaggerChildren, StaggerItem } from '@/components/animations/ScrollAnimations';
-import { Mascot } from '@/components/layout/Mascot';
-
-const stepMoods = ['thinking', 'default', 'waving', 'pointing'] as const;
 
 const steps = [
   {
@@ -73,10 +70,6 @@ export function HomepageProcess() {
 
                   {/* Content */}
                   <div className="flex-1 pt-1">
-                  {/* Mood mascot — desktop only */}
-                  <div className="hidden md:block absolute -right-2 -top-1 opacity-50 group-hover:opacity-80 transition-opacity duration-500">
-                    <Mascot size={40} variant={stepMoods[i]} disableInteraction />
-                  </div>
                     <div className="flex items-center gap-3 mb-2">
                       <span className="font-mono text-xs text-[var(--text-muted)] uppercase tracking-wider">
                         Step {String(i + 1).padStart(2, '0')}

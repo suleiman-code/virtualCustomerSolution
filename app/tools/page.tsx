@@ -1,6 +1,7 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
+import { FREE_AUDIT_CONTACT_HREF } from "@/lib/paths";
 import {
   Calculator,
   Users,
@@ -282,7 +283,7 @@ export default function ToolsPage() {
               Our tools provide estimates. For a detailed, custom analysis
               tailored to your business, talk to our experts.
             </p>
-            <Link href="/free-audit" className="btn-primary gap-2">
+            <Link href={FREE_AUDIT_CONTACT_HREF} className="btn-primary gap-2">
               Get a Free Growth Audit
               <ArrowRight className="w-4 h-4" />
             </Link>

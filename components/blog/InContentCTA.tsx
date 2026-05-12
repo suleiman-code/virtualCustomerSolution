@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { FREE_AUDIT_CONTACT_HREF } from '@/lib/paths';
 import { Zap } from 'lucide-react';
 
 export function InContentCTA() {
@@ -24,7 +25,7 @@ export function InContentCTA() {
         </div>
 
         <Link
-          href="/free-audit"
+          href={FREE_AUDIT_CONTACT_HREF}
           className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#22C55E] hover:bg-[#059669] text-white text-sm font-semibold transition-colors"
         >
           Free Audit

@@ -1,4 +1,4 @@
----
+﻿---
 title: "How to Build Reporting Systems That Actually Get Used"
 excerpt: "Most dashboards die within 30 days. I've built dozens that didn't. Here's what separates reporting systems people ignore from ones they can't live without."
 category: "technology"

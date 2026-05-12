@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
@@ -40,14 +40,14 @@ const bottlenecks = [
   'Hiring bottlenecks',
   'Founder-dependent execution',
   'Fragmented vendors/tools',
-  'Remote team management',
+  'Virtual team management',
   'Not sure yet',
 ];
 
 const services = [
   { id: 'performance', label: 'Performance Marketing' },
   { id: 'systems', label: 'Systems & Reporting' },
-  { id: 'workforce', label: 'Remote Workforce' },
+  { id: 'workforce', label: 'Virtual Workforce' },
   { id: 'unsure', label: 'Not sure yet' },
 ];
 

@@ -1,4 +1,4 @@
----
+﻿---
 title: "Web Analytics Beyond Google Analytics in 2026"
 excerpt: "GA4 isn't the only option — and may not be the best for you. A look at privacy-first alternatives and the metrics that truly matter."
 category: "technology"

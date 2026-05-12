@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -35,7 +35,7 @@ const testimonials = [
     metric: '12hrs/week Saved',
   },
   {
-    quote: "I was skeptical about a remote team from Pakistan. But honestly? They're more responsive than our local contractors. And the timezone thing actually works in our favor — stuff gets done overnight.",
+    quote: "I was skeptical about a virtual team from Pakistan. But honestly? They're more responsive than our local contractors. And the timezone thing actually works in our favor — stuff gets done overnight.",
     author: 'David Chen',
     role: 'FinTech Director',
     location: 'San Francisco, USA',
@@ -52,13 +52,13 @@ export function HomepageTestimonials() {
   const t = testimonials[current];
 
   return (
-    <section className="section-padding relative overflow-hidden">
+    <section id="testimonials" className="section-padding relative scroll-mt-[calc(var(--site-header-height)+1rem)] overflow-hidden">
       {/* Background glow */}
       <div className="absolute inset-0 radial-glow opacity-30" />
 
       <div className="container-wide relative z-10">
         <RevealOnScroll variant="fade-up" duration={0.8}>
-          <div className="text-center mb-16">
+          <div className="mb-10 text-center">
             <span className="badge mb-4 inline-block">What They Say</span>
             <h2 className="text-3xl md:text-5xl font-bold font-display">
               Hear It From{' '}

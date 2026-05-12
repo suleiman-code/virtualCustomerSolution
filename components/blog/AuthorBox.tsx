@@ -1,4 +1,4 @@
-import { Linkedin } from 'lucide-react';
+﻿import { Linkedin } from 'lucide-react';
 import Link from 'next/link';
 
 interface AuthorData {
@@ -15,8 +15,8 @@ const AUTHORS: Record<string, AuthorData> = {
     name: 'M Faizan Rafiq',
     initials: 'MF',
     title: 'Founder & CEO',
-    bio: 'Faizan started VCS in 2017 after seeing businesses waste money juggling multiple vendors. Now he runs a team that handles marketing, remote staffing, and operations for 200+ clients across 15 countries.',
-    expertise: ['Digital Strategy', 'Business Growth', 'Remote Teams'],
+    bio: 'Faizan started VCS in 2017 after seeing businesses waste money juggling multiple vendors. Now he runs a team that handles marketing, virtual staffing, and operations for 200+ clients across 15 countries.',
+    expertise: ['Digital Strategy', 'Business Growth', 'Virtual Teams'],
     linkedin: 'https://linkedin.com/in/mfaizanrafiq',
   },
   'Sarah Mitchell': {

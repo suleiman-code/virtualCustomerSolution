@@ -1,0 +1,19 @@
+/* Quill font classes — 6 classic web fonts (whitelist matches AdminRichTextEditor) */
+.ql-font-helvetica {
+  font-family: Helvetica, Arial, sans-serif !important;
+}
+.ql-font-times-new-roman {
+  font-family: 'Times New Roman', Times, serif !important;
+}
+.ql-font-georgia {
+  font-family: Georgia, 'Times New Roman', serif !important;
+}
+.ql-font-courier-new {
+  font-family: 'Courier New', Courier, monospace !important;
+}
+.ql-font-verdana {
+  font-family: Verdana, Geneva, sans-serif !important;
+}
+.ql-font-arial {
+  font-family: Arial, Helvetica, sans-serif !important;
+}

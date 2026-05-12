@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { FREE_AUDIT_CONTACT_HREF } from '@/lib/paths';
 import { ArrowRight, TrendingUp } from 'lucide-react';
 
 export function LeadMagnetBanner() {
@@ -22,7 +23,7 @@ export function LeadMagnetBanner() {
         </p>
 
         <Link
-          href="/free-audit"
+          href={FREE_AUDIT_CONTACT_HREF}
           className="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg bg-white text-[#059669] font-semibold hover:bg-white/90 transition-colors text-base"
         >
           Get Your Free Audit

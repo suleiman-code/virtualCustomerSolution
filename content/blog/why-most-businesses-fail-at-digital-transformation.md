@@ -1,4 +1,4 @@
----
+﻿---
 title: "Why Most Businesses Fail at Digital Transformation"
 excerpt: "72% of digital transformation initiatives fail. After watching dozens of companies struggle, here are the patterns that predict failure — and what works."
 category: "technology"

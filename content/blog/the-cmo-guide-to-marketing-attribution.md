@@ -1,4 +1,4 @@
----
+﻿---
 title: "The CMO Guide to Marketing Attribution"
 excerpt: "Multi-touch attribution demystified. Which model fits your business, how to avoid common pitfalls, and why perfect attribution is a myth."
 category: "digital-marketing"

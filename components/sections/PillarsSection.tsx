@@ -1,8 +1,8 @@
-'use client';
+﻿'use client';
 
 import { motion } from 'framer-motion';
-import { Brain, Cloud, Shield, Zap, MessageSquare, Code, Database, Workflow, ArrowRight } from 'lucide-react';
-import { useNavigation } from '@/lib/navigation';
+import { useRouter } from 'next/navigation';
+import { Brain, Zap, MessageSquare, Workflow, ArrowRight } from 'lucide-react';
 import { RevealOnScroll, StaggerChildren, StaggerItem, MagneticHover } from '@/components/animations/ScrollAnimations';
 
 const services = [
@@ -15,22 +15,6 @@ const services = [
     size: 'large',
   },
   {
-    icon: Cloud,
-    title: 'Cloud Infrastructure',
-    description: 'Migration, setup, monitoring — we keep your servers running smooth on AWS, Azure, or GCP.',
-    gradient: 'from-[#059669] to-black',
-    features: ['Cloud Migration', 'AWS/Azure/GCP', 'Server Setup', '24/7 Monitoring'],
-    size: 'medium',
-  },
-  {
-    icon: Shield,
-    title: 'Cybersecurity',
-    description: 'Audits, threat detection, and compliance — so you don\'t get caught off guard.',
-    gradient: 'from-[#059669] to-[#22C55E]',
-    features: ['Threat Detection', 'Compliance', 'Penetration Testing', 'Security Audit'],
-    size: 'small',
-  },
-  {
     icon: Workflow,
     title: 'Digital Engineering',
     description: 'Websites, apps, APIs — we build the stuff that runs your business.',
@@ -40,7 +24,7 @@ const services = [
   },
   {
     icon: MessageSquare,
-    title: 'Remote Workforce',
+    title: 'Virtual Workforce',
     description: 'Need a VA, support agent, or marketer? We\'ve got trained staff ready to start this week.',
     gradient: 'from-[#059669] to-[#22C55E]',
     features: ['Virtual Assistants', 'Tech Support', 'Sales & Marketing', '24/7 Coverage'],
@@ -57,10 +41,13 @@ const services = [
 ];
 
 export function PillarsSection() {
-  const { navigateTo } = useNavigation();
+  const router = useRouter();
 
   return (
-    <section className="section-padding relative overflow-hidden">
+    <section
+      id="what-we-do"
+      className="section-padding relative scroll-mt-[calc(var(--site-header-height)+1rem)] overflow-hidden"
+    >
       {/* Background */}
       <div className="absolute inset-0 bg-[#0A0A0A]" />
       <div className="absolute inset-0 grid-bg opacity-20" />
@@ -78,7 +65,7 @@ export function PillarsSection() {
             <span className="text-gradient-lime">Actually Do</span>
           </h2>
           <p className="text-[#A1A1AA] text-lg max-w-2xl mx-auto">
-            Six core areas where we help businesses cut costs, move faster, and stop leaving money on the table.
+            Four core areas where we help businesses cut costs, move faster, and stop leaving money on the table.
           </p>
         </RevealOnScroll>
 
@@ -146,11 +133,12 @@ export function PillarsSection() {
 
                 {/* CTA */}
                 <button
-                  onClick={() => navigateTo('services')}
-                  className="mt-4 flex items-center gap-1 text-sm text-[#71717A] hover:text-[#F5F5F5] transition-colors group/cta min-h-[44px]"
+                  type="button"
+                  onClick={() => router.push('/services#offerings')}
+                  className="mt-4 flex min-h-[44px] items-center gap-1 text-sm text-[#71717A] transition-colors group/cta hover:text-[#F5F5F5]"
                 >
-                  Learn more
-                  <ArrowRight className="w-4 h-4 group-hover/cta:translate-x-1 transition-transform" />
+                  Full service list
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover/cta:translate-x-1" />
                 </button>
               </div>
 

@@ -6,6 +6,7 @@ import {
   getComparisonBySlug,
   getAllComparisonSlugs,
 } from "@/lib/comparisons";
+import { FREE_AUDIT_CONTACT_HREF } from "@/lib/paths";
 import {
   ChevronRight,
   ArrowRight,
@@ -344,7 +345,7 @@ export default async function ComparisonPage({
             Get a free audit and we&apos;ll give you a personalized recommendation.
           </p>
           <Link
-            href="/free-growth-audit"
+            href={FREE_AUDIT_CONTACT_HREF}
             className="mt-8 inline-flex items-center gap-2 rounded-xl bg-[var(--red-primary)] px-8 py-3.5 text-sm font-semibold text-black shadow-lg shadow-[#22C55E]/20 transition-[background-color,box-shadow] hover:bg-[var(--red-dark)] hover:shadow-[#22C55E]/30 font-[family-name:var(--font-body)]"
           >
             Get a Free Growth Audit

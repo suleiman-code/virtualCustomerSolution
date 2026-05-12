@@ -22,6 +22,36 @@ const nextConfig: NextConfig = {
         destination: "/services",
         permanent: true,
       },
+      {
+        source: "/support",
+        destination: "/contact",
+        permanent: true,
+      },
+      {
+        source: "/pricing",
+        destination: "/services",
+        permanent: true,
+      },
+      {
+        source: "/careers",
+        destination: "/contact",
+        permanent: true,
+      },
+      {
+        source: "/free-audit",
+        destination: "/contact?intent=free-audit",
+        permanent: true,
+      },
+      {
+        source: "/free-growth-audit",
+        destination: "/contact?intent=free-audit",
+        permanent: true,
+      },
+      {
+        source: "/guides/complete-guide-remote-team-management",
+        destination: "/guides/complete-guide-virtual-team-management",
+        permanent: true,
+      },
     ];
   },
   async headers() {

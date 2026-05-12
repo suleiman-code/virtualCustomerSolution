@@ -1,16 +1,16 @@
-import { Metadata } from 'next'
+﻿import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: {
-    absolute: 'Free Remote Team Consultation | VCS',
+    absolute: 'Free Virtual Team Consultation | VCS',
   },
   description:
-    'Book a free 30-minute strategy call with VCS. Get a custom cost breakdown, team proposal, and matched candidates. Build your remote team in 2 weeks.',
+    'Book a free 30-minute strategy call with VCS. Get a custom cost breakdown, team proposal, and matched candidates. Build your virtual team in 2 weeks.',
   alternates: {
     canonical: 'https://virtualcustomersolution.com/free-consultation',
   },
   openGraph: {
-    title: 'Free Remote Team Consultation | VCS',
+    title: 'Free Virtual Team Consultation | VCS',
     description:
       'Book a free 30-minute strategy call. Get a custom cost breakdown, team proposal, and matched candidates.',
     url: 'https://virtualcustomersolution.com/free-consultation',
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
         url: '/opengraph-image',
         width: 1200,
         height: 630,
-        alt: 'VCS Free Remote Team Consultation',
+        alt: 'VCS Free Virtual Team Consultation',
       },
     ],
   },

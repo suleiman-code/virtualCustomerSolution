@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
@@ -76,7 +76,7 @@ const whatTheyGet = [
     icon: FileText,
     title: 'Custom Cost Breakdown',
     description:
-      'Local hiring vs. VCS remote team. Real numbers, line-by-line. See where the savings are.',
+      'Local hiring vs. VCS virtual team. Real numbers, line-by-line. See where the savings are.',
   },
   {
     icon: UsersRound,
@@ -166,7 +166,7 @@ export default function FreeConsultationPage() {
             Get a Free{' '}
             <span className="relative inline-block">
               <span className="bg-gradient-to-r from-[#4ADE80] via-[#22C55E] to-[#059669] bg-clip-text text-transparent">
-                Remote Team
+                Virtual Team
               </span>
               <motion.span
                 initial={{ scaleX: 0 }}
@@ -186,7 +186,7 @@ export default function FreeConsultationPage() {
             className="mx-auto mt-7 max-w-2xl text-lg text-white/70 sm:text-xl"
           >
             Hiring locally costs <span className="font-bold text-white">3x more</span>.
-            We build your remote team in <span className="font-bold text-[#22C55E]">2 weeks</span>.
+            We build your virtual team in <span className="font-bold text-[#22C55E]">2 weeks</span>.
           </motion.p>
 
           <motion.a

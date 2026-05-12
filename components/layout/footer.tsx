@@ -1,31 +1,28 @@
-'use client';
+﻿'use client';
 
-import { Linkedin, Mail, Phone, MapPin, ArrowUpRight, Instagram, Twitter, Facebook, LifeBuoy } from 'lucide-react';
+import { Linkedin, Mail, Phone, MapPin, ArrowUpRight, Instagram, Twitter, Facebook } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useNavigation } from '@/lib/navigation';
+import { useNavigation, scrollDocumentToTop } from '@/lib/navigation';
 
 const footerLinks = {
   quickLinks: [
     { name: 'Home', page: 'home' as const },
     { name: 'Services', page: 'services' as const },
-    { name: 'Pricing', page: 'pricing' as const },
-    { name: 'About', page: 'about' as const },
     { name: 'Blog', page: 'blog' as const },
+    { name: 'About', page: 'about' as const },
     { name: 'Contact', page: 'contact' as const },
   ],
   services: [
     { name: 'AI-Powered CX', page: 'services' as const },
-    { name: 'Cloud Infrastructure', page: 'services' as const },
-    { name: 'Cybersecurity', page: 'services' as const },
     { name: 'Digital Engineering', page: 'services' as const },
-    { name: 'Remote Workforce', page: 'services' as const },
+    { name: 'Virtual Workforce', page: 'services' as const },
     { name: 'Digital Marketing', page: 'services' as const },
   ],
 };
 
 export function Footer() {
-  const { navigateTo } = useNavigation();
+  const { navigateTo, pathname } = useNavigation();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -37,20 +34,32 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-12 py-16 md:grid-cols-2 md:py-20 lg:grid-cols-4">
           {/* Brand Column */}
           <div className="lg:col-span-1">
-            <button onClick={() => navigateTo('home')} className="mb-6 flex flex-col items-start">
+            <Link
+              href="/"
+              className="mb-6 flex w-full flex-col items-center text-center outline-none focus-visible:ring-2 focus-visible:ring-[#22C55E]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0a0a] sm:w-auto"
+              onClick={(e) => {
+                const cur = (pathname || '/').split('?')[0] || '/';
+                if (cur === '/') {
+                  e.preventDefault();
+                  scrollDocumentToTop();
+                  window.history.replaceState(null, '', '/');
+                  requestAnimationFrame(scrollDocumentToTop);
+                }
+              }}
+            >
               <Image
                 src="/Virtual.png"
                 alt="Virtual Customer Solution logo"
-                width={160}
-                height={34}
-                className="h-8 w-auto object-contain"
+                width={360}
+                height={77}
+                className="h-12 w-auto max-w-[260px] object-contain object-center sm:h-14 sm:max-w-[300px] md:h-16 md:max-w-[340px]"
               />
-              <span className="text-[9px] text-[#4ADE80]/50 tracking-[0.22em] font-semibold mt-0.5 uppercase neon-text">
-                Customer Solution
+              <span className="mt-1.5 max-w-[16rem] font-display text-[10px] font-semibold leading-snug tracking-wide text-[#A1A1AA] sm:max-w-[18rem] sm:text-xs md:text-[13px] md:tracking-tight">
+                Virtual Customer Solution
               </span>
-            </button>
+            </Link>
             <p className="max-w-xs text-sm leading-relaxed text-[#A1A1AA] mb-6">
-              Remote teams, marketing, web development, and operations support.
+              Virtual teams, marketing, web development, and operations support.
               Helping businesses grow since 2017.
             </p>
             <div className="flex flex-wrap gap-3">
@@ -130,13 +139,13 @@ export function Footer() {
                 <Mail className="h-4 w-4 text-[#059669] neon-text" />
                 contact@virtualcustomersolution.com
               </a>
-              <Link
-                href="/support"
+              <a
+                href="mailto:contact@virtualcustomersolution.com?subject=Support%20request"
                 className="group flex items-center gap-3 text-sm text-[#A1A1AA] hover:text-[#22C55E] transition-colors"
               >
-                <LifeBuoy className="h-4 w-4 text-[#059669] neon-text" />
-                Submit a Support Ticket
-              </Link>
+                <Mail className="h-4 w-4 text-[#059669] neon-text" />
+                Email support
+              </a>
               <div className="flex items-center gap-3 text-sm text-[#A1A1AA]">
                 <MapPin className="h-4 w-4 text-[#059669] neon-text" />
                 114 McLeod Rd, Lahore
@@ -160,7 +169,6 @@ export function Footer() {
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
             <Link href="/privacy-policy" className="text-xs text-[#71717A] hover:text-[#A1A1AA] transition-colors">Privacy Policy</Link>
             <Link href="/terms-of-service" className="text-xs text-[#71717A] hover:text-[#A1A1AA] transition-colors">Terms of Service</Link>
-            <Link href="/support" className="text-xs text-[#71717A] hover:text-[#A1A1AA] transition-colors">Support</Link>
           </div>
         </div>
       </div>

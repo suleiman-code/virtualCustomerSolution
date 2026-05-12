@@ -1,4 +1,4 @@
----
+﻿---
 title: "Automation Tools Every Growing Business Needs"
 excerpt: "An honest roundup of the CRM, email, reporting, and project management tools that actually deliver — with real pros, cons, and pricing breakdowns."
 category: "technology"

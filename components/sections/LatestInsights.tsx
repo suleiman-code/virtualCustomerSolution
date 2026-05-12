@@ -1,165 +1,203 @@
 'use client';
 
-import { ArrowRight, Clock, User } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { User, Loader2, ArrowRight } from 'lucide-react';
 import { RevealOnScroll, StaggerChildren, StaggerItem } from '@/components/animations/ScrollAnimations';
+import { Button } from '@/components/ui/button';
+import { plainTextFromAnyContent } from '@/lib/markdown-excerpt';
+import { cn } from '@/lib/utils';
 
-interface BlogPost {
-  slug: string;
-  category: string;
+interface Blog {
+  id: string;
   title: string;
-  excerpt: string;
+  content: string;
+  excerpt?: string;
+  category?: string;
+  authorName: string;
+  image: string;
+  isPinned: boolean;
   date: string;
-  readTime: string;
-  author: string;
-  gradient: string;
 }
 
-const posts: BlogPost[] = [
-  {
-    slug: 'why-remote-teams-outperform-local-hires',
-    category: 'Remote Work',
-    title: 'What We Learned Managing 200+ Remote Teams',
-    excerpt: 'After years of building remote teams for clients, here are the patterns that keep showing up in the ones that actually work.',
-    date: 'Mar 18, 2026',
-    readTime: '7 min read',
-    author: 'VCS Team',
-    gradient: 'from-[#22C55E] to-black',
-  },
-  {
-    slug: 'google-ads-vs-meta-ads-which-drives-better-roi',
-    category: 'Marketing',
-    title: 'Why Most Google Ads Campaigns Waste Money (And How to Fix Yours)',
-    excerpt: 'We audited 50 ad accounts last quarter. Here\'s what the profitable ones had in common.',
-    date: 'Mar 10, 2026',
-    readTime: '5 min read',
-    author: 'VCS Team',
-    gradient: 'from-[#059669] to-black',
-  },
-  {
-    slug: 'automation-tools-every-growing-business-needs',
-    category: 'Operations',
-    title: 'The 5 Tasks You Should Have Automated Yesterday',
-    excerpt: 'Simple automations that save our clients 10-20 hours a week. Most take under an hour to set up.',
-    date: 'Feb 28, 2026',
-    readTime: '6 min read',
-    author: 'VCS Team',
-    gradient: 'from-[#22C55E]/70 to-black',
-  },
-  {
-    slug: 'hiring-remote-talent',
-    category: 'Recruitment',
-    title: 'Stop Hiring on Fiverr: How to Find Remote Staff That Stick Around',
-    excerpt: 'Freelance marketplaces are a gamble. Here\'s how we source, vet, and retain dedicated remote workers.',
-    date: 'Feb 20, 2026',
-    readTime: '8 min read',
-    author: 'VCS Team',
-    gradient: 'from-[#4ADE80]/60 to-black',
-  },
-  {
-    slug: 'client-reporting-frameworks',
-    category: 'Reporting',
-    title: 'Your Clients Don\'t Read Your Reports. Here\'s How to Change That.',
-    excerpt: 'We rebuilt our reporting from scratch after a client told us they never open them. What we changed made all the difference.',
-    date: 'Feb 12, 2026',
-    readTime: '5 min read',
-    author: 'VCS Team',
-    gradient: 'from-[#059669]/80 to-black',
-  },
-  {
-    slug: 'cost-efficiency-outsourcing',
-    category: 'Strategy',
-    title: 'How One Agency Cut Their Overhead by 60% Without Firing Anyone',
-    excerpt: 'A real case study of how we helped a 12-person agency restructure with remote staff and come out stronger.',
-    date: 'Feb 5, 2026',
-    readTime: '6 min read',
-    author: 'VCS Team',
-    gradient: 'from-[#22C55E]/50 to-black',
-  },
-];
-
-const categoryColors: Record<string, string> = {
-  'Remote Work': 'bg-[#22C55E]/15 text-[#4ADE80] border border-[#22C55E]/20',
-  Marketing: 'bg-[#059669]/15 text-[#34D399] border border-[#059669]/20',
-  Operations: 'bg-[#22C55E]/10 text-[#4ADE80] border border-[#22C55E]/15',
-  Recruitment: 'bg-[#059669]/10 text-[#34D399] border border-[#059669]/15',
-  Reporting: 'bg-[#22C55E]/15 text-[#4ADE80] border border-[#22C55E]/20',
-  Strategy: 'bg-[#059669]/15 text-[#34D399] border border-[#059669]/20',
-};
+function cardExcerpt(blog: Blog): string {
+  const fromField = blog.excerpt?.trim();
+  if (fromField) return plainTextFromAnyContent(fromField, 190);
+  return plainTextFromAnyContent(blog.content || '', 190);
+}
 
 export function LatestInsights() {
+  const [pinnedBlogs, setPinnedBlogs] = useState<Blog[]>([]);
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [skip, setSkip] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+
+  useEffect(() => {
+    const initFetch = async () => {
+      setLoading(true);
+      try {
+        const [pinnedRes, unpinnedRes] = await Promise.all([
+          fetch('/api/blogs?pinned=true'),
+          fetch('/api/blogs?skip=0&limit=3'),
+        ]);
+
+        const pinnedData = await pinnedRes.json();
+        const unpinnedData = await unpinnedRes.json();
+
+        setPinnedBlogs(Array.isArray(pinnedData) ? pinnedData : []);
+        setBlogs(Array.isArray(unpinnedData.blogs) ? unpinnedData.blogs : []);
+        setHasMore(unpinnedData.hasMore || false);
+        setSkip(3);
+      } catch (err) {
+        console.error('Fetch blogs error:', err);
+        setPinnedBlogs([]);
+        setBlogs([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    void initFetch();
+  }, []);
+
+  const loadMore = async () => {
+    setLoadingMore(true);
+    try {
+      const res = await fetch(`/api/blogs?skip=${skip}&limit=3`);
+      const data = await res.json();
+      if (Array.isArray(data.blogs)) {
+        setBlogs((prev) => [...prev, ...data.blogs]);
+      }
+      setHasMore(data.hasMore || false);
+      setSkip(skip + 3);
+    } catch (err) {
+      console.error('Load more blogs error:', err);
+    } finally {
+      setLoadingMore(false);
+    }
+  };
+
+  const allVisibleBlogs = [...pinnedBlogs, ...blogs];
+
   return (
-    <section className="section-padding relative">
-      <div className="container-wide">
-        <RevealOnScroll variant="fade-up" duration={0.8}>
-          <div className="mb-12 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
-            <div>
-              <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-[#22C55E] neon-text">
-                Blog
-              </p>
-              <h2 className="font-display text-3xl font-bold tracking-tight text-[#F5F5F5] sm:text-4xl">
-                Latest Insights
-              </h2>
-            </div>
-            <Link
-              href="/blog"
-              className="group inline-flex items-center gap-2 text-sm font-medium text-[#22C55E] transition hover:text-[#4ADE80] neon-text min-h-[44px]"
-            >
-              View All Posts
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-          </div>
+    <section
+      id="blogs"
+      className="section-padding relative scroll-mt-[calc(var(--site-header-height)+0.75rem)] overflow-hidden border-t border-white/[0.06]"
+    >
+      <div className="absolute inset-0 bg-[#0A0A0A]" />
+      <div className="absolute inset-0 grid-bg opacity-20" />
+      <div className="absolute bottom-0 right-1/4 h-96 w-96 rounded-full bg-[#22C55E]/5 blur-[150px]" />
+
+      <div className="container-wide relative z-10 max-w-full">
+        <RevealOnScroll variant="fade-up" duration={0.8} className="mb-8 text-center sm:mb-10">
+          <span className="neon-border neon-text glass mb-4 inline-block rounded-full border border-[rgba(34,197,94,0.3)] px-4 py-1.5 text-sm font-medium text-[#22C55E]">
+            Insights
+          </span>
+          <h2 className="font-display text-4xl font-extrabold tracking-tight text-[#F5F5F5] md:text-5xl lg:text-6xl">
+            Latest
+            <br />
+            <span className="text-gradient-lime">Insights</span>
+          </h2>
         </RevealOnScroll>
 
-        <StaggerChildren staggerDelay={0.1} className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {posts.slice(0, 3).map((post) => (
-            <StaggerItem key={post.slug}>
-              <RevealOnScroll variant="blur-in" duration={0.8}>
-                <Link
-                  href={`/blog/${post.slug}`}
-                  className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.03] transition-[border-color,background-color] hover:border-[#22C55E]/30 hover:bg-white/[0.05]"
-                >
-                  <div className="relative h-48 overflow-hidden">
-                    <div className={`absolute inset-0 bg-gradient-to-br ${post.gradient} group-hover:scale-110 transition-transform duration-700 ease-out`} />
-                    <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-white/[0.06] group-hover:scale-110 transition-transform duration-700" />
-                    <div className="absolute bottom-4 left-4 w-16 h-16 rotate-12 rounded-lg bg-white/[0.04] group-hover:rotate-[20deg] transition-transform duration-700" />
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full bg-white/[0.03] blur-xl" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-transparent" />
-                    <div className="absolute top-4 left-4 z-10">
-                      <span
-                        className={`inline-flex rounded-full px-3 py-1 text-xs font-medium backdrop-blur-sm ${
-                          categoryColors[post.category] ?? 'bg-[#22C55E]/10 text-[#4ADE80]'
-                        }`}
+        {loading ? (
+          <div className="flex justify-center py-20">
+            <Loader2 className="h-8 w-8 animate-spin text-[#22C55E]" />
+          </div>
+        ) : (
+          <>
+            <StaggerChildren
+              staggerDelay={0.08}
+              className="grid auto-rows-fr grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"
+            >
+              {Array.isArray(allVisibleBlogs) && allVisibleBlogs.length > 0 ? (
+                allVisibleBlogs.map((blog) => (
+                  <StaggerItem key={blog.id} className="h-full min-h-0">
+                    <RevealOnScroll variant="blur-in" duration={0.6} className="h-full min-h-0">
+                      <article
+                        className={cn(
+                          'flex h-full min-w-0 flex-col overflow-hidden rounded-2xl bg-[#111]/95 shadow-[0_8px_40px_rgba(0,0,0,0.5)] ring-1 ring-white/[0.08] transition-shadow duration-300 hover:shadow-[0_12px_48px_rgba(34,197,94,0.12)]'
+                        )}
                       >
-                        {post.category}
-                      </span>
-                    </div>
-                  </div>
+                        <div className="relative aspect-[16/10] min-h-[140px] overflow-hidden bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] sm:min-h-0">
+                          {blog.image ? (
+                            <img src={blog.image} alt="" className="h-full w-full object-cover" />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#14532d]/40 to-[#052e16]/60">
+                              <span className="text-sm font-medium uppercase tracking-widest text-[#22C55E]/60">
+                                {blog.category || 'Insight'}
+                              </span>
+                            </div>
+                          )}
+                          <div className="absolute left-3 top-3">
+                            <span className="inline-flex items-center rounded-full border border-white/10 bg-black/50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#A7F3D0] shadow-sm backdrop-blur-sm">
+                              {(blog.category || 'Insight').slice(0, 18)}
+                            </span>
+                          </div>
+                          {blog.isPinned && (
+                            <div className="absolute right-3 top-3 rounded-full bg-[#0d9488] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white shadow-sm">
+                              Featured
+                            </div>
+                          )}
+                        </div>
 
-                  <div className="flex flex-1 flex-col p-6">
-                    <h3 className="mb-2 font-display text-lg font-semibold leading-snug text-[#F5F5F5] transition-colors group-hover:text-[#22C55E]">
-                      {post.title}
-                    </h3>
-                    <p className="mb-6 flex-1 text-sm leading-relaxed text-white/60">
-                      {post.excerpt}
-                    </p>
-                    <div className="flex items-center gap-4 border-t border-white/[0.06] pt-4 text-xs text-white/40">
-                      <span className="flex items-center gap-1">
-                        <User className="h-3 w-3" />
-                        {post.author}
-                      </span>
-                      <span>{post.date}</span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
-                        {post.readTime}
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-              </RevealOnScroll>
-            </StaggerItem>
-          ))}
-        </StaggerChildren>
+                        <div className="flex min-h-0 min-w-0 flex-1 flex-col border-t border-white/[0.06] px-4 pb-4 pt-3 sm:px-5 sm:pb-5 sm:pt-4">
+                          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#4ADE80] sm:text-[11px]">
+                            {blog.category || 'Article'}
+                          </p>
+                          <h3 className="mt-2 line-clamp-2 font-display text-base font-bold leading-snug tracking-tight text-[#F5F5F5] sm:text-lg">
+                            {blog.title}
+                          </h3>
+                          <p className="mt-2 min-h-[4.5rem] flex-1 line-clamp-3 text-sm leading-relaxed text-[#A1A1AA]">
+                            {cardExcerpt(blog)}
+                          </p>
+
+                          <div className="mt-auto flex flex-col gap-3 border-t border-white/[0.08] pt-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                            <span className="flex min-w-0 items-center gap-2 text-sm font-semibold text-[#E4E4E7]">
+                              <User className="h-4 w-4 shrink-0 text-[#71717A]" aria-hidden />
+                              <span className="truncate">{blog.authorName}</span>
+                            </span>
+                            <Button
+                              asChild
+                              className="h-10 w-full shrink-0 rounded-full border border-[#22C55E]/35 bg-[#22C55E]/15 px-4 text-sm font-semibold text-[#86EFAC] shadow-none hover:bg-[#22C55E]/25 sm:h-9 sm:w-auto"
+                            >
+                              <Link href={`/insight/${blog.id}`} className="inline-flex items-center gap-1.5">
+                                Details
+                                <ArrowRight className="h-3.5 w-3.5" />
+                              </Link>
+                            </Button>
+                          </div>
+                        </div>
+                      </article>
+                    </RevealOnScroll>
+                  </StaggerItem>
+                ))
+              ) : (
+                <p className="col-span-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-12 text-center text-sm text-white/45 sm:py-14">
+                  No insights yet.
+                </p>
+              )}
+            </StaggerChildren>
+
+            {hasMore && (
+              <div className="mt-10 flex justify-center px-2 sm:mt-12">
+                <Button
+                  onClick={loadMore}
+                  disabled={loadingMore}
+                  variant="outline"
+                  className="w-full max-w-sm rounded-full border-[#22C55E]/35 bg-[#22C55E]/[0.06] px-6 py-5 text-[#86EFAC] hover:bg-[#22C55E]/15 sm:w-auto sm:max-w-none sm:px-8 sm:py-6"
+                >
+                  {loadingMore ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    'Load more'
+                  )}
+                </Button>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </section>
   );

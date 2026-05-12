@@ -1,4 +1,4 @@
----
+﻿---
 title: "Build a Customer Success Team From Scratch"
 excerpt: "When should you hire your first CS rep? How to structure the team, which metrics matter, and everything I learned building customer success at VCS."
 category: "business-growth"
@@ -208,4 +208,4 @@ Building a customer success team from scratch isn't glamorous. There's no viral 
 
 If you're losing clients and you don't know why — or worse, you DO know why but don't have the bandwidth to fix it — that's your sign. Start building. Start small. Start now.
 
-And if you need help setting up remote CS teams without the overhead of hiring locally, that's something we've gotten pretty good at over at VCS. Happy to share more if you reach out.
+And if you need help setting up virtual.CS teams without the overhead of hiring locally, that's something we've gotten pretty good at over at VCS. Happy to share more if you reach out.

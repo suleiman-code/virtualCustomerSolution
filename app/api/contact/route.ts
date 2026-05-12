@@ -4,6 +4,7 @@ import { db } from '@/lib/db'
 import { sendContactConfirmation, sendAdminNotification } from '@/lib/email'
 import { rateLimit } from '@/lib/rate-limit'
 import { forwardToCRM } from '@/lib/crm-webhook'
+import { mirrorSubmissionToLeads } from '@/lib/lead-sync'
 
 const contactSchema = z.object({
   name: z.string().min(1, 'Name is required').max(200),
@@ -47,6 +48,18 @@ export async function POST(request: Request) {
         subject: data.subject ?? null,
         message: data.message,
       },
+    })
+
+    void mirrorSubmissionToLeads({
+      kind: 'contact',
+      name: data.name,
+      email: data.email,
+      phone: data.phone ?? null,
+      country: null,
+      service: data.service?.trim() || 'General inquiry',
+      budget: data.budget?.trim(),
+      description: [data.subject?.trim(), data.message.trim()].filter(Boolean).join('\n\n'),
+      source: 'Contact form',
     })
 
     Promise.allSettled([

@@ -50,17 +50,17 @@ export const caseStudies: CaseStudy[] = [
     tags: ["E-commerce", "Paid Media", "Reporting", "Lifecycle Marketing"],
   },
   {
-    slug: "saas-remote-team-scaling",
-    title: "Scaling Operations with a Dedicated Remote Workforce",
+    slug: "saas-virtual-team-scaling",
+    title: "Scaling Operations with a Dedicated Virtual Workforce",
     client: "B2B SaaS Company",
     industry: "Technology / SaaS",
     problem:
       "A growing B2B SaaS company was struggling to keep up with customer onboarding, support ticket volume, and internal operations as they crossed 500 active accounts. The founding team was still handling escalations, and hiring locally was too slow and expensive to match their growth rate. Quality was slipping and churn started creeping upward.",
     strategy:
-      "We built and managed a dedicated remote operations team that handled customer onboarding, tier-1 support, and internal process documentation. Each team member was trained on the client's product, tools, and tone of voice. We also introduced SOPs and a weekly quality review process to keep service levels consistent as the team expanded.",
+      "We built and managed a dedicated virtual operations team that handled customer onboarding, tier-1 support, and internal process documentation. Each team member was trained on the client's product, tools, and tone of voice. We also introduced SOPs and a weekly quality review process to keep service levels consistent as the team expanded.",
     execution: [
       "Mapped all customer-facing and internal operations workflows to identify delegation opportunities",
-      "Recruited, vetted, and onboarded a 6-person remote team across support, onboarding, and admin roles",
+      "Recruited, vetted, and onboarded a 6-person virtual team across support, onboarding, and admin roles",
       "Built a 40+ task SOP library with clear escalation paths and execution rules",
       "Implemented a QA scoring system with weekly calibration sessions",
       "Set up shared dashboards for ticket response time, resolution rate, and customer satisfaction",
@@ -75,8 +75,8 @@ export const caseStudies: CaseStudy[] = [
     testimonial:
       "We went from drowning in support tickets to having a team that handles everything better than we did ourselves. VCS gave us our time back without sacrificing quality.",
     duration: "6 months",
-    servicesUsed: ["Remote Workforce Solutions"],
-    tags: ["SaaS", "Remote Teams", "Customer Support", "Operations"],
+    servicesUsed: ["Virtual Workforce Solutions"],
+    tags: ["SaaS", "Virtual Teams", "Customer Support", "Operations"],
   },
   {
     slug: "agency-performance-marketing-turnaround",
@@ -137,18 +137,18 @@ export const caseStudies: CaseStudy[] = [
     tags: ["Healthcare", "Reporting", "Automation", "Multi-location"],
   },
   {
-    slug: "fintech-remote-dev-operations",
-    title: "Building a Remote Dev & Ops Team from Scratch",
+    slug: "fintech-virtual-dev-operations",
+    title: "Building a Virtual Dev & Ops Team from Scratch",
     client: "Fintech Startup",
     industry: "Financial Technology",
     problem:
       "A funded fintech startup needed to move fast on product development and customer operations but couldn't afford a full local engineering and ops team at Bay Area rates. Their initial attempts at freelance hiring produced inconsistent quality and constant context-switching for the CTO, who was spending more time managing contractors than building the product.",
     strategy:
-      "We assembled a dedicated remote team covering front-end development, QA testing, and customer operations. Each team member was embedded into the client's workflows, attending standups and using their project management tools. We also set up the reporting and process infrastructure so the CTO could manage by output rather than hours.",
+      "We assembled a dedicated virtual team covering front-end development, QA testing, and customer operations. Each team member was embedded into the client's workflows, attending standups and using their project management tools. We also set up the reporting and process infrastructure so the CTO could manage by output rather than hours.",
     execution: [
       "Defined role requirements, technical assessments, and cultural fit criteria with the founding team",
       "Recruited and onboarded 4 developers, 2 QA engineers, and 3 operations specialists within 6 weeks",
-      "Integrated remote team into the client's Jira, Slack, and GitHub workflows with clear sprint commitments",
+      "Integrated virtual team into the client's Jira, Slack, and GitHub workflows with clear sprint commitments",
       "Established code review standards, deployment checklists, and QA acceptance criteria",
       "Built a performance dashboard tracking sprint velocity, bug rates, and customer response metrics",
       "Ran monthly retrospectives to continuously improve team processes and communication",
@@ -160,10 +160,10 @@ export const caseStudies: CaseStudy[] = [
       { metric: "Bug Resolution", value: "< 24 hrs", description: "Average time to resolve critical bugs, down from 5+ days" },
     ],
     testimonial:
-      "VCS gave us a team that feels like our own. They didn't just fill seats — they built the processes that made our remote team actually work. We shipped faster than we ever could have locally.",
+      "VCS gave us a team that feels like our own. They didn't just fill seats — they built the processes that made our virtual team actually work. We shipped faster than we ever could have locally.",
     duration: "Ongoing (12+ months)",
-    servicesUsed: ["Remote Workforce Solutions", "Growth Systems & Reporting"],
-    tags: ["Fintech", "Remote Teams", "Development", "QA", "Startup"],
+    servicesUsed: ["Virtual Workforce Solutions", "Growth Systems & Reporting"],
+    tags: ["Fintech", "Virtual Teams", "Development", "QA", "Startup"],
   },
 ];
 

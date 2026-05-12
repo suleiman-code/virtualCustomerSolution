@@ -11,6 +11,7 @@ import {
   type ServiceSlug,
   type Industry,
 } from "@/lib/programmatic-seo";
+import { FREE_AUDIT_CONTACT_HREF } from "@/lib/paths";
 import {
   ChevronRight,
   ArrowRight,
@@ -91,7 +92,7 @@ export default async function ServiceIndustryPage({
               Home
             </Link>
             <ChevronRight className="h-3.5 w-3.5" />
-            <Link href="/services" className="transition-colors hover:text-[var(--text-secondary)]">
+            <Link href="/services#offerings" className="transition-colors hover:text-[var(--text-secondary)]">
               Services
             </Link>
             <ChevronRight className="h-3.5 w-3.5" />
@@ -118,7 +119,7 @@ export default async function ServiceIndustryPage({
             {content.subheadline}
           </p>
           <Link
-            href="/free-growth-audit"
+            href={FREE_AUDIT_CONTACT_HREF}
             className="mt-8 inline-flex items-center gap-2 rounded-xl bg-[var(--red-primary)] px-8 py-3.5 text-sm font-semibold text-black shadow-lg shadow-[#22C55E]/20 transition-[background-color,box-shadow] hover:bg-[var(--red-dark)] hover:shadow-[#22C55E]/30 font-[family-name:var(--font-body)]"
           >
             Get a Free Growth Audit
@@ -236,7 +237,7 @@ export default async function ServiceIndustryPage({
             {content.ctaText}
           </p>
           <Link
-            href="/free-growth-audit"
+            href={FREE_AUDIT_CONTACT_HREF}
             className="mt-8 inline-flex items-center gap-2 rounded-xl bg-[var(--red-primary)] px-8 py-3.5 text-sm font-semibold text-black shadow-lg shadow-[#22C55E]/20 transition-[background-color,box-shadow] hover:bg-[var(--red-dark)] hover:shadow-[#22C55E]/30 font-[family-name:var(--font-body)]"
           >
             Get a Free Growth Audit

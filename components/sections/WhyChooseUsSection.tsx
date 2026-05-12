@@ -1,13 +1,13 @@
-'use client';
+﻿'use client';
 
 import { Check, ArrowRight } from 'lucide-react';
 import { Section, Container, SectionHeader, FadeUp, GlassCard } from '@/components/ui-dp/AnimatedElements';
-import { useNavigation } from '@/lib/navigation';
+import { useNavigation, type PageRoute } from '@/lib/navigation';
 import { Button } from '@/components/ui/button';
 
 const benefits = [
   {
-    title: 'Marketing + Remote Staff in ONE package',
+    title: 'Marketing + Virtual Staff in ONE package',
     description: 'Unique offering — competitors don\'t offer this combination',
     icon: '✅',
   },
@@ -33,7 +33,15 @@ const benefits = [
   },
 ];
 
-const packages = [
+const packages: {
+  name: string;
+  price: string;
+  period: string;
+  description: string;
+  badge: string;
+  highlighted: boolean;
+  link: PageRoute;
+}[] = [
   {
     name: 'Starter Rocket',
     price: '$399',
@@ -41,7 +49,7 @@ const packages = [
     description: 'For Startups',
     badge: '🟢',
     highlighted: false,
-    link: 'pricing',
+    link: 'contact',
   },
   {
     name: 'Growth Engine',
@@ -50,7 +58,7 @@ const packages = [
     description: 'Most Popular',
     badge: '🔵',
     highlighted: true,
-    link: 'pricing',
+    link: 'contact',
   },
   {
     name: 'Domination Mode',
@@ -59,7 +67,7 @@ const packages = [
     description: 'For Market Leaders',
     badge: '🟡',
     highlighted: false,
-    link: 'pricing',
+    link: 'contact',
   },
 ];
 
@@ -98,10 +106,10 @@ export function WhyChooseUsSection() {
         {/* Package Preview */}
         <div className="text-center mb-8">
           <h3 className="font-display text-2xl font-bold text-[var(--text-primary)] mb-2">
-            Our Pricing Packages
+            Example engagement ranges
           </h3>
           <p className="text-[var(--text-secondary)]">
-            Choose the plan that fits your business needs
+            Final scopes are custom — contact us for a tailored proposal
           </p>
         </div>
 
@@ -126,11 +134,11 @@ export function WhyChooseUsSection() {
                 </div>
                 <p className="text-[var(--text-muted)] text-sm mb-4">{pkg.description}</p>
                 <Button
-                  onClick={() => navigateTo(pkg.link as any)}
+                  onClick={() => navigateTo(pkg.link)}
                   variant={pkg.highlighted ? 'default' : 'outline'}
                   className="w-full"
                 >
-                  View Details
+                  Get a quote
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </GlassCard>

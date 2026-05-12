@@ -303,8 +303,6 @@ export async function sendLeadAdminNotification(data: LeadEmailData): Promise<vo
 }
 
 export async function sendLeadAutoReply(data: LeadEmailData): Promise<void> {
-  const whatsappUrl = 'https://wa.me/923151407896'
-
   const body = [
     paragraph(`Hi ${data.name},`),
     paragraph(`Thank you for booking a free consultation with ${COMPANY_NAME}. We've received your request and a strategist from our workforce team is already reviewing your requirements.`),
@@ -323,7 +321,7 @@ export async function sendLeadAutoReply(data: LeadEmailData): Promise<void> {
     </ol>`,
     divider(),
     paragraph(`<strong style="color:${COLORS.text};">Need to reach us sooner?</strong>`),
-    mutedParagraph(`For urgent queries, message us on WhatsApp: <a href="${whatsappUrl}" style="color:${COLORS.accent};text-decoration:none;font-weight:600;">+92 315 1407896</a>`),
+    mutedParagraph(`Call us: <a href="tel:+923151407896" style="color:${COLORS.accent};text-decoration:none;font-weight:600;">+92 315 1407896</a>`),
     mutedParagraph(`Or reply to this email with any questions you have.`),
     divider(),
     mutedParagraph(`${COMPANY_NAME} · 114 McLeod Rd, Lahore, Pakistan`),

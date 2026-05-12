@@ -5,7 +5,9 @@ import Link from 'next/link';
 import { Calendar, Clock, Search, X } from 'lucide-react';
 
 interface PostSummary {
+  kind?: 'mongo' | 'markdown';
   slug: string;
+  mongoId?: string;
   title: string;
   excerpt: string;
   category: string;
@@ -14,6 +16,7 @@ interface PostSummary {
   author: string;
   readingTime: number;
   featured: boolean;
+  image?: string;
 }
 
 interface BlogListClientProps {
@@ -38,6 +41,7 @@ export function BlogListClient({ posts, categories }: BlogListClientProps) {
         (p) =>
           p.title.toLowerCase().includes(q) ||
           p.excerpt.toLowerCase().includes(q) ||
+          p.author.toLowerCase().includes(q) ||
           p.tags.some((t) => t.toLowerCase().includes(q))
       );
     }
@@ -109,40 +113,67 @@ export function BlogListClient({ posts, categories }: BlogListClientProps) {
 
       {/* Posts Grid */}
       {filteredPosts.length > 0 ? (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid auto-rows-fr gap-6 md:grid-cols-2 lg:grid-cols-3">
           {filteredPosts.map((post) => {
-            const formattedDate = new Date(post.date).toLocaleDateString(
-              'en-US',
-              { year: 'numeric', month: 'short', day: 'numeric' }
-            );
+            const formattedDate =
+              post.date && !Number.isNaN(Date.parse(post.date))
+                ? new Date(post.date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                  })
+                : '—';
+
+            const href = post.mongoId ? `/insight/${post.mongoId}` : `/blog/${post.slug}`;
+            const cardKey = post.mongoId ?? post.slug;
 
             return (
               <Link
-                key={post.slug}
-                href={`/blog/${post.slug}`}
-                className="glass-panel p-6 group hover:border-[rgba(34,197,94,0.2)] transition-all flex flex-col"
+                key={cardKey}
+                href={href}
+                className="glass-panel group flex h-full min-h-0 flex-col overflow-hidden p-0 transition-all hover:border-[rgba(34,197,94,0.2)]"
               >
-                <span className="inline-flex self-start items-center text-xs font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[rgba(34,197,94,0.08)] text-[#22C55E] border border-[rgba(34,197,94,0.15)] mb-4">
-                  {post.category}
-                </span>
-
-                <h2 className="font-display text-lg font-bold text-[#F5F5F5] mb-2 group-hover:text-[#22C55E] transition-colors line-clamp-2">
-                  {post.title}
-                </h2>
-
-                <p className="text-sm text-white/60 leading-relaxed mb-4 line-clamp-3 flex-1">
-                  {post.excerpt}
-                </p>
-
-                <div className="flex items-center gap-3 text-xs text-white/40">
-                  <span className="flex items-center gap-1">
-                    <Calendar className="w-3 h-3" />
-                    {formattedDate}
+                <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-white/[0.04]">
+                  {post.image ? (
+                    <>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={post.image}
+                        alt=""
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                      />
+                    </>
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#14532d]/25 to-[#052e16]/50">
+                      <span className="text-xs font-semibold uppercase tracking-widest text-[#22C55E]/50">
+                        Article
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="flex min-h-0 flex-1 flex-col p-6">
+                  <span className="mb-4 inline-flex items-center self-start rounded-full border border-[rgba(34,197,94,0.15)] bg-[rgba(34,197,94,0.08)] px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-[#22C55E]">
+                    {post.category}
                   </span>
-                  <span className="flex items-center gap-1">
-                    <Clock className="w-3 h-3" />
-                    {post.readingTime} min
-                  </span>
+
+                  <h2 className="font-display mb-2 line-clamp-2 text-lg font-bold text-[#F5F5F5] transition-colors group-hover:text-[#22C55E]">
+                    {post.title}
+                  </h2>
+
+                  <p className="mb-4 min-h-[4.5rem] flex-1 line-clamp-3 text-sm leading-relaxed text-white/60">
+                    {post.excerpt}
+                  </p>
+
+                  <div className="mt-auto flex items-center gap-3 text-xs text-white/40">
+                    <span className="flex items-center gap-1">
+                      <Calendar className="h-3 w-3" />
+                      {formattedDate}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Clock className="h-3 w-3" />
+                      {post.readingTime} min
+                    </span>
+                  </div>
                 </div>
               </Link>
             );

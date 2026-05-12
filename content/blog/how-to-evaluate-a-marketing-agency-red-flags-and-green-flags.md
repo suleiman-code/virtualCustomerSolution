@@ -1,4 +1,4 @@
----
+﻿---
 title: "How to Evaluate a Marketing Agency: Key Red Flags"
 excerpt: "Hiring the wrong agency is expensive. After running one for 8 years, here's my insider guide to spotting the great ones and running from the terrible ones."
 category: "business-growth"
