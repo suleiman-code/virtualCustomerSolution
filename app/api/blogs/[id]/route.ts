@@ -3,12 +3,14 @@ import { ObjectId } from 'mongodb';
 import { getDb } from '@/lib/db';
 import { requireAdminApi } from '@/lib/require-admin-api';
 import { coerceBlogCategory } from '@/lib/blog-categories';
+import { normalizePublicImageUrl } from '@/lib/public-image-url';
 
 function serializeBlog(b: Record<string, unknown> & { _id: { toString: () => string } }) {
   const { _id, ...rest } = b;
   const out = { ...rest, id: _id.toString() } as Record<string, unknown>;
   if (out.date instanceof Date) out.date = out.date.toISOString();
   if (out.createdAt instanceof Date) out.createdAt = out.createdAt.toISOString();
+  if (typeof out.image === 'string') out.image = normalizePublicImageUrl(out.image);
   return out;
 }
 
@@ -82,7 +84,7 @@ export async function PATCH(
     $set.excerpt = String(data.excerpt || '').trim();
   }
   if (data.image !== undefined) {
-    $set.image = String(data.image || '').trim();
+    $set.image = normalizePublicImageUrl(String(data.image || ''));
   }
   if (data.isPinned !== undefined) {
     $set.isPinned = !!data.isPinned;

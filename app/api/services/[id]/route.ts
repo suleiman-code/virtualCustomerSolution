@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import { getDb } from '@/lib/db';
 import { requireAdminApi } from '@/lib/require-admin-api';
+import { normalizePublicImageUrl } from '@/lib/public-image-url';
 
 function serializeService(s: Record<string, unknown> & { _id: { toString: () => string } }) {
   const { _id, ...rest } = s;
@@ -9,6 +10,7 @@ function serializeService(s: Record<string, unknown> & { _id: { toString: () => 
   if (out.date instanceof Date) out.date = out.date.toISOString();
   if (out.createdAt instanceof Date) out.createdAt = out.createdAt.toISOString();
   if (out.updatedAt instanceof Date) out.updatedAt = out.updatedAt.toISOString();
+  if (typeof out.image === 'string') out.image = normalizePublicImageUrl(out.image);
   return out;
 }
 
@@ -75,7 +77,7 @@ export async function PATCH(
     $set.body = body;
   }
   if (data.image !== undefined) {
-    $set.image = String(data.image || '').trim();
+    $set.image = normalizePublicImageUrl(String(data.image || ''));
   }
   if (data.isPinned !== undefined) {
     $set.isPinned = !!data.isPinned;

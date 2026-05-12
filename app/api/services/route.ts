@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDb, mongoUnavailablePayload } from '@/lib/db';
 import { requireAdminApi } from '@/lib/require-admin-api';
+import { normalizePublicImageUrl } from '@/lib/public-image-url';
 
 function serializeService(s: Record<string, unknown> & { _id: { toString: () => string } }) {
   const { _id, ...rest } = s;
@@ -8,6 +9,7 @@ function serializeService(s: Record<string, unknown> & { _id: { toString: () => 
   if (out.date instanceof Date) out.date = out.date.toISOString();
   if (out.createdAt instanceof Date) out.createdAt = out.createdAt.toISOString();
   if (out.updatedAt instanceof Date) out.updatedAt = out.updatedAt.toISOString();
+  if (typeof out.image === 'string') out.image = normalizePublicImageUrl(out.image);
   return out;
 }
 
@@ -90,7 +92,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const image = data.image != null ? String(data.image).trim() : '';
+    const image = data.image != null ? normalizePublicImageUrl(String(data.image)) : '';
 
     const newService = {
       title,

@@ -7,6 +7,7 @@ import { ArticleBody } from '@/components/public/ArticleBody';
 import { plainTextFromAnyContent } from '@/lib/markdown-excerpt';
 import { SiteShell } from '@/components/layout/SiteShell';
 import { FREE_AUDIT_CONTACT_HREF } from '@/lib/paths';
+import { normalizePublicImageUrl } from '@/lib/public-image-url';
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -48,7 +49,7 @@ export default async function OfferingPage({ params }: Props) {
   const title = String(doc.title || '');
   const description = String(doc.description || '');
   const body = String(doc.body || '');
-  const image = doc.image ? String(doc.image) : '';
+  const image = normalizePublicImageUrl(doc.image ? String(doc.image) : '');
 
   const lead =
     plainTextFromAnyContent(description, 280) || plainTextFromAnyContent(body, 280);
