@@ -12,6 +12,34 @@ export const siteConfig = {
   formSubmitAction: "https://formsubmit.co/ajax/contact@virtualcustomersolution.com",
 };
 
+/** Public office & phone lines (footer, contact, schema, emails). */
+export const officeLocations = {
+  usa: {
+    regionLabel: 'United States',
+    hqLabel: 'Agency HQ',
+    phoneTel: '+12674523317',
+    phoneDisplay: '+1 (267) 452-3317',
+    lines: ['325 Chestnut St, Suite 876 #232', 'Philadelphia, PA 19106'] as const,
+    schemaStreetAddress: '325 Chestnut St, Suite 876 #232',
+    addressLocality: 'Philadelphia',
+    addressRegion: 'PA',
+    postalCode: '19106',
+    addressCountry: 'US',
+  },
+  pakistan: {
+    regionLabel: 'Pakistan',
+    officeLabel: 'Lahore office',
+    phoneTel: '+923249986545',
+    phoneDisplay: '+92 324 9986545',
+    lines: ['Office no. 2, Aqa Khail Road', 'Block L, Gulberg 3', 'Lahore, Pakistan'] as const,
+    schemaStreetAddress: 'Office no. 2, Aqa Khail Road, Block L, Gulberg 3',
+    addressLocality: 'Lahore',
+    addressRegion: 'Punjab',
+    postalCode: '',
+    addressCountry: 'PK',
+  },
+} as const;
+
 export const navigation = [
   { label: "Services", href: "/services#offerings" },
   { label: "Stories", href: "#testimonials" },

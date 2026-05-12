@@ -3,6 +3,7 @@ import { Space_Grotesk, Inter, IBM_Plex_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { officeLocations } from "@/lib/content";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-display",
@@ -131,7 +132,7 @@ export default function RootLayout({
                   description:
                     'AI-powered digital marketing, virtual workforce, and web development solutions for businesses in 15+ countries.',
                   email: 'contact@virtualcustomersolution.com',
-                  telephone: '+92-315-1407896',
+                  telephone: officeLocations.usa.phoneTel,
                   priceRange: '$399-$2499/mo',
                   openingHours: 'Mo-Sa 10:00-19:00',
                   currenciesAccepted: 'USD, PKR',
@@ -142,25 +143,54 @@ export default function RootLayout({
                     'https://twitter.com/virtualcustsol',
                     'https://instagram.com/virtualcustomersolution',
                   ],
-                  contactPoint: {
-                    '@type': 'ContactPoint',
-                    telephone: '+92-315-1407896',
-                    email: 'contact@virtualcustomersolution.com',
-                    contactType: 'customer service',
-                    availableLanguage: ['English', 'Urdu'],
-                    areaServed: ['US', 'UK', 'AE', 'CA', 'AU', 'PK'],
-                  },
-                  address: {
-                    '@type': 'PostalAddress',
-                    streetAddress: '114 McLeod Rd',
-                    addressLocality: 'Lahore',
-                    addressCountry: 'PK',
-                  },
-                  geo: {
-                    '@type': 'GeoCoordinates',
-                    latitude: '31.5497',
-                    longitude: '74.3436',
-                  },
+                  contactPoint: [
+                    {
+                      '@type': 'ContactPoint',
+                      telephone: officeLocations.usa.phoneTel,
+                      email: 'contact@virtualcustomersolution.com',
+                      contactType: 'customer support',
+                      availableLanguage: ['English'],
+                      areaServed: ['US', 'CA'],
+                    },
+                    {
+                      '@type': 'ContactPoint',
+                      telephone: officeLocations.pakistan.phoneTel,
+                      email: 'contact@virtualcustomersolution.com',
+                      contactType: 'customer support',
+                      availableLanguage: ['English', 'Urdu'],
+                      areaServed: ['PK', 'AE', 'UK', 'AU'],
+                    },
+                  ],
+                  location: [
+                    {
+                      '@type': 'Place',
+                      name: `${officeLocations.usa.hqLabel} — ${officeLocations.usa.regionLabel}`,
+                      address: {
+                        '@type': 'PostalAddress',
+                        streetAddress: officeLocations.usa.schemaStreetAddress,
+                        addressLocality: officeLocations.usa.addressLocality,
+                        addressRegion: officeLocations.usa.addressRegion,
+                        postalCode: officeLocations.usa.postalCode,
+                        addressCountry: officeLocations.usa.addressCountry,
+                      },
+                    },
+                    {
+                      '@type': 'Place',
+                      name: `${officeLocations.pakistan.officeLabel} — ${officeLocations.pakistan.regionLabel}`,
+                      address: {
+                        '@type': 'PostalAddress',
+                        streetAddress: officeLocations.pakistan.schemaStreetAddress,
+                        addressLocality: officeLocations.pakistan.addressLocality,
+                        addressRegion: officeLocations.pakistan.addressRegion,
+                        addressCountry: officeLocations.pakistan.addressCountry,
+                      },
+                      geo: {
+                        '@type': 'GeoCoordinates',
+                        latitude: '31.5497',
+                        longitude: '74.3436',
+                      },
+                    },
+                  ],
                   founder: {
                     '@type': 'Person',
                     name: 'M Faizan Rafiq',

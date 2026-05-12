@@ -21,6 +21,99 @@ type OurServicesProps = {
   sectionId?: string;
 };
 
+function ServiceVisualNoImage({
+  title,
+  description,
+  isHomeServices,
+}: {
+  title: string;
+  description: string;
+  isHomeServices: boolean;
+}) {
+  const lede = plainTextFromAnyContent(description, 110);
+  const cleanTitle = title?.trim() || 'Service';
+
+  return (
+    <div className="relative flex h-full min-h-[140px] w-full overflow-hidden sm:min-h-0">
+      {/* Quiet depth — no loud colour blocks */}
+      <div
+        className={cn(
+          'pointer-events-none absolute inset-0',
+          isHomeServices
+            ? 'bg-gradient-to-br from-[#101010] via-[#0c0c0c] to-[#080808]'
+            : 'bg-gradient-to-br from-[#fafafa] via-[#f4f4f5] to-[#ececee]'
+        )}
+      />
+      <div
+        className={cn(
+          'pointer-events-none absolute inset-0 opacity-[0.45]',
+          isHomeServices
+            ? '[background-image:repeating-linear-gradient(-12deg,transparent,transparent_38px,rgba(255,255,255,0.02)_38px,rgba(255,255,255,0.02)_39px)]'
+            : '[background-image:repeating-linear-gradient(-12deg,transparent,transparent_40px,rgba(0,0,0,0.02)_40px,rgba(0,0,0,0.02)_41px)]'
+        )}
+      />
+      {isHomeServices ? (
+        <div className="pointer-events-none absolute left-0 top-0 h-full w-px bg-gradient-to-b from-[#22C55E]/25 via-[#22C55E]/10 to-transparent" />
+      ) : (
+        <div className="pointer-events-none absolute left-0 top-0 h-full w-px bg-gradient-to-b from-sky-300/50 via-sky-200/20 to-transparent" />
+      )}
+
+      <div className="relative z-[1] flex h-full w-full flex-col justify-end px-5 pb-6 pt-10 text-left sm:px-6 sm:pb-7 sm:pt-12">
+        <h3
+          className={cn(
+            'font-display text-lg font-semibold leading-snug tracking-tight line-clamp-2 sm:text-xl',
+            isHomeServices ? 'text-[#f4f4f5]' : 'text-zinc-900'
+          )}
+        >
+          {cleanTitle}
+        </h3>
+        {lede ? (
+          <p
+            className={cn(
+              'mt-2.5 text-[13px] leading-relaxed line-clamp-2 sm:text-sm',
+              isHomeServices ? 'text-white/48' : 'text-slate-600'
+            )}
+          >
+            {lede}
+          </p>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+function ServiceCoverMedia({
+  image,
+  title,
+  description,
+  isHomeServices,
+}: {
+  image: string;
+  title: string;
+  description: string;
+  isHomeServices: boolean;
+}) {
+  const [broken, setBroken] = useState(false);
+  const url = image?.trim();
+  if (url && !broken) {
+    return (
+      <img
+        src={url}
+        alt=""
+        className="h-full w-full object-cover"
+        onError={() => setBroken(true)}
+      />
+    );
+  }
+  return (
+    <ServiceVisualNoImage
+      title={title}
+      description={description}
+      isHomeServices={isHomeServices}
+    />
+  );
+}
+
 export function OurServices({ sectionId = 'services' }: OurServicesProps) {
   const [pinnedServices, setPinnedServices] = useState<Service[]>([]);
   const [services, setServices] = useState<Service[]>([]);
@@ -147,31 +240,12 @@ export function OurServices({ sectionId = 'services' }: OurServicesProps) {
                             isHomeServices ? 'bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d]' : 'bg-zinc-100'
                           )}
                         >
-                          {service.image ? (
-                            <img
-                              src={service.image}
-                              alt=""
-                              className="h-full w-full object-cover"
-                            />
-                          ) : (
-                            <div
-                              className={cn(
-                                'flex h-full w-full items-center justify-center bg-gradient-to-br',
-                                isHomeServices
-                                  ? 'from-[#14532d]/40 to-[#052e16]/60'
-                                  : 'from-slate-100 to-slate-200'
-                              )}
-                            >
-                              <span
-                                className={cn(
-                                  'text-sm font-medium uppercase tracking-widest',
-                                  isHomeServices ? 'text-[#22C55E]/60' : 'text-slate-400'
-                                )}
-                              >
-                                Service
-                              </span>
-                            </div>
-                          )}
+                          <ServiceCoverMedia
+                            image={service.image}
+                            title={service.title}
+                            description={service.description}
+                            isHomeServices={isHomeServices}
+                          />
                           <div className="absolute left-3 top-3">
                             <span
                               className={cn(

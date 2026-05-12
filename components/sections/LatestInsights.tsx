@@ -20,6 +20,47 @@ interface Blog {
   date: string;
 }
 
+function BlogVisualNoImage({ title, lede }: { title: string; lede: string }) {
+  const cleanTitle = title?.trim() || 'Article';
+
+  return (
+    <div className="relative flex h-full min-h-[140px] w-full overflow-hidden sm:min-h-0">
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#0f0f0f] via-[#0a0a0a] to-[#060606]" />
+      <div className="pointer-events-none absolute inset-0 opacity-[0.5] [background-image:repeating-linear-gradient(11deg,transparent,transparent_44px,rgba(255,255,255,0.018)_44px,rgba(255,255,255,0.018)_45px)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_100%_0%,rgba(34,197,94,0.06),transparent_55%)]" />
+      <div className="pointer-events-none absolute left-0 top-0 h-full w-px bg-gradient-to-b from-white/12 via-white/[0.06] to-transparent" />
+
+      <div className="relative z-[1] flex h-full w-full flex-col justify-end px-5 pb-6 pt-10 text-left sm:px-6 sm:pb-7 sm:pt-12">
+        <h3 className="font-display text-lg font-semibold leading-snug tracking-tight text-[#f2f2f2] line-clamp-2 sm:text-xl">
+          {cleanTitle}
+        </h3>
+        {lede ? (
+          <p className="mt-2.5 text-[13px] leading-relaxed text-white/45 line-clamp-2 sm:text-sm">{lede}</p>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+function BlogCoverMedia({
+  image,
+  title,
+  lede,
+}: {
+  image: string;
+  title: string;
+  lede: string;
+}) {
+  const [broken, setBroken] = useState(false);
+  const url = image?.trim();
+  if (url && !broken) {
+    return (
+      <img src={url} alt="" className="h-full w-full object-cover" onError={() => setBroken(true)} />
+    );
+  }
+  return <BlogVisualNoImage title={title} lede={lede} />;
+}
+
 function cardExcerpt(blog: Blog): string {
   const fromField = blog.excerpt?.trim();
   if (fromField) return plainTextFromAnyContent(fromField, 190);
@@ -121,15 +162,14 @@ export function LatestInsights() {
                         )}
                       >
                         <div className="relative aspect-[16/10] min-h-[140px] overflow-hidden bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] sm:min-h-0">
-                          {blog.image ? (
-                            <img src={blog.image} alt="" className="h-full w-full object-cover" />
-                          ) : (
-                            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#14532d]/40 to-[#052e16]/60">
-                              <span className="text-sm font-medium uppercase tracking-widest text-[#22C55E]/60">
-                                {blog.category || 'Insight'}
-                              </span>
-                            </div>
-                          )}
+                          <BlogCoverMedia
+                            image={blog.image}
+                            title={blog.title}
+                            lede={plainTextFromAnyContent(
+                              blog.excerpt?.trim() || blog.content || '',
+                              120
+                            )}
+                          />
                           <div className="absolute left-3 top-3">
                             <span className="inline-flex items-center rounded-full border border-white/10 bg-black/50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#A7F3D0] shadow-sm backdrop-blur-sm">
                               {(blog.category || 'Insight').slice(0, 18)}

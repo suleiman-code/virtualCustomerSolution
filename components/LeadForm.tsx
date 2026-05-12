@@ -26,6 +26,7 @@ import {
   leadSchema,
   type LeadInput,
 } from '@/lib/validations/lead'
+import { officeLocations } from '@/lib/content'
 
 const STORAGE_KEY = 'vcs.leadForm.draft'
 
@@ -453,7 +454,7 @@ export default function LeadForm() {
           className="relative z-10 mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row"
         >
           <a
-            href="tel:+923151407896"
+            href={`tel:${officeLocations.usa.phoneTel}`}
             className="inline-flex items-center gap-2 rounded-full border border-[#22C55E]/40 bg-[#22C55E]/10 px-6 py-3 text-sm font-semibold text-[#22C55E] transition-all hover:bg-[#22C55E]/20"
           >
             <Phone className="h-4 w-4" />

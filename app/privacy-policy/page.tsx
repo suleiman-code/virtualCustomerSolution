@@ -2,6 +2,7 @@
 import { SiteShell } from "@/components/layout/SiteShell";
 import { Shield, Mail, MapPin, Calendar, Cookie, Database, UserCheck, Eye, Trash2, Lock } from "lucide-react";
 import Link from "next/link";
+import { officeLocations } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -326,9 +327,17 @@ export default function PrivacyPolicyPage() {
                     contact@virtualcustomersolution.com
                   </a>
                 </div>
-                <div className="flex items-center gap-3 text-[var(--text-secondary)]">
-                  <MapPin className="h-5 w-5 text-[var(--red-primary)]" />
-                  <span>Virtual Customer Solution, 114 McLeod Rd, Lahore</span>
+                <div className="flex items-start gap-3 text-[var(--text-secondary)]">
+                  <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-[var(--red-primary)]" />
+                  <span className="text-sm leading-relaxed">
+                    <strong className="font-semibold text-[var(--text-primary)]">Virtual Customer Solution</strong>
+                    <br />
+                    {officeLocations.usa.hqLabel} ({officeLocations.usa.regionLabel}):{' '}
+                    {officeLocations.usa.lines.join(', ')}
+                    <br />
+                    {officeLocations.pakistan.officeLabel} ({officeLocations.pakistan.regionLabel}):{' '}
+                    {officeLocations.pakistan.lines.join(', ')}
+                  </span>
                 </div>
               </div>
             </div>

@@ -1,5 +1,7 @@
 import nodemailer from 'nodemailer'
 
+import { officeLocations } from '@/lib/content'
+
 const ADMIN_EMAIL = 'contact@virtualcustomersolution.com'
 const COMPANY_NAME = 'Virtual Customer Solution'
 
@@ -321,10 +323,14 @@ export async function sendLeadAutoReply(data: LeadEmailData): Promise<void> {
     </ol>`,
     divider(),
     paragraph(`<strong style="color:${COLORS.text};">Need to reach us sooner?</strong>`),
-    mutedParagraph(`Call us: <a href="tel:+923151407896" style="color:${COLORS.accent};text-decoration:none;font-weight:600;">+92 315 1407896</a>`),
+    mutedParagraph(
+      `Call us: <a href="tel:${officeLocations.usa.phoneTel}" style="color:${COLORS.accent};text-decoration:none;font-weight:600;">${officeLocations.usa.phoneDisplay}</a> (${officeLocations.usa.regionLabel}) · <a href="tel:${officeLocations.pakistan.phoneTel}" style="color:${COLORS.accent};text-decoration:none;font-weight:600;">${officeLocations.pakistan.phoneDisplay}</a> (${officeLocations.pakistan.regionLabel})`
+    ),
     mutedParagraph(`Or reply to this email with any questions you have.`),
     divider(),
-    mutedParagraph(`${COMPANY_NAME} · 114 McLeod Rd, Lahore, Pakistan`),
+    mutedParagraph(
+      `${COMPANY_NAME} · ${officeLocations.usa.hqLabel}: ${officeLocations.usa.lines.join(', ')}, ${officeLocations.usa.regionLabel}. ${officeLocations.pakistan.officeLabel}: ${officeLocations.pakistan.lines.join(', ')}.`
+    ),
     mutedParagraph(`<a href="https://virtualcustomersolution.com" style="color:${COLORS.accent};text-decoration:none;">virtualcustomersolution.com</a>`),
   ].join('')
 

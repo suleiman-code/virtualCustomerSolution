@@ -1,9 +1,10 @@
 ﻿'use client';
 
-import { Linkedin, Mail, Phone, MapPin, ArrowUpRight, Instagram, Twitter, Facebook } from 'lucide-react';
+import { Linkedin, Mail, Phone, ArrowUpRight, Instagram, Twitter, Facebook } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useNavigation, scrollDocumentToTop } from '@/lib/navigation';
+import { officeLocations } from '@/lib/content';
 
 const footerLinks = {
   quickLinks: [
@@ -117,46 +118,65 @@ export function Footer() {
           {/* Contact */}
           <div>
             <h4 className="font-display font-semibold text-[#F5F5F5] mb-4">Contact</h4>
-            <div className="space-y-4">
-              <a
-                href="tel:+923151407896"
-                className="group flex items-center gap-3 text-sm text-[#A1A1AA] hover:text-[#22C55E] transition-colors"
-              >
-                <Phone className="h-4 w-4 text-[#059669] neon-text" />
-                0315-1407896
-              </a>
-              <a
-                href="tel:+923704059424"
-                className="group flex items-center gap-3 text-sm text-[#A1A1AA] hover:text-[#22C55E] transition-colors"
-              >
-                <Phone className="h-4 w-4 text-[#059669] neon-text" />
-                0370-4059424
-              </a>
+            <div className="space-y-6">
               <a
                 href="mailto:contact@virtualcustomersolution.com"
                 className="group flex items-center gap-3 text-sm text-[#A1A1AA] hover:text-[#22C55E] transition-colors"
               >
-                <Mail className="h-4 w-4 text-[#059669] neon-text" />
+                <Mail className="h-4 w-4 shrink-0 text-[#059669] neon-text" />
                 contact@virtualcustomersolution.com
               </a>
+
+              <div className="space-y-2 border-l border-white/[0.08] pl-3">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-[#71717A]">
+                  {officeLocations.usa.regionLabel}
+                </p>
+                <p className="text-xs leading-relaxed text-[#A1A1AA]">
+                  <span className="font-medium text-[#E4E4E7]">{officeLocations.usa.hqLabel}</span>
+                  {' · '}
+                  {officeLocations.usa.lines.join(', ')}
+                </p>
+                <a
+                  href={`tel:${officeLocations.usa.phoneTel}`}
+                  className="mt-1 inline-flex items-center gap-2 text-sm text-[#A1A1AA] hover:text-[#22C55E] transition-colors"
+                >
+                  <Phone className="h-4 w-4 shrink-0 text-[#059669] neon-text" />
+                  {officeLocations.usa.phoneDisplay}
+                </a>
+              </div>
+
+              <div className="space-y-2 border-l border-white/[0.08] pl-3">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-[#71717A]">
+                  {officeLocations.pakistan.regionLabel}
+                </p>
+                <p className="text-xs leading-relaxed text-[#A1A1AA]">
+                  <span className="font-medium text-[#E4E4E7]">{officeLocations.pakistan.officeLabel}</span>
+                  {' · '}
+                  {officeLocations.pakistan.lines.join(', ')}
+                </p>
+                <a
+                  href={`tel:${officeLocations.pakistan.phoneTel}`}
+                  className="mt-1 inline-flex items-center gap-2 text-sm text-[#A1A1AA] hover:text-[#22C55E] transition-colors"
+                >
+                  <Phone className="h-4 w-4 shrink-0 text-[#059669] neon-text" />
+                  {officeLocations.pakistan.phoneDisplay}
+                </a>
+              </div>
+
               <a
                 href="mailto:contact@virtualcustomersolution.com?subject=Support%20request"
                 className="group flex items-center gap-3 text-sm text-[#A1A1AA] hover:text-[#22C55E] transition-colors"
               >
-                <Mail className="h-4 w-4 text-[#059669] neon-text" />
+                <Mail className="h-4 w-4 shrink-0 text-[#059669] neon-text" />
                 Email support
               </a>
-              <div className="flex items-center gap-3 text-sm text-[#A1A1AA]">
-                <MapPin className="h-4 w-4 text-[#059669] neon-text" />
-                114 McLeod Rd, Lahore
-              </div>
               <a
                 href="https://linkedin.com/company/virtualcustomersolution"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex items-center gap-3 text-sm text-[#A1A1AA] hover:text-[#22C55E] transition-colors"
               >
-                <Linkedin className="h-4 w-4 text-[#059669] neon-text" />
+                <Linkedin className="h-4 w-4 shrink-0 text-[#059669] neon-text" />
                 LinkedIn
               </a>
             </div>

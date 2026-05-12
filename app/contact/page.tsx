@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { GlassCard, FadeUp } from '@/components/ui-dp/AnimatedElements';
 import { SiteShell } from '@/components/layout/SiteShell';
+import { officeLocations } from '@/lib/content';
 
 const AUDIT_INTENT = 'free-audit';
 const AUDIT_MESSAGE_DEFAULT =
@@ -234,14 +235,31 @@ function ContactPageInner() {
                     <div className="w-12 h-12 rounded-xl bg-[#22C55E]/10 flex items-center justify-center flex-shrink-0">
                       <Phone className="w-5 h-5 text-[#22C55E]" />
                     </div>
-                    <div>
+                    <div className="min-w-0 space-y-4">
                       <h3 className="font-semibold text-text-primary">Phone</h3>
-                      <a href="tel:+923151407896" className="text-text-secondary hover:text-[#22C55E] block">
-                        0315-1407896
-                      </a>
-                      <a href="tel:+923704059424" className="text-text-secondary hover:text-[#22C55E] block">
-                        0370-4059424
-                      </a>
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">
+                          {officeLocations.usa.regionLabel}
+                        </p>
+                        <a
+                          href={`tel:${officeLocations.usa.phoneTel}`}
+                          className="mt-1 text-text-secondary hover:text-[#22C55E] block"
+                        >
+                          {officeLocations.usa.phoneDisplay}
+                        </a>
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">
+                          {officeLocations.pakistan.regionLabel}
+                        </p>
+                        <p className="mt-0.5 text-xs text-text-muted">{officeLocations.pakistan.officeLabel}</p>
+                        <a
+                          href={`tel:${officeLocations.pakistan.phoneTel}`}
+                          className="mt-1 text-text-secondary hover:text-[#22C55E] block"
+                        >
+                          {officeLocations.pakistan.phoneDisplay}
+                        </a>
+                      </div>
                     </div>
                   </div>
 
@@ -249,9 +267,28 @@ function ContactPageInner() {
                     <div className="w-12 h-12 rounded-xl bg-[#22C55E]/10 flex items-center justify-center flex-shrink-0">
                       <MapPin className="w-5 h-5 text-[#22C55E]" />
                     </div>
-                    <div>
-                      <h3 className="font-semibold text-text-primary">Office</h3>
-                      <p className="text-text-secondary">114 McLeod Rd, Lahore</p>
+                    <div className="min-w-0 space-y-5">
+                      <h3 className="font-semibold text-text-primary">Offices</h3>
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">
+                          {officeLocations.usa.regionLabel}
+                        </p>
+                        <p className="mt-1 text-text-secondary leading-relaxed">
+                          <span className="font-medium text-text-primary">{officeLocations.usa.hqLabel}</span>
+                          {' · '}
+                          {officeLocations.usa.lines.join(', ')}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">
+                          {officeLocations.pakistan.regionLabel}
+                        </p>
+                        <p className="mt-1 text-text-secondary leading-relaxed">
+                          <span className="font-medium text-text-primary">{officeLocations.pakistan.officeLabel}</span>
+                          {' · '}
+                          {officeLocations.pakistan.lines.join(', ')}
+                        </p>
+                      </div>
                     </div>
                   </div>
 
