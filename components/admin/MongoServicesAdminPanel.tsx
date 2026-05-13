@@ -14,7 +14,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -445,32 +444,27 @@ export function MongoServicesAdminPanel() {
             </div>
           </div>
 
-          <Tabs defaultValue="write" className="mt-2 w-full">
-            <TabsList className="bg-white/[0.06]">
-              <TabsTrigger value="write" className="data-[state=active]:bg-[#22C55E]/20">
-                Edit
-              </TabsTrigger>
-              <TabsTrigger value="preview" className="data-[state=active]:bg-[#22C55E]/20">
-                Preview
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="write" className="mt-3">
-              <AdminRichTextEditor
-                key={`svc-body-${editingId ?? 'new'}`}
-                label={<Label className="mb-0">Detailed narrative (optional)</Label>}
-                value={form.body}
-                onChange={(html) => setForm((f) => ({ ...f, body: html }))}
-                minHeight={260}
-                placeholder="Full page content for /offering/[id]. Leave empty to use short description only."
-              />
-              <p className="mt-2 text-xs text-white/40">
-                Markdown-only tiles still work. Rich HTML is sanitized on the public page.
-              </p>
-            </TabsContent>
-            <TabsContent value="preview" className="mt-3 rounded-xl border border-white/10 bg-black/30 p-4">
-              <ArticleBody markdownOrHtml={form.body?.trim() ? form.body : form.description} />
-            </TabsContent>
-          </Tabs>
+          <div className="mt-2 w-full space-y-3">
+            <AdminRichTextEditor
+              key={`svc-body-${editingId ?? 'new'}`}
+              label={<Label className="mb-0">Detailed narrative (optional)</Label>}
+              value={form.body}
+              onChange={(html) => setForm((f) => ({ ...f, body: html }))}
+              minHeight={260}
+              placeholder="Full page content for /offering/[id]. Leave empty to use short description only."
+            />
+            <p className="text-xs text-white/40">
+              Markdown-only tiles still work. Rich HTML is sanitized on the public page.
+            </p>
+            <details className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2">
+              <summary className="cursor-pointer select-none text-sm font-medium text-white/70">
+                Live preview
+              </summary>
+              <div className="mt-3 rounded-lg border border-white/10 bg-black/30 p-4">
+                <ArticleBody markdownOrHtml={form.body?.trim() ? form.body : form.description} />
+              </div>
+            </details>
+          </div>
 
           <DialogFooter className="gap-2 sm:gap-0">
             <Button

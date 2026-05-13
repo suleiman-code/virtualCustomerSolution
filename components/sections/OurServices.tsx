@@ -101,6 +101,8 @@ function ServiceCoverMedia({
         src={url}
         alt=""
         className="h-full w-full object-cover"
+        loading="lazy"
+        decoding="async"
         onError={() => setBroken(true)}
       />
     );
@@ -223,7 +225,9 @@ export function OurServices({ sectionId = 'services' }: OurServicesProps) {
               className="grid auto-rows-fr grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"
             >
               {Array.isArray(allVisibleServices) && allVisibleServices.length > 0 ? (
-                allVisibleServices.map((service) => (
+                allVisibleServices.map((service) => {
+                  const hasTileImage = !!service.image?.trim();
+                  return (
                   <StaggerItem key={service.id} className="h-full min-h-0">
                     <RevealOnScroll variant="blur-in" duration={0.6} className="h-full min-h-0">
                       <article
@@ -279,22 +283,36 @@ export function OurServices({ sectionId = 'services' }: OurServicesProps) {
                           >
                             Professional service
                           </p>
-                          <h3
-                            className={cn(
-                              'mt-2 font-display text-base font-bold leading-snug tracking-tight line-clamp-2 sm:text-lg',
-                              isHomeServices ? 'text-[#F5F5F5]' : 'text-zinc-900'
-                            )}
-                          >
-                            {service.title}
-                          </h3>
-                          <p
-                            className={cn(
-                              'mt-2 min-h-[4.5rem] flex-1 text-sm leading-relaxed line-clamp-3',
-                              isHomeServices ? 'text-[#A1A1AA]' : 'text-zinc-500'
-                            )}
-                          >
-                            {plainTextFromAnyContent(service.description, 400)}
-                          </p>
+                          {hasTileImage ? (
+                            <>
+                              <h3
+                                className={cn(
+                                  'mt-2 font-display text-base font-bold leading-snug tracking-tight line-clamp-2 sm:text-lg',
+                                  isHomeServices ? 'text-[#F5F5F5]' : 'text-zinc-900'
+                                )}
+                              >
+                                {service.title}
+                              </h3>
+                              <p
+                                className={cn(
+                                  'mt-2 min-h-[4.5rem] flex-1 text-sm leading-relaxed line-clamp-3',
+                                  isHomeServices ? 'text-[#A1A1AA]' : 'text-zinc-500'
+                                )}
+                              >
+                                {plainTextFromAnyContent(service.description, 400)}
+                              </p>
+                            </>
+                          ) : (
+                            <p
+                              className={cn(
+                                'mt-3 min-h-[4.5rem] flex-1 text-xs leading-relaxed line-clamp-4 sm:text-sm',
+                                isHomeServices ? 'text-white/42' : 'text-zinc-500'
+                              )}
+                            >
+                              Open the offering for scope, deliverables, timelines, and how we work with your
+                              team.
+                            </p>
+                          )}
 
                           <div
                             className={cn(
@@ -324,7 +342,8 @@ export function OurServices({ sectionId = 'services' }: OurServicesProps) {
                       </article>
                     </RevealOnScroll>
                   </StaggerItem>
-                ))
+                  );
+                })
               ) : (
                 <p className="col-span-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-12 text-center text-sm text-white/45 sm:py-14">
                   No services yet. Add tiles from the admin Services panel.

@@ -14,7 +14,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -59,7 +58,6 @@ const emptyForm = () => ({
   category: DEFAULT_BLOG_CATEGORY,
   authorName: '',
   content: '',
-  excerpt: '',
   image: '',
   isPinned: false,
   dateLocal: toDatetimeLocalValue(new Date().toISOString()),
@@ -118,7 +116,6 @@ export function MongoBlogsAdminPanel() {
       category: coerceBlogCategory(b.category),
       authorName: b.authorName || '',
       content: b.content || '',
-      excerpt: b.excerpt || '',
       image: b.image || '',
       isPinned: !!b.isPinned,
       dateLocal: toDatetimeLocalValue(b.date || ''),
@@ -148,7 +145,7 @@ export function MongoBlogsAdminPanel() {
         category: coerceBlogCategory(form.category),
         authorName: form.authorName.trim(),
         content: form.content.trim(),
-        excerpt: form.excerpt.trim(),
+        excerpt: '',
         image: form.image.trim(),
         isPinned: form.isPinned,
         date: form.dateLocal ? new Date(form.dateLocal).toISOString() : undefined,
@@ -471,45 +468,30 @@ export function MongoBlogsAdminPanel() {
                 Pin to top of homepage list
               </Label>
             </div>
-            <div className="space-y-2 sm:col-span-2">
-              <AdminRichTextEditor
-                key={`blog-excerpt-${editingId ?? 'new'}`}
-                label={<Label>Card excerpt (optional)</Label>}
-                value={form.excerpt}
-                onChange={(html) => setForm((f) => ({ ...f, excerpt: html }))}
-                minHeight={120}
-                placeholder="Short intro for cards"
-              />
-            </div>
           </div>
 
-          <Tabs defaultValue="write" className="mt-2 w-full">
-            <TabsList className="bg-white/[0.06]">
-              <TabsTrigger value="write" className="data-[state=active]:bg-[#22C55E]/20">
-                Edit
-              </TabsTrigger>
-              <TabsTrigger value="preview" className="data-[state=active]:bg-[#22C55E]/20">
-                Preview
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="write" className="mt-3">
-              <AdminRichTextEditor
-                key={`blog-content-${editingId ?? 'new'}`}
-                label={<Label className="mb-0">Detailed narrative</Label>}
-                value={form.content}
-                onChange={(html) => setForm((f) => ({ ...f, content: html }))}
-                minHeight={280}
-                placeholder="Article body — rich text or paste markdown as plain text"
-              />
-              <p className="mt-2 text-xs text-white/40">
-                Legacy posts saved as markdown still render on the site. New posts can use the rich editor
-                (HTML).
-              </p>
-            </TabsContent>
-            <TabsContent value="preview" className="mt-3 rounded-xl border border-white/10 bg-black/30 p-4">
-              <ArticleBody markdownOrHtml={form.content} />
-            </TabsContent>
-          </Tabs>
+          <div className="mt-2 w-full space-y-3">
+            <AdminRichTextEditor
+              key={`blog-content-${editingId ?? 'new'}`}
+              label={<Label className="mb-0">Detailed narrative</Label>}
+              value={form.content}
+              onChange={(html) => setForm((f) => ({ ...f, content: html }))}
+              minHeight={280}
+              placeholder="Article body — rich text or paste markdown as plain text"
+            />
+            <p className="text-xs text-white/40">
+              Legacy posts saved as markdown still render on the site. New posts can use the rich editor
+              (HTML). Card previews use a short line from this content automatically.
+            </p>
+            <details className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2">
+              <summary className="cursor-pointer select-none text-sm font-medium text-white/70">
+                Live preview
+              </summary>
+              <div className="mt-3 rounded-lg border border-white/10 bg-black/30 p-4">
+                <ArticleBody markdownOrHtml={form.content} />
+              </div>
+            </details>
+          </div>
 
           <DialogFooter className="gap-2 sm:gap-0">
             <Button

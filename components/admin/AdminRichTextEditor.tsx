@@ -13,7 +13,7 @@ const FONT_WHITELIST = [
   'arial',
 ] as const;
 
-/** Every pixel from 10px through 60px (51 options). */
+/** Every pixel from 10px through 60px (51 options); labels in admin-quill.css. */
 const SIZE_WHITELIST = Array.from({ length: 51 }, (_, i) => `${10 + i}px`) as unknown as readonly string[];
 
 const FORMATS = [
@@ -101,16 +101,18 @@ export function AdminRichTextEditor({
         placeholder,
         formats: [...FORMATS],
         modules: {
-          toolbar: [
-            [{ header: [1, 2, 3, false] }],
-            [{ font: [...FONT_WHITELIST] }],
-            [{ size: [...SIZE_WHITELIST] }],
-            ['bold', 'italic', 'underline', 'strike'],
-            [{ color: [] }, { background: [] }],
-            [{ align: [] }],
-            [{ list: 'ordered' }, { list: 'bullet' }],
-            ['link', 'clean'],
-          ],
+          toolbar: {
+            container: [
+              [{ header: [1, 2, 3, false] }],
+              [{ font: [...FONT_WHITELIST] }],
+              [{ size: [...SIZE_WHITELIST] }],
+              ['bold', 'italic', 'underline', 'strike'],
+              [{ color: [] }, { background: [] }],
+              [{ align: [] }],
+              [{ list: 'ordered' }, { list: 'bullet' }],
+              ['link', 'clean'],
+            ],
+          },
         },
       });
 

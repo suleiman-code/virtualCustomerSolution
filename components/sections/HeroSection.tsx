@@ -36,7 +36,7 @@ export function HeroSection() {
       <div className="container-wide relative z-10 w-full pb-14 pt-6 sm:pb-16 sm:pt-8">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-12 xl:gap-16">
           <div className="min-w-0 max-w-3xl lg:max-w-none">
-          <motion.div style={{ y, opacity }} className="max-w-xl text-left">
+            <motion.div style={{ y, opacity }} className="max-w-xl text-left">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -113,23 +113,25 @@ export function HeroSection() {
                 </div>
               ))}
             </motion.div>
-          </motion.div>
+            </motion.div>
           </div>
 
           <motion.div
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.75, delay: 0.15, ease: smoothEase }}
-            className="relative mx-auto w-full max-w-lg lg:mx-0 lg:max-w-none"
+            className="relative mx-auto w-full max-w-lg justify-self-center lg:mx-0 lg:max-w-none lg:justify-self-end"
           >
-            <div className="relative aspect-[4/3] w-full sm:aspect-[16/11] lg:aspect-[5/4]">
+            {/* Wide cinematic frame (4:3 → 16:11); square art is cropped with object-cover so no empty bands. */}
+            <div className="relative mx-auto aspect-[4/3] w-full max-w-[min(100%,26rem)] sm:aspect-[16/11] sm:max-w-[min(100%,34rem)] lg:mx-0 lg:ml-auto lg:max-w-[min(52rem,54vw)] lg:aspect-[16/11]">
               <Image
                 src="/images/hero-vcs.png"
                 alt="Virtual Customer Solution — marketing and virtual teams"
                 fill
                 priority
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-contain object-center drop-shadow-[0_0_80px_rgba(34,197,94,0.12)]"
+                quality={92}
+                sizes="(max-width: 640px) 90vw, (max-width: 1024px) 85vw, 54vw"
+                className="rounded-2xl object-cover object-center shadow-[0_24px_80px_rgba(0,0,0,0.45)] ring-1 ring-white/[0.08] drop-shadow-[0_0_80px_rgba(34,197,94,0.14)]"
               />
             </div>
             <div

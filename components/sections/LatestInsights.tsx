@@ -55,15 +55,20 @@ function BlogCoverMedia({
   const url = image?.trim();
   if (url && !broken) {
     return (
-      <img src={url} alt="" className="h-full w-full object-cover" onError={() => setBroken(true)} />
+      <img
+        src={url}
+        alt=""
+        className="h-full w-full object-cover"
+        loading="lazy"
+        decoding="async"
+        onError={() => setBroken(true)}
+      />
     );
   }
   return <BlogVisualNoImage title={title} lede={lede} />;
 }
 
 function cardExcerpt(blog: Blog): string {
-  const fromField = blog.excerpt?.trim();
-  if (fromField) return plainTextFromAnyContent(fromField, 190);
   return plainTextFromAnyContent(blog.content || '', 190);
 }
 
@@ -153,7 +158,9 @@ export function LatestInsights() {
               className="grid auto-rows-fr grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"
             >
               {Array.isArray(allVisibleBlogs) && allVisibleBlogs.length > 0 ? (
-                allVisibleBlogs.map((blog) => (
+                allVisibleBlogs.map((blog) => {
+                  const hasTileImage = !!blog.image?.trim();
+                  return (
                   <StaggerItem key={blog.id} className="h-full min-h-0">
                     <RevealOnScroll variant="blur-in" duration={0.6} className="h-full min-h-0">
                       <article
@@ -165,10 +172,7 @@ export function LatestInsights() {
                           <BlogCoverMedia
                             image={blog.image}
                             title={blog.title}
-                            lede={plainTextFromAnyContent(
-                              blog.excerpt?.trim() || blog.content || '',
-                              120
-                            )}
+                            lede={plainTextFromAnyContent(blog.content || '', 120)}
                           />
                           <div className="absolute left-3 top-3">
                             <span className="inline-flex items-center rounded-full border border-white/10 bg-black/50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#A7F3D0] shadow-sm backdrop-blur-sm">
@@ -186,12 +190,20 @@ export function LatestInsights() {
                           <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#4ADE80] sm:text-[11px]">
                             {blog.category || 'Article'}
                           </p>
-                          <h3 className="mt-2 line-clamp-2 font-display text-base font-bold leading-snug tracking-tight text-[#F5F5F5] sm:text-lg">
-                            {blog.title}
-                          </h3>
-                          <p className="mt-2 min-h-[4.5rem] flex-1 line-clamp-3 text-sm leading-relaxed text-[#A1A1AA]">
-                            {cardExcerpt(blog)}
-                          </p>
+                          {hasTileImage ? (
+                            <>
+                              <h3 className="mt-2 line-clamp-2 font-display text-base font-bold leading-snug tracking-tight text-[#F5F5F5] sm:text-lg">
+                                {blog.title}
+                              </h3>
+                              <p className="mt-2 min-h-[4.5rem] flex-1 line-clamp-3 text-sm leading-relaxed text-[#A1A1AA]">
+                                {cardExcerpt(blog)}
+                              </p>
+                            </>
+                          ) : (
+                            <p className="mt-3 min-h-[4.5rem] flex-1 text-xs leading-relaxed text-white/42 line-clamp-4 sm:text-sm">
+                              Read the full insight for tactics, examples, and takeaways you can use this week.
+                            </p>
+                          )}
 
                           <div className="mt-auto flex flex-col gap-3 border-t border-white/[0.08] pt-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
                             <span className="flex min-w-0 items-center gap-2 text-sm font-semibold text-[#E4E4E7]">
@@ -212,7 +224,8 @@ export function LatestInsights() {
                       </article>
                     </RevealOnScroll>
                   </StaggerItem>
-                ))
+                  );
+                })
               ) : (
                 <p className="col-span-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-12 text-center text-sm text-white/45 sm:py-14">
                   No insights yet.
