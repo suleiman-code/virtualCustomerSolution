@@ -1,6 +1,7 @@
 ﻿import type { MetadataRoute } from 'next';
 import fs from 'fs';
 import path from 'path';
+import { getDb } from '@/lib/db';
 
 const SITE_URL = 'https://virtualcustomersolution.com';
 
@@ -29,7 +30,37 @@ function getDataSlugs(modulePath: string, key: string): string[] {
   }
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+async function getMongoPages(
+  collection: 'services' | 'blogs',
+  routePrefix: '/offering' | '/insight',
+  priority: number
+): Promise<MetadataRoute.Sitemap> {
+  try {
+    const db = await getDb();
+    if (!db) return [];
+    const rows = await db
+      .collection(collection)
+      .find({}, { projection: { _id: 1, updatedAt: 1, date: 1, createdAt: 1 } })
+      .sort({ date: -1 })
+      .limit(500)
+      .toArray();
+
+    return rows.map((row) => {
+      const rawDate = row.updatedAt || row.date || row.createdAt;
+      const lastModified = rawDate instanceof Date ? rawDate : new Date();
+      return {
+        url: `${SITE_URL}${routePrefix}/${row._id.toString()}`,
+        lastModified,
+        changeFrequency: 'weekly' as const,
+        priority,
+      };
+    });
+  } catch {
+    return [];
+  }
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date().toISOString();
 
   // ── Home ──
@@ -41,7 +72,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const servicePages = [
     '/services',
     '/performance-marketing',
-    '/remote-workforce',
+    '/virtual-workforce',
     '/systems-reporting',
   ].map((r) => ({ url: `${SITE_URL}${r}`, lastModified: now, changeFrequency: 'monthly' as const, priority: 0.9 }));
 
@@ -104,13 +135,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // ── Core pages ──
   const corePages = [
-    '/about', '/contact', '/results',
+    '/about', '/contact', '/results', '/free-consultation',
   ].map((r) => ({ url: `${SITE_URL}${r}`, lastModified: now, changeFrequency: 'monthly' as const, priority: 0.7 }));
 
   // ── Research ──
   const researchPages = [
     '/research',
     '/research/remote-work-statistics',
+    '/research/virtual-work-statistics',
     '/research/marketing-roi-benchmarks',
     '/research/business-automation-trends',
   ].map((r) => ({ url: `${SITE_URL}${r}`, lastModified: now, changeFrequency: 'monthly' as const, priority: 0.6 }));
@@ -120,8 +152,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/tools',
     '/tools/roi-calculator',
     '/tools/remote-team-cost-calculator',
+    '/tools/virtual-team-cost-calculator',
     '/tools/marketing-budget-planner',
   ].map((r) => ({ url: `${SITE_URL}${r}`, lastModified: now, changeFrequency: 'monthly' as const, priority: 0.6 }));
+
+  const mongoServicePages = await getMongoPages('services', '/offering', 0.75);
+  const mongoInsightPages = await getMongoPages('blogs', '/insight', 0.7);
 
   // ── Legal ──
   const legalPages = [
@@ -137,6 +173,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...caseStudyPages,
     ...guidePages,
     ...comparisonPages,
+    ...mongoServicePages,
+    ...mongoInsightPages,
     ...corePages,
     ...researchPages,
     ...toolPages,

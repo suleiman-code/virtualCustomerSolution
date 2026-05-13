@@ -14,6 +14,20 @@ function serializeBlog(b: Record<string, unknown> & { _id: { toString: () => str
   return out;
 }
 
+function parsePagination(searchParams: URLSearchParams) {
+  const rawSkip = Number.parseInt(searchParams.get('skip') || '0', 10);
+  const rawLimit = Number.parseInt(searchParams.get('limit') || '3', 10);
+  const skip = Number.isFinite(rawSkip) && rawSkip > 0 ? rawSkip : 0;
+  const limit = Number.isFinite(rawLimit) ? Math.min(Math.max(rawLimit, 1), 12) : 3;
+  return { skip, limit };
+}
+
+function parseOptionalDate(value: unknown): Date | null {
+  if (value == null || value === '') return new Date();
+  const date = new Date(String(value));
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
@@ -35,8 +49,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ blogs: [], hasMore: false }, { status: 200 });
     }
 
-    const skip = parseInt(searchParams.get('skip') || '0');
-    const limit = parseInt(searchParams.get('limit') || '3');
+    const { skip, limit } = parsePagination(searchParams);
     const isPinnedOnly = searchParams.get('pinned') === 'true';
 
     if (isPinnedOnly) {
@@ -96,6 +109,10 @@ export async function POST(req: NextRequest) {
 
     const excerpt = data.excerpt != null ? String(data.excerpt).trim() : '';
     const image = data.image != null ? normalizePublicImageUrl(String(data.image)) : '';
+    const date = parseOptionalDate(data.date);
+    if (!date) {
+      return NextResponse.json({ error: 'Invalid date' }, { status: 400 });
+    }
 
     const newBlog = {
       title,
@@ -105,7 +122,7 @@ export async function POST(req: NextRequest) {
       authorName,
       image,
       isPinned: !!data.isPinned,
-      date: data.date ? new Date(data.date) : new Date(),
+      date,
       createdAt: new Date(),
     };
 

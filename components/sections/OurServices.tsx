@@ -87,23 +87,27 @@ function ServiceCoverMedia({
   title,
   description,
   isHomeServices,
+  imageFailed,
+  onImageError,
 }: {
   image: string;
   title: string;
   description: string;
   isHomeServices: boolean;
+  imageFailed: boolean;
+  onImageError: () => void;
 }) {
-  const [broken, setBroken] = useState(false);
   const url = image?.trim();
-  if (url && !broken) {
+  if (url && !imageFailed) {
     return (
+      // eslint-disable-next-line @next/next/no-img-element -- CMS/user URLs can be same-origin or remote.
       <img
         src={url}
-        alt=""
+        alt={`${title?.trim() || 'Service'} cover image`}
         className="h-full w-full object-cover"
         loading="lazy"
         decoding="async"
-        onError={() => setBroken(true)}
+        onError={onImageError}
       />
     );
   }
@@ -119,6 +123,7 @@ function ServiceCoverMedia({
 export function OurServices({ sectionId = 'services' }: OurServicesProps) {
   const [pinnedServices, setPinnedServices] = useState<Service[]>([]);
   const [services, setServices] = useState<Service[]>([]);
+  const [failedImages, setFailedImages] = useState<Record<string, true>>({});
   const [skip, setSkip] = useState(0);
   const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -226,122 +231,126 @@ export function OurServices({ sectionId = 'services' }: OurServicesProps) {
             >
               {Array.isArray(allVisibleServices) && allVisibleServices.length > 0 ? (
                 allVisibleServices.map((service) => {
-                  const hasTileImage = !!service.image?.trim();
+                  const imageUrl = service.image?.trim() || '';
+                  const imageKey = `${service.id}:${imageUrl}`;
+                  const hasTileImage = !!imageUrl && !failedImages[imageKey];
                   return (
-                  <StaggerItem key={service.id} className="h-full min-h-0">
-                    <RevealOnScroll variant="blur-in" duration={0.6} className="h-full min-h-0">
-                      <article
-                        className={cn(
-                          'flex h-full min-w-0 flex-col overflow-hidden rounded-2xl transition-shadow duration-300',
-                          isHomeServices
-                            ? 'bg-[#111]/95 shadow-[0_8px_40px_rgba(0,0,0,0.5)] ring-1 ring-white/[0.08] hover:shadow-[0_12px_48px_rgba(34,197,94,0.12)]'
-                            : 'bg-white shadow-[0_8px_30px_rgba(0,0,0,0.12)] ring-1 ring-black/[0.04] hover:shadow-[0_12px_40px_rgba(0,0,0,0.14)]'
-                        )}
-                      >
-                        <div
+                    <StaggerItem key={service.id} className="h-full min-h-0">
+                      <RevealOnScroll variant="blur-in" duration={0.6} className="h-full min-h-0">
+                        <article
                           className={cn(
-                            'relative aspect-[16/10] min-h-[140px] overflow-hidden sm:min-h-0',
-                            isHomeServices ? 'bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d]' : 'bg-zinc-100'
+                            'flex h-full min-w-0 flex-col overflow-hidden rounded-2xl transition-shadow duration-300',
+                            isHomeServices
+                              ? 'bg-[#111]/95 shadow-[0_8px_40px_rgba(0,0,0,0.5)] ring-1 ring-white/[0.08] hover:shadow-[0_12px_48px_rgba(34,197,94,0.12)]'
+                              : 'bg-white shadow-[0_8px_30px_rgba(0,0,0,0.12)] ring-1 ring-black/[0.04] hover:shadow-[0_12px_40px_rgba(0,0,0,0.14)]'
                           )}
                         >
-                          <ServiceCoverMedia
-                            image={service.image}
-                            title={service.title}
-                            description={service.description}
-                            isHomeServices={isHomeServices}
-                          />
-                          <div className="absolute left-3 top-3">
-                            <span
-                              className={cn(
-                                'inline-flex rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider shadow-sm backdrop-blur-sm',
-                                isHomeServices
-                                  ? 'border border-white/10 bg-black/50 text-[#A7F3D0]'
-                                  : 'bg-white/95 text-zinc-800'
-                              )}
-                            >
-                              Offering
-                            </span>
-                          </div>
-                          {service.isPinned && (
-                            <div className="absolute right-3 top-3 rounded-full bg-[#0d9488] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white shadow-sm">
-                              Featured
-                            </div>
-                          )}
-                        </div>
-
-                        <div
-                          className={cn(
-                            'flex min-h-0 min-w-0 flex-1 flex-col px-4 pb-4 pt-3 sm:px-5 sm:pb-5 sm:pt-4',
-                            isHomeServices && 'border-t border-white/[0.06]'
-                          )}
-                        >
-                          <p
+                          <div
                             className={cn(
-                              'text-[10px] font-semibold uppercase tracking-[0.2em] sm:text-[11px]',
-                              isHomeServices ? 'text-[#4ADE80]' : 'text-[#0d9488]'
+                              'relative aspect-[16/10] min-h-[140px] overflow-hidden sm:min-h-0',
+                              isHomeServices ? 'bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d]' : 'bg-zinc-100'
                             )}
                           >
-                            Professional service
-                          </p>
-                          {hasTileImage ? (
-                            <>
-                              <h3
+                            <ServiceCoverMedia
+                              image={service.image}
+                              title={service.title}
+                              description={service.description}
+                              isHomeServices={isHomeServices}
+                              imageFailed={!!failedImages[imageKey]}
+                              onImageError={() => setFailedImages((prev) => ({ ...prev, [imageKey]: true }))}
+                            />
+                            <div className="absolute left-3 top-3">
+                              <span
                                 className={cn(
-                                  'mt-2 font-display text-base font-bold leading-snug tracking-tight line-clamp-2 sm:text-lg',
-                                  isHomeServices ? 'text-[#F5F5F5]' : 'text-zinc-900'
+                                  'inline-flex rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider shadow-sm backdrop-blur-sm',
+                                  isHomeServices
+                                    ? 'border border-white/10 bg-black/50 text-[#A7F3D0]'
+                                    : 'bg-white/95 text-zinc-800'
                                 )}
                               >
-                                {service.title}
-                              </h3>
-                              <p
-                                className={cn(
-                                  'mt-2 min-h-[4.5rem] flex-1 text-sm leading-relaxed line-clamp-3',
-                                  isHomeServices ? 'text-[#A1A1AA]' : 'text-zinc-500'
-                                )}
-                              >
-                                {plainTextFromAnyContent(service.description, 400)}
-                              </p>
-                            </>
-                          ) : (
-                            <p
-                              className={cn(
-                                'mt-3 min-h-[4.5rem] flex-1 text-xs leading-relaxed line-clamp-4 sm:text-sm',
-                                isHomeServices ? 'text-white/42' : 'text-zinc-500'
-                              )}
-                            >
-                              Open the offering for scope, deliverables, timelines, and how we work with your
-                              team.
-                            </p>
-                          )}
+                                Offering
+                              </span>
+                            </div>
+                            {service.isPinned && (
+                              <div className="absolute right-3 top-3 rounded-full bg-[#0d9488] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white shadow-sm">
+                                Featured
+                              </div>
+                            )}
+                          </div>
 
                           <div
                             className={cn(
-                              'mt-auto flex justify-end border-t pt-4',
-                              isHomeServices ? 'border-white/[0.08]' : 'border-zinc-100'
+                              'flex min-h-0 min-w-0 flex-1 flex-col px-4 pb-4 pt-3 sm:px-5 sm:pb-5 sm:pt-4',
+                              isHomeServices && 'border-t border-white/[0.06]'
                             )}
                           >
-                            <Button
-                              asChild
+                            <p
                               className={cn(
-                                'h-10 w-full rounded-full px-4 text-sm font-semibold shadow-none sm:h-9 sm:w-auto',
-                                isHomeServices
-                                  ? 'border border-[#22C55E]/35 bg-[#22C55E]/15 text-[#86EFAC] hover:bg-[#22C55E]/25'
-                                  : 'bg-[#bae6fd] text-sky-900 hover:bg-[#7dd3fc]'
+                                'text-[10px] font-semibold uppercase tracking-[0.2em] sm:text-[11px]',
+                                isHomeServices ? 'text-[#4ADE80]' : 'text-[#0d9488]'
                               )}
                             >
-                              <Link
-                                href={`/offering/${service.id}`}
-                                className="inline-flex items-center gap-1.5"
+                              Professional service
+                            </p>
+                            {hasTileImage ? (
+                              <>
+                                <h3
+                                  className={cn(
+                                    'mt-2 font-display text-base font-bold leading-snug tracking-tight line-clamp-2 sm:text-lg',
+                                    isHomeServices ? 'text-[#F5F5F5]' : 'text-zinc-900'
+                                  )}
+                                >
+                                  {service.title}
+                                </h3>
+                                <p
+                                  className={cn(
+                                    'mt-2 min-h-[4.5rem] flex-1 text-sm leading-relaxed line-clamp-3',
+                                    isHomeServices ? 'text-[#A1A1AA]' : 'text-zinc-500'
+                                  )}
+                                >
+                                  {plainTextFromAnyContent(service.description, 400)}
+                                </p>
+                              </>
+                            ) : (
+                              <p
+                                className={cn(
+                                  'mt-3 min-h-[4.5rem] flex-1 text-xs leading-relaxed line-clamp-4 sm:text-sm',
+                                  isHomeServices ? 'text-white/42' : 'text-zinc-500'
+                                )}
                               >
-                                Details
-                                <ArrowRight className="h-3.5 w-3.5" />
-                              </Link>
-                            </Button>
+                                Open the offering for scope, deliverables, timelines, and how we work with your
+                                team.
+                              </p>
+                            )}
+
+                            <div
+                              className={cn(
+                                'mt-auto flex justify-end border-t pt-4',
+                                isHomeServices ? 'border-white/[0.08]' : 'border-zinc-100'
+                              )}
+                            >
+                              <Button
+                                asChild
+                                className={cn(
+                                  'h-10 w-full rounded-full px-4 text-sm font-semibold shadow-none sm:h-9 sm:w-auto',
+                                  isHomeServices
+                                    ? 'border border-[#22C55E]/35 bg-[#22C55E]/15 text-[#86EFAC] hover:bg-[#22C55E]/25'
+                                    : 'bg-[#bae6fd] text-sky-900 hover:bg-[#7dd3fc]'
+                                )}
+                              >
+                                <Link
+                                  href={`/offering/${service.id}`}
+                                  className="inline-flex items-center gap-1.5"
+                                >
+                                  Details
+                                  <ArrowRight className="h-3.5 w-3.5" />
+                                </Link>
+                              </Button>
+                            </div>
                           </div>
-                        </div>
-                      </article>
-                    </RevealOnScroll>
-                  </StaggerItem>
+                        </article>
+                      </RevealOnScroll>
+                    </StaggerItem>
                   );
                 })
               ) : (

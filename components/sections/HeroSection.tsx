@@ -129,7 +129,6 @@ export function HeroSection() {
                 alt="Virtual Customer Solution — marketing and virtual teams"
                 fill
                 priority
-                quality={92}
                 sizes="(max-width: 640px) 90vw, (max-width: 1024px) 85vw, 54vw"
                 className="rounded-2xl object-cover object-center shadow-[0_24px_80px_rgba(0,0,0,0.45)] ring-1 ring-white/[0.08] drop-shadow-[0_0_80px_rgba(34,197,94,0.14)]"
               />

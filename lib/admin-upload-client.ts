@@ -1,10 +1,20 @@
 /** Client-side upload to `/api/admin/upload` (cookie session). */
 
 const MAX_BYTES = 3 * 1024 * 1024;
+const ALLOWED_IMAGE_TYPES = new Set([
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+  'image/gif',
+  'image/avif',
+]);
 
 export async function uploadAdminImage(file: File): Promise<string> {
   if (file.size > MAX_BYTES) {
     throw new Error('Image must be 3MB or smaller.');
+  }
+  if (file.type && !ALLOWED_IMAGE_TYPES.has(file.type)) {
+    throw new Error('Use JPG, PNG, WebP, GIF, or AVIF images only.');
   }
   const fd = new FormData();
   fd.append('file', file);

@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ObjectId } from 'mongodb';
 import { ArrowLeft, User } from 'lucide-react';
@@ -7,21 +8,50 @@ import { ArticleBody } from '@/components/public/ArticleBody';
 import { SiteShell } from '@/components/layout/SiteShell';
 import { FREE_AUDIT_CONTACT_HREF } from '@/lib/paths';
 import { normalizePublicImageUrl } from '@/lib/public-image-url';
+import { plainTextFromAnyContent } from '@/lib/markdown-excerpt';
 
 type Props = { params: Promise<{ id: string }> };
 
 export const dynamic = 'force-dynamic';
+const SITE_URL = 'https://virtualcustomersolution.com';
 
-export async function generateMetadata({ params }: Props) {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   if (!ObjectId.isValid(id)) return { title: 'Insight' };
   const db = await getDb();
   if (!db) return { title: 'Insight' };
   const doc = await db.collection('blogs').findOne(
     { _id: new ObjectId(id) },
-    { projection: { title: 1 } }
+    { projection: { title: 1, content: 1, excerpt: 1, image: 1, category: 1 } }
   );
-  return { title: doc?.title ? `${doc.title} · VCS` : 'Insight' };
+  if (!doc) return { title: 'Insight' };
+
+  const title = String(doc.title || 'Insight');
+  const description = plainTextFromAnyContent(
+    String(doc.excerpt || doc.content || ''),
+    155
+  );
+  const image = normalizePublicImageUrl(doc.image ? String(doc.image) : '');
+
+  return {
+    title: `${title} · Virtual Customer Solution`,
+    description,
+    alternates: { canonical: `/insight/${id}` },
+    openGraph: {
+      title,
+      description,
+      url: `/insight/${id}`,
+      type: 'article',
+      section: String(doc.category || 'Insight'),
+      images: image ? [{ url: image, alt: title }] : undefined,
+    },
+    twitter: {
+      card: image ? 'summary_large_image' : 'summary',
+      title,
+      description,
+      images: image ? [image] : undefined,
+    },
+  };
 }
 
 export default async function InsightPage({ params }: Props) {
@@ -51,10 +81,36 @@ export default async function InsightPage({ params }: Props) {
   const image = normalizePublicImageUrl(doc.image ? String(doc.image) : '');
   const content = String(doc.content || '');
   const date = doc.date instanceof Date ? doc.date : new Date(doc.date as string);
+  const safeDate = Number.isNaN(date.getTime()) ? new Date() : date;
+  const description = plainTextFromAnyContent(content, 180);
+  const canonicalUrl = `${SITE_URL}/insight/${id}`;
+  const blogSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    description,
+    image: image ? (image.startsWith('http') ? image : `${SITE_URL}${image}`) : undefined,
+    datePublished: safeDate.toISOString(),
+    dateModified: doc.updatedAt instanceof Date ? doc.updatedAt.toISOString() : safeDate.toISOString(),
+    author: {
+      '@type': 'Person',
+      name: authorName || 'Virtual Customer Solution',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Virtual Customer Solution',
+      url: SITE_URL,
+    },
+    mainEntityOfPage: canonicalUrl,
+  };
 
   return (
     <SiteShell>
     <article className="pb-20 pt-8 text-[#F5F5F5] sm:pt-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
+      />
       <div className="container-wide">
         <Link
           href="/#blogs"
@@ -74,14 +130,14 @@ export default async function InsightPage({ params }: Props) {
               <User className="h-4 w-4 text-[#22C55E]" />
               {authorName}
             </span>
-            <span>{date.toLocaleDateString(undefined, { dateStyle: 'long' })}</span>
+            <span>{safeDate.toLocaleDateString(undefined, { dateStyle: 'long' })}</span>
           </div>
         </header>
 
         {image ? (
           <div className="relative mx-auto mt-10 max-w-4xl overflow-hidden rounded-2xl border border-white/10 bg-zinc-900 shadow-[0_0_60px_rgba(34,197,94,0.08)]">
             {/* eslint-disable-next-line @next/next/no-img-element -- user-provided arbitrary URLs */}
-            <img src={image} alt="" className="max-h-[min(70vh,520px)] w-full object-cover" />
+            <img src={image} alt={`${title} cover image`} className="max-h-[min(70vh,520px)] w-full object-cover" />
           </div>
         ) : null}
 

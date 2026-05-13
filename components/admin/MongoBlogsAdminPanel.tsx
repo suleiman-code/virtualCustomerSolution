@@ -452,10 +452,32 @@ export function MongoBlogsAdminPanel() {
                 <input
                   id="blog-image-file"
                   type="file"
-                  accept="image/*"
+                  accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
                   className="hidden"
-                  onChange={(e) => void uploadImage(e.target.files?.[0] ?? null)}
+                  onChange={(e) => {
+                    void uploadImage(e.target.files?.[0] ?? null);
+                    e.currentTarget.value = '';
+                  }}
                 />
+              </div>
+            </div>
+            <div className="sm:col-span-2">
+              <div className="overflow-hidden rounded-xl border border-white/10 bg-white/[0.03]">
+                <div className="relative aspect-[16/9] w-full bg-zinc-900 sm:aspect-[21/9]">
+                  <AdminListThumbnail
+                    src={form.image}
+                    alt={form.title || 'Blog cover preview'}
+                    className="h-full w-full object-cover"
+                    fallback={
+                      <div className="flex h-full items-center justify-center px-4 text-center text-xs font-semibold uppercase tracking-[0.24em] text-white/25">
+                        Upload a JPG, PNG, WebP, GIF, or AVIF cover image
+                      </div>
+                    }
+                  />
+                </div>
+                <p className="border-t border-white/10 px-3 py-2 text-xs text-white/45">
+                  This image URL is saved with the blog in MongoDB and shown on the public card/detail page.
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-2 sm:col-span-2">

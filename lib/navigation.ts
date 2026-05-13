@@ -27,7 +27,7 @@ export type PageRoute =
   | 'contact'
   | 'free-audit'
   | 'performance-marketing'
-  | 'remote-workforce'
+  | 'virtual-workforce'
   | 'systems-reporting'
   | 'results'
   | 'free-growth-audit';
@@ -39,7 +39,7 @@ export const pathToPage: Record<string, PageRoute> = {
   '/blog': 'blog',
   '/contact': 'contact',
   '/performance-marketing': 'performance-marketing',
-  '/remote-workforce': 'remote-workforce',
+  '/virtual-workforce': 'virtual-workforce',
   '/systems-reporting': 'systems-reporting',
   '/results': 'results',
   '/free-growth-audit': 'free-growth-audit',
@@ -53,7 +53,7 @@ export const pageToPath: Record<PageRoute, string> = {
   contact: '/contact',
   'free-audit': FREE_AUDIT_CONTACT_HREF,
   'performance-marketing': '/performance-marketing',
-  'remote-workforce': '/remote-workforce',
+  'virtual-workforce': '/virtual-workforce',
   'systems-reporting': '/systems-reporting',
   results: '/results',
   'free-growth-audit': FREE_AUDIT_CONTACT_HREF,
@@ -67,7 +67,7 @@ export const pageNames: Record<PageRoute, string> = {
   contact: 'Contact',
   'free-audit': 'Free Audit',
   'performance-marketing': 'Performance Marketing',
-  'remote-workforce': 'Remote Workforce',
+  'virtual-workforce': 'Virtual Workforce',
   'systems-reporting': 'Systems & Reporting',
   results: 'Results',
   'free-growth-audit': 'Free Growth Audit',

@@ -46,22 +46,26 @@ function BlogCoverMedia({
   image,
   title,
   lede,
+  imageFailed,
+  onImageError,
 }: {
   image: string;
   title: string;
   lede: string;
+  imageFailed: boolean;
+  onImageError: () => void;
 }) {
-  const [broken, setBroken] = useState(false);
   const url = image?.trim();
-  if (url && !broken) {
+  if (url && !imageFailed) {
     return (
+      // eslint-disable-next-line @next/next/no-img-element -- CMS/user URLs can be same-origin or remote.
       <img
         src={url}
-        alt=""
+        alt={`${title?.trim() || 'Insight'} cover image`}
         className="h-full w-full object-cover"
         loading="lazy"
         decoding="async"
-        onError={() => setBroken(true)}
+        onError={onImageError}
       />
     );
   }
@@ -75,6 +79,7 @@ function cardExcerpt(blog: Blog): string {
 export function LatestInsights() {
   const [pinnedBlogs, setPinnedBlogs] = useState<Blog[]>([]);
   const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [failedImages, setFailedImages] = useState<Record<string, true>>({});
   const [skip, setSkip] = useState(0);
   const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -159,71 +164,75 @@ export function LatestInsights() {
             >
               {Array.isArray(allVisibleBlogs) && allVisibleBlogs.length > 0 ? (
                 allVisibleBlogs.map((blog) => {
-                  const hasTileImage = !!blog.image?.trim();
+                  const imageUrl = blog.image?.trim() || '';
+                  const imageKey = `${blog.id}:${imageUrl}`;
+                  const hasTileImage = !!imageUrl && !failedImages[imageKey];
                   return (
-                  <StaggerItem key={blog.id} className="h-full min-h-0">
-                    <RevealOnScroll variant="blur-in" duration={0.6} className="h-full min-h-0">
-                      <article
-                        className={cn(
-                          'flex h-full min-w-0 flex-col overflow-hidden rounded-2xl bg-[#111]/95 shadow-[0_8px_40px_rgba(0,0,0,0.5)] ring-1 ring-white/[0.08] transition-shadow duration-300 hover:shadow-[0_12px_48px_rgba(34,197,94,0.12)]'
-                        )}
-                      >
-                        <div className="relative aspect-[16/10] min-h-[140px] overflow-hidden bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] sm:min-h-0">
-                          <BlogCoverMedia
-                            image={blog.image}
-                            title={blog.title}
-                            lede={plainTextFromAnyContent(blog.content || '', 120)}
-                          />
-                          <div className="absolute left-3 top-3">
-                            <span className="inline-flex items-center rounded-full border border-white/10 bg-black/50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#A7F3D0] shadow-sm backdrop-blur-sm">
-                              {(blog.category || 'Insight').slice(0, 18)}
-                            </span>
-                          </div>
-                          {blog.isPinned && (
-                            <div className="absolute right-3 top-3 rounded-full bg-[#0d9488] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white shadow-sm">
-                              Featured
+                    <StaggerItem key={blog.id} className="h-full min-h-0">
+                      <RevealOnScroll variant="blur-in" duration={0.6} className="h-full min-h-0">
+                        <article
+                          className={cn(
+                            'flex h-full min-w-0 flex-col overflow-hidden rounded-2xl bg-[#111]/95 shadow-[0_8px_40px_rgba(0,0,0,0.5)] ring-1 ring-white/[0.08] transition-shadow duration-300 hover:shadow-[0_12px_48px_rgba(34,197,94,0.12)]'
+                          )}
+                        >
+                          <div className="relative aspect-[16/10] min-h-[140px] overflow-hidden bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] sm:min-h-0">
+                            <BlogCoverMedia
+                              image={blog.image}
+                              title={blog.title}
+                              lede={plainTextFromAnyContent(blog.content || '', 120)}
+                              imageFailed={!!failedImages[imageKey]}
+                              onImageError={() => setFailedImages((prev) => ({ ...prev, [imageKey]: true }))}
+                            />
+                            <div className="absolute left-3 top-3">
+                              <span className="inline-flex items-center rounded-full border border-white/10 bg-black/50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#A7F3D0] shadow-sm backdrop-blur-sm">
+                                {(blog.category || 'Insight').slice(0, 18)}
+                              </span>
                             </div>
-                          )}
-                        </div>
-
-                        <div className="flex min-h-0 min-w-0 flex-1 flex-col border-t border-white/[0.06] px-4 pb-4 pt-3 sm:px-5 sm:pb-5 sm:pt-4">
-                          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#4ADE80] sm:text-[11px]">
-                            {blog.category || 'Article'}
-                          </p>
-                          {hasTileImage ? (
-                            <>
-                              <h3 className="mt-2 line-clamp-2 font-display text-base font-bold leading-snug tracking-tight text-[#F5F5F5] sm:text-lg">
-                                {blog.title}
-                              </h3>
-                              <p className="mt-2 min-h-[4.5rem] flex-1 line-clamp-3 text-sm leading-relaxed text-[#A1A1AA]">
-                                {cardExcerpt(blog)}
-                              </p>
-                            </>
-                          ) : (
-                            <p className="mt-3 min-h-[4.5rem] flex-1 text-xs leading-relaxed text-white/42 line-clamp-4 sm:text-sm">
-                              Read the full insight for tactics, examples, and takeaways you can use this week.
-                            </p>
-                          )}
-
-                          <div className="mt-auto flex flex-col gap-3 border-t border-white/[0.08] pt-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-                            <span className="flex min-w-0 items-center gap-2 text-sm font-semibold text-[#E4E4E7]">
-                              <User className="h-4 w-4 shrink-0 text-[#71717A]" aria-hidden />
-                              <span className="truncate">{blog.authorName}</span>
-                            </span>
-                            <Button
-                              asChild
-                              className="h-10 w-full shrink-0 rounded-full border border-[#22C55E]/35 bg-[#22C55E]/15 px-4 text-sm font-semibold text-[#86EFAC] shadow-none hover:bg-[#22C55E]/25 sm:h-9 sm:w-auto"
-                            >
-                              <Link href={`/insight/${blog.id}`} className="inline-flex items-center gap-1.5">
-                                Details
-                                <ArrowRight className="h-3.5 w-3.5" />
-                              </Link>
-                            </Button>
+                            {blog.isPinned && (
+                              <div className="absolute right-3 top-3 rounded-full bg-[#0d9488] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white shadow-sm">
+                                Featured
+                              </div>
+                            )}
                           </div>
-                        </div>
-                      </article>
-                    </RevealOnScroll>
-                  </StaggerItem>
+
+                          <div className="flex min-h-0 min-w-0 flex-1 flex-col border-t border-white/[0.06] px-4 pb-4 pt-3 sm:px-5 sm:pb-5 sm:pt-4">
+                            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#4ADE80] sm:text-[11px]">
+                              {blog.category || 'Article'}
+                            </p>
+                            {hasTileImage ? (
+                              <>
+                                <h3 className="mt-2 line-clamp-2 font-display text-base font-bold leading-snug tracking-tight text-[#F5F5F5] sm:text-lg">
+                                  {blog.title}
+                                </h3>
+                                <p className="mt-2 min-h-[4.5rem] flex-1 line-clamp-3 text-sm leading-relaxed text-[#A1A1AA]">
+                                  {cardExcerpt(blog)}
+                                </p>
+                              </>
+                            ) : (
+                              <p className="mt-3 min-h-[4.5rem] flex-1 text-xs leading-relaxed text-white/42 line-clamp-4 sm:text-sm">
+                                Read the full insight for tactics, examples, and takeaways you can use this week.
+                              </p>
+                            )}
+
+                            <div className="mt-auto flex flex-col gap-3 border-t border-white/[0.08] pt-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                              <span className="flex min-w-0 items-center gap-2 text-sm font-semibold text-[#E4E4E7]">
+                                <User className="h-4 w-4 shrink-0 text-[#71717A]" aria-hidden />
+                                <span className="truncate">{blog.authorName}</span>
+                              </span>
+                              <Button
+                                asChild
+                                className="h-10 w-full shrink-0 rounded-full border border-[#22C55E]/35 bg-[#22C55E]/15 px-4 text-sm font-semibold text-[#86EFAC] shadow-none hover:bg-[#22C55E]/25 sm:h-9 sm:w-auto"
+                              >
+                                <Link href={`/insight/${blog.id}`} className="inline-flex items-center gap-1.5">
+                                  Details
+                                  <ArrowRight className="h-3.5 w-3.5" />
+                                </Link>
+                              </Button>
+                            </div>
+                          </div>
+                        </article>
+                      </RevealOnScroll>
+                    </StaggerItem>
                   );
                 })
               ) : (

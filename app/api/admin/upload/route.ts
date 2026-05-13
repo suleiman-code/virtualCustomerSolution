@@ -8,25 +8,14 @@ export const runtime = 'nodejs';
 /** Max upload size (MongoDB + Vercel-friendly; filesystem is not used on serverless). */
 const MAX_BYTES = 3 * 1024 * 1024;
 
-/** MIME types we persist after validation + sniffing. */
+/** Browser-safe MIME types we persist after validation + sniffing. */
 const ALLOWED = new Set([
   'image/jpeg',
   'image/pjpeg',
   'image/png',
-  'image/apng',
   'image/webp',
   'image/gif',
   'image/avif',
-  'image/bmp',
-  'image/x-ms-bmp',
-  'image/tiff',
-  'image/tif',
-  'image/x-icon',
-  'image/vnd.microsoft.icon',
-  'image/svg+xml',
-  'image/heic',
-  'image/heif',
-  'image/jxl',
 ]);
 
 const MIME_TO_EXT: Record<string, string> = {
