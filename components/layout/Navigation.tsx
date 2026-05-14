@@ -19,7 +19,7 @@ const loginButtonClass =
   'group relative inline-flex items-center justify-center rounded-full border border-white/18 bg-white/[0.04] px-3 py-1.5 text-xs font-semibold text-[#C4C4CC] transition-[border-color,background-color,color] duration-300 hover:border-white/28 hover:bg-white/[0.08] hover:text-[#F5F5F5] sm:px-3.5 sm:py-2 sm:text-sm';
 
 const ctaButtonClass =
-  'group relative inline-flex items-center justify-center gap-1.5 rounded-full border border-[#22C55E]/40 bg-[#22C55E]/10 px-3 py-1.5 text-xs font-semibold text-[#F5F5F5] transition-[border-color,background-color,box-shadow] duration-300 hover:border-[#22C55E]/70 hover:bg-[#22C55E]/20 hover:shadow-[0_0_20px_rgba(34,197,94,0.28)] neon-box neon-border sm:px-3.5 sm:py-2 sm:text-sm';
+  'group relative inline-flex items-center justify-center gap-1 rounded-full border border-[#22C55E]/40 bg-[#22C55E]/10 px-2.5 py-1.5 text-[11px] font-semibold leading-tight text-[#F5F5F5] transition-[border-color,background-color,box-shadow] duration-300 hover:border-[#22C55E]/70 hover:bg-[#22C55E]/20 hover:shadow-[0_0_20px_rgba(34,197,94,0.28)] neon-box neon-border sm:gap-1.5 sm:px-3 sm:py-1.5 sm:text-xs md:px-3.5 md:py-2 md:text-sm';
 
 function pathOnly(url: string) {
   const s = url.split('#')[0]?.split('?')[0];
@@ -159,8 +159,11 @@ export function Navigation() {
               onClick={() => navigateTo('free-audit')}
               className={`${ctaButtonClass} pointer-events-auto hidden lg:inline-flex`}
             >
-              <span>Free Consultation</span>
-              <ArrowRight className="h-3.5 w-3.5 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5 sm:h-4 sm:w-4" />
+              <span className="whitespace-nowrap">
+                <span className="hidden sm:inline">Free Consultation</span>
+                <span className="sm:hidden">Free</span>
+              </span>
+              <ArrowRight className="h-3 w-3 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4" />
             </button>
 
             <button
@@ -233,7 +236,7 @@ export function Navigation() {
                   }}
                   className={`${ctaButtonClass} w-full justify-center`}
                 >
-                  <span>Free Consultation</span>
+                  <span className="whitespace-nowrap">Free Consultation</span>
                   <ArrowRight className="h-3.5 w-3.5 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5 sm:h-4 sm:w-4" />
                 </button>
               </div>

@@ -1,12 +1,16 @@
 ﻿import { Metadata } from 'next';
 import Link from 'next/link';
-import { Calendar, Clock, Tag, ArrowRight } from 'lucide-react';
+import { Clock, ArrowRight } from 'lucide-react';
 
 import { SiteShell } from '@/components/layout/SiteShell';
 import { getAllPosts, getAllCategories } from '@/lib/blog';
-import { BlogListClient } from './BlogListClient';
+import { BlogCardMedia, BlogListClient } from './BlogListClient';
 import { getDb } from '@/lib/db';
 import { plainTextFromAnyContent } from '@/lib/markdown-excerpt';
+import { normalizePublicImageUrl } from '@/lib/public-image-url';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: { absolute: 'Marketing, Virtual Work & Growth Blog | VCS' },
@@ -42,42 +46,48 @@ export type MongoBlogCard = {
 };
 
 async function getMongoBlogCards(): Promise<MongoBlogCard[]> {
-  const db = await getDb();
-  if (!db) return [];
+  try {
+    const db = await getDb();
+    if (!db) return [];
 
-  const rows = await db.collection('blogs').find({}).sort({ isPinned: -1, date: -1 }).toArray();
+    const rows = await db.collection('blogs').find({}).sort({ isPinned: -1, date: -1 }).toArray();
 
-  return rows.map((doc) => {
-    const id = doc._id.toString();
-    const content = String(doc.content ?? '');
-    const words = content.trim().split(/\s+/).filter(Boolean).length;
-    const readingTime = Math.max(1, Math.ceil(words / 225));
-    const excerptField = String(doc.excerpt ?? '').trim();
-    const excerpt = excerptField || plainTextFromAnyContent(content, 220);
+    return rows.map((doc) => {
+      const id = doc._id.toString();
+      const content = String(doc.content ?? '');
+      const plainContent = plainTextFromAnyContent(content, 220);
+      const words = plainTextFromAnyContent(content, 4000).trim().split(/\s+/).filter(Boolean).length;
+      const readingTime = Math.max(1, Math.ceil(words / 225));
+      const excerptField = String(doc.excerpt ?? '').trim();
+      const excerpt = plainTextFromAnyContent(excerptField || content, 220) || plainContent;
 
-    const rawDate = doc.date;
-    let dateStr = '';
-    if (rawDate instanceof Date) {
-      dateStr = rawDate.toISOString().slice(0, 10);
-    } else if (typeof rawDate === 'string') {
-      dateStr = rawDate.slice(0, 10);
-    }
+      const rawDate = doc.date;
+      let dateStr = '';
+      if (rawDate instanceof Date && !Number.isNaN(rawDate.getTime())) {
+        dateStr = rawDate.toISOString().slice(0, 10);
+      } else if (typeof rawDate === 'string' && !Number.isNaN(Date.parse(rawDate))) {
+        dateStr = new Date(rawDate).toISOString().slice(0, 10);
+      }
 
-    return {
-      kind: 'mongo' as const,
-      mongoId: id,
-      slug: id,
-      title: String(doc.title ?? ''),
-      excerpt,
-      category: String(doc.category ?? 'General'),
-      tags: [] as string[],
-      date: dateStr,
-      author: String(doc.authorName ?? ''),
-      readingTime,
-      featured: !!doc.isPinned,
-      image: typeof doc.image === 'string' ? doc.image : '',
-    };
-  });
+      return {
+        kind: 'mongo' as const,
+        mongoId: id,
+        slug: id,
+        title: String(doc.title ?? ''),
+        excerpt,
+        category: String(doc.category ?? 'General'),
+        tags: [] as string[],
+        date: dateStr,
+        author: String(doc.authorName ?? ''),
+        readingTime,
+        featured: !!doc.isPinned,
+        image: normalizePublicImageUrl(typeof doc.image === 'string' ? doc.image : ''),
+      };
+    });
+  } catch (error) {
+    console.error('[blog/page] Failed to load Mongo blogs:', error);
+    return [];
+  }
 }
 
 export default async function BlogPage() {
@@ -113,11 +123,10 @@ export default async function BlogPage() {
   const featuredPost = showMongoFeatured ? featuredMongo : null;
   const featuredMarkdownPost = !showMongoFeatured && featuredMarkdown ? featuredMarkdown : null;
 
-  const featuredMongoId = featuredPost?.mongoId ?? null;
   const featuredFileSlug = featuredMarkdownPost?.slug ?? null;
 
   const listPosts = combinedPosts.filter((p) => {
-    if (p.kind === 'mongo' && featuredMongoId && p.mongoId === featuredMongoId) return false;
+    // Admin-created Mongo blogs should always appear in the grid/list as well.
     if (p.kind === 'markdown' && featuredFileSlug && p.slug === featuredFileSlug) return false;
     return true;
   });
@@ -149,16 +158,12 @@ export default async function BlogPage() {
             >
               <div className="flex flex-col gap-6 md:flex-row md:gap-10">
                 <div className="flex h-48 w-full shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[rgba(255,255,255,0.04)] bg-gradient-to-br from-[rgba(34,197,94,0.1)] to-[rgba(29,78,216,0.05)] md:h-auto md:w-80">
-                  {featuredPost.image ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={featuredPost.image}
-                      alt=""
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <Tag className="h-10 w-10 text-[#22C55E] opacity-40" />
-                  )}
+                  <BlogCardMedia
+                    image={featuredPost.image}
+                    title={featuredPost.title}
+                    category={featuredPost.category}
+                    label={featuredPost.featured ? 'Featured insight' : 'Insight brief'}
+                  />
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col justify-center">
                   <div className="mb-3 flex flex-wrap items-center gap-3">
@@ -199,8 +204,12 @@ export default async function BlogPage() {
               className="glass-panel group mb-12 block p-6 transition-all hover:border-[rgba(34,197,94,0.2)] md:p-8"
             >
               <div className="flex flex-col gap-6 md:flex-row md:gap-10">
-                <div className="flex h-48 w-full shrink-0 items-center justify-center rounded-xl border border-[rgba(255,255,255,0.04)] bg-gradient-to-br from-[rgba(34,197,94,0.1)] to-[rgba(29,78,216,0.05)] md:h-auto md:w-80">
-                  <Tag className="h-10 w-10 text-[#22C55E] opacity-40" />
+                <div className="flex h-48 w-full shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[rgba(255,255,255,0.04)] bg-[#070b09] md:h-auto md:w-80">
+                  <BlogCardMedia
+                    title={featuredMarkdownPost.title}
+                    category={featuredMarkdownPost.category}
+                    label={featuredMarkdownPost.featured ? 'Featured insight' : 'Insight brief'}
+                  />
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col justify-center">
                   <div className="mb-3 flex flex-wrap items-center gap-3">

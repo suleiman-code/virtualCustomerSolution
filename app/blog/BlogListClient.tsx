@@ -24,6 +24,65 @@ interface BlogListClientProps {
   categories: string[];
 }
 
+export function BlogCardMedia({
+  image,
+  title,
+  category = 'Insight',
+  label = 'Insight brief',
+}: {
+  image?: string;
+  title: string;
+  category?: string;
+  label?: string;
+}) {
+  const [failed, setFailed] = useState(false);
+  const src = image?.trim();
+
+  if (src && !failed) {
+    return (
+      <div className="relative h-full w-full">
+        {/* eslint-disable-next-line @next/next/no-img-element -- admin/CMS URLs can be same-origin or remote. */}
+        <img
+          src={src}
+          alt={`${title} cover image`}
+          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+          loading="lazy"
+          decoding="async"
+          onError={() => setFailed(true)}
+        />
+        <span className="absolute left-3 top-3 inline-flex rounded-full border border-white/10 bg-black/50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#A7F3D0] shadow-sm backdrop-blur-sm">
+          {(category || 'Insight').slice(0, 18)}
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative flex h-full w-full overflow-hidden bg-[#070b09]">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_20%_20%,rgba(34,197,94,0.18),transparent_42%),radial-gradient(ellipse_at_85%_75%,rgba(20,217,196,0.14),transparent_40%),linear-gradient(135deg,#101010,#07110d_48%,#050505)]" />
+      <div className="pointer-events-none absolute inset-0 opacity-[0.45] [background-image:linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] [background-size:24px_24px]" />
+      <div className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full border border-[#22C55E]/20" />
+      <div className="pointer-events-none absolute -bottom-16 left-8 h-44 w-44 rounded-full border border-[#14d9c4]/15" />
+      <div className="relative z-[1] flex h-full w-full flex-col justify-between p-5">
+        <div className="flex items-center justify-between gap-3">
+          <span className="rounded-full border border-white/10 bg-black/35 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#A7F3D0] backdrop-blur-sm">
+            {(category || 'Insight').slice(0, 18)}
+          </span>
+          <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/25">
+            VCS
+          </span>
+        </div>
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#22C55E]/70">
+            {label}
+          </p>
+          <div className="mt-3 h-px w-20 bg-gradient-to-r from-[#22C55E]/70 to-transparent" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function BlogListClient({ posts, categories }: BlogListClientProps) {
   const [activeCategory, setActiveCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState('');
@@ -133,23 +192,12 @@ export function BlogListClient({ posts, categories }: BlogListClientProps) {
                 href={href}
                 className="glass-panel group flex h-full min-h-0 flex-col overflow-hidden p-0 transition-all hover:border-[rgba(34,197,94,0.2)]"
               >
-                <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-white/[0.04]">
-                  {post.image ? (
-                    <>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={post.image}
-                        alt=""
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                      />
-                    </>
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#14532d]/25 to-[#052e16]/50">
-                      <span className="text-xs font-semibold uppercase tracking-widest text-[#22C55E]/50">
-                        Article
-                      </span>
-                    </div>
-                  )}
+                <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-[#070b09]">
+                  <BlogCardMedia
+                    image={post.image}
+                    title={post.title}
+                    category={post.category}
+                  />
                 </div>
                 <div className="flex min-h-0 flex-1 flex-col p-6">
                   <span className="mb-4 inline-flex items-center self-start rounded-full border border-[rgba(34,197,94,0.15)] bg-[rgba(34,197,94,0.08)] px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-[#22C55E]">

@@ -21,10 +21,11 @@ type OurServicesProps = {
   sectionId?: string;
 };
 
+const HOME_PAGE_SIZE = 3;
+
 function ServiceVisualNoImage({
   title,
   description,
-  isHomeServices,
 }: {
   title: string;
   description: string;
@@ -35,48 +36,27 @@ function ServiceVisualNoImage({
 
   return (
     <div className="relative flex h-full min-h-[140px] w-full overflow-hidden sm:min-h-0">
-      {/* Quiet depth — no loud colour blocks */}
-      <div
-        className={cn(
-          'pointer-events-none absolute inset-0',
-          isHomeServices
-            ? 'bg-gradient-to-br from-[#101010] via-[#0c0c0c] to-[#080808]'
-            : 'bg-gradient-to-br from-[#fafafa] via-[#f4f4f5] to-[#ececee]'
-        )}
-      />
-      <div
-        className={cn(
-          'pointer-events-none absolute inset-0 opacity-[0.45]',
-          isHomeServices
-            ? '[background-image:repeating-linear-gradient(-12deg,transparent,transparent_38px,rgba(255,255,255,0.02)_38px,rgba(255,255,255,0.02)_39px)]'
-            : '[background-image:repeating-linear-gradient(-12deg,transparent,transparent_40px,rgba(0,0,0,0.02)_40px,rgba(0,0,0,0.02)_41px)]'
-        )}
-      />
-      {isHomeServices ? (
-        <div className="pointer-events-none absolute left-0 top-0 h-full w-px bg-gradient-to-b from-[#22C55E]/25 via-[#22C55E]/10 to-transparent" />
-      ) : (
-        <div className="pointer-events-none absolute left-0 top-0 h-full w-px bg-gradient-to-b from-sky-300/50 via-sky-200/20 to-transparent" />
-      )}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_20%_20%,rgba(34,197,94,0.18),transparent_42%),radial-gradient(ellipse_at_85%_75%,rgba(20,217,196,0.14),transparent_40%),linear-gradient(135deg,#101010,#07110d_48%,#050505)]" />
+      <div className="pointer-events-none absolute inset-0 opacity-[0.45] [background-image:linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] [background-size:24px_24px]" />
+      <div className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full border border-[#22C55E]/20" />
+      <div className="pointer-events-none absolute -bottom-16 left-8 h-44 w-44 rounded-full border border-[#14d9c4]/15" />
+      <div className="pointer-events-none absolute left-0 top-0 h-full w-px bg-gradient-to-b from-white/12 via-white/[0.06] to-transparent" />
 
-      <div className="relative z-[1] flex h-full w-full flex-col justify-end px-5 pb-6 pt-10 text-left sm:px-6 sm:pb-7 sm:pt-12">
-        <h3
-          className={cn(
-            'font-display text-lg font-semibold leading-snug tracking-tight line-clamp-2 sm:text-xl',
-            isHomeServices ? 'text-[#f4f4f5]' : 'text-zinc-900'
-          )}
-        >
-          {cleanTitle}
-        </h3>
-        {lede ? (
-          <p
-            className={cn(
-              'mt-2.5 text-[13px] leading-relaxed line-clamp-2 sm:text-sm',
-              isHomeServices ? 'text-white/48' : 'text-slate-600'
-            )}
-          >
-            {lede}
+      <div className="relative z-[1] flex h-full w-full flex-col justify-between px-5 pb-6 pt-5 text-left sm:px-6 sm:pb-7">
+        <div className="flex justify-end">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/25">VCS</span>
+        </div>
+        <div>
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.28em] text-[#22C55E]/70">
+            Service brief
           </p>
-        ) : null}
+          <h3 className="font-display text-lg font-semibold leading-snug tracking-tight text-[#f2f2f2] line-clamp-2 sm:text-xl">
+            {cleanTitle}
+          </h3>
+          {lede ? (
+            <p className="mt-2.5 text-[13px] leading-relaxed text-white/48 line-clamp-2 sm:text-sm">{lede}</p>
+          ) : null}
+        </div>
       </div>
     </div>
   );
@@ -128,6 +108,7 @@ export function OurServices({ sectionId = 'services' }: OurServicesProps) {
   const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(HOME_PAGE_SIZE);
 
   useEffect(() => {
     const initFetch = async () => {
@@ -135,7 +116,7 @@ export function OurServices({ sectionId = 'services' }: OurServicesProps) {
       try {
         const [pinnedRes, unpinnedRes] = await Promise.all([
           fetch('/api/services?pinned=true'),
-          fetch('/api/services?skip=0&limit=3'),
+          fetch(`/api/services?skip=0&limit=${HOME_PAGE_SIZE}`),
         ]);
 
         const pinnedData = await pinnedRes.json();
@@ -144,7 +125,8 @@ export function OurServices({ sectionId = 'services' }: OurServicesProps) {
         setPinnedServices(Array.isArray(pinnedData) ? pinnedData : []);
         setServices(Array.isArray(unpinnedData.services) ? unpinnedData.services : []);
         setHasMore(unpinnedData.hasMore || false);
-        setSkip(3);
+        setSkip(HOME_PAGE_SIZE);
+        setVisibleCount(HOME_PAGE_SIZE);
       } catch (err) {
         console.error('Fetch services error:', err);
         setPinnedServices([]);
@@ -156,25 +138,41 @@ export function OurServices({ sectionId = 'services' }: OurServicesProps) {
     void initFetch();
   }, []);
 
+  const isHomeServices = sectionId === 'services';
+  const allLoadedServices = [...pinnedServices, ...services];
+  const allVisibleServices = isHomeServices
+    ? allLoadedServices.slice(0, visibleCount)
+    : allLoadedServices;
+  const hasHiddenLoadedServices = isHomeServices && allLoadedServices.length > visibleCount;
+  const canLoadMore = hasMore || hasHiddenLoadedServices;
+
   const loadMore = async () => {
+    if (loadingMore) return;
+
+    const nextVisibleCount = visibleCount + HOME_PAGE_SIZE;
+    if (isHomeServices && (!hasMore || allLoadedServices.length >= nextVisibleCount)) {
+      setVisibleCount(nextVisibleCount);
+      return;
+    }
+
     setLoadingMore(true);
     try {
-      const res = await fetch(`/api/services?skip=${skip}&limit=3`);
+      const res = await fetch(`/api/services?skip=${skip}&limit=${HOME_PAGE_SIZE}`);
       const data = await res.json();
       if (Array.isArray(data.services)) {
         setServices((prev) => [...prev, ...data.services]);
       }
       setHasMore(data.hasMore || false);
-      setSkip(skip + 3);
+      setSkip((prev) => prev + HOME_PAGE_SIZE);
+      if (isHomeServices) {
+        setVisibleCount(nextVisibleCount);
+      }
     } catch (err) {
       console.error('Load more services error:', err);
     } finally {
       setLoadingMore(false);
     }
   };
-
-  const allVisibleServices = [...pinnedServices, ...services];
-  const isHomeServices = sectionId === 'services';
 
   return (
     <section
@@ -242,13 +240,15 @@ export function OurServices({ sectionId = 'services' }: OurServicesProps) {
                             'flex h-full min-w-0 flex-col overflow-hidden rounded-2xl transition-shadow duration-300',
                             isHomeServices
                               ? 'bg-[#111]/95 shadow-[0_8px_40px_rgba(0,0,0,0.5)] ring-1 ring-white/[0.08] hover:shadow-[0_12px_48px_rgba(34,197,94,0.12)]'
-                              : 'bg-white shadow-[0_8px_30px_rgba(0,0,0,0.12)] ring-1 ring-black/[0.04] hover:shadow-[0_12px_40px_rgba(0,0,0,0.14)]'
+                              : 'bg-[#101010]/95 shadow-[0_8px_40px_rgba(0,0,0,0.45)] ring-1 ring-white/[0.08] hover:shadow-[0_12px_48px_rgba(20,217,196,0.12)]'
                           )}
                         >
                           <div
                             className={cn(
                               'relative aspect-[16/10] min-h-[140px] overflow-hidden sm:min-h-0',
-                              isHomeServices ? 'bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d]' : 'bg-zinc-100'
+                              isHomeServices
+                                ? 'bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d]'
+                                : 'bg-gradient-to-br from-[#141414] via-[#0f1715] to-[#080808]'
                             )}
                           >
                             <ServiceCoverMedia
@@ -260,14 +260,7 @@ export function OurServices({ sectionId = 'services' }: OurServicesProps) {
                               onImageError={() => setFailedImages((prev) => ({ ...prev, [imageKey]: true }))}
                             />
                             <div className="absolute left-3 top-3">
-                              <span
-                                className={cn(
-                                  'inline-flex rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider shadow-sm backdrop-blur-sm',
-                                  isHomeServices
-                                    ? 'border border-white/10 bg-black/50 text-[#A7F3D0]'
-                                    : 'bg-white/95 text-zinc-800'
-                                )}
-                              >
+                              <span className="inline-flex rounded-full border border-white/10 bg-black/50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#A7F3D0] shadow-sm backdrop-blur-sm">
                                 Offering
                               </span>
                             </div>
@@ -280,8 +273,7 @@ export function OurServices({ sectionId = 'services' }: OurServicesProps) {
 
                           <div
                             className={cn(
-                              'flex min-h-0 min-w-0 flex-1 flex-col px-4 pb-4 pt-3 sm:px-5 sm:pb-5 sm:pt-4',
-                              isHomeServices && 'border-t border-white/[0.06]'
+                              'flex min-h-0 min-w-0 flex-1 flex-col border-t border-white/[0.06] px-4 pb-4 pt-3 sm:px-5 sm:pb-5 sm:pt-4'
                             )}
                           >
                             <p
@@ -297,7 +289,7 @@ export function OurServices({ sectionId = 'services' }: OurServicesProps) {
                                 <h3
                                   className={cn(
                                     'mt-2 font-display text-base font-bold leading-snug tracking-tight line-clamp-2 sm:text-lg',
-                                    isHomeServices ? 'text-[#F5F5F5]' : 'text-zinc-900'
+                                    isHomeServices ? 'text-[#F5F5F5]' : 'text-[#F5F5F5]'
                                   )}
                                 >
                                   {service.title}
@@ -305,7 +297,7 @@ export function OurServices({ sectionId = 'services' }: OurServicesProps) {
                                 <p
                                   className={cn(
                                     'mt-2 min-h-[4.5rem] flex-1 text-sm leading-relaxed line-clamp-3',
-                                    isHomeServices ? 'text-[#A1A1AA]' : 'text-zinc-500'
+                                    isHomeServices ? 'text-[#A1A1AA]' : 'text-[#A1A1AA]'
                                   )}
                                 >
                                   {plainTextFromAnyContent(service.description, 400)}
@@ -315,7 +307,7 @@ export function OurServices({ sectionId = 'services' }: OurServicesProps) {
                               <p
                                 className={cn(
                                   'mt-3 min-h-[4.5rem] flex-1 text-xs leading-relaxed line-clamp-4 sm:text-sm',
-                                  isHomeServices ? 'text-white/42' : 'text-zinc-500'
+                                  isHomeServices ? 'text-white/42' : 'text-white/45'
                                 )}
                               >
                                 Open the offering for scope, deliverables, timelines, and how we work with your
@@ -326,7 +318,7 @@ export function OurServices({ sectionId = 'services' }: OurServicesProps) {
                             <div
                               className={cn(
                                 'mt-auto flex justify-end border-t pt-4',
-                                isHomeServices ? 'border-white/[0.08]' : 'border-zinc-100'
+                                isHomeServices ? 'border-white/[0.08]' : 'border-white/[0.08]'
                               )}
                             >
                               <Button
@@ -335,7 +327,7 @@ export function OurServices({ sectionId = 'services' }: OurServicesProps) {
                                   'h-10 w-full rounded-full px-4 text-sm font-semibold shadow-none sm:h-9 sm:w-auto',
                                   isHomeServices
                                     ? 'border border-[#22C55E]/35 bg-[#22C55E]/15 text-[#86EFAC] hover:bg-[#22C55E]/25'
-                                    : 'bg-[#bae6fd] text-sky-900 hover:bg-[#7dd3fc]'
+                                    : 'border border-[#14d9c4]/35 bg-[#14d9c4]/15 text-[#99F6E4] hover:bg-[#14d9c4]/25'
                                 )}
                               >
                                 <Link
@@ -360,7 +352,7 @@ export function OurServices({ sectionId = 'services' }: OurServicesProps) {
               )}
             </StaggerChildren>
 
-            {hasMore && (
+            {canLoadMore && (
               <div className="mt-10 flex justify-center px-2 sm:mt-12">
                 <Button
                   onClick={loadMore}

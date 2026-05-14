@@ -20,23 +20,34 @@ interface Blog {
   date: string;
 }
 
+const HOME_PAGE_SIZE = 3;
+
 function BlogVisualNoImage({ title, lede }: { title: string; lede: string }) {
   const cleanTitle = title?.trim() || 'Article';
 
   return (
     <div className="relative flex h-full min-h-[140px] w-full overflow-hidden sm:min-h-0">
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#0f0f0f] via-[#0a0a0a] to-[#060606]" />
-      <div className="pointer-events-none absolute inset-0 opacity-[0.5] [background-image:repeating-linear-gradient(11deg,transparent,transparent_44px,rgba(255,255,255,0.018)_44px,rgba(255,255,255,0.018)_45px)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_100%_0%,rgba(34,197,94,0.06),transparent_55%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_18%_20%,rgba(34,197,94,0.16),transparent_44%),radial-gradient(ellipse_at_84%_76%,rgba(20,217,196,0.12),transparent_42%),linear-gradient(135deg,#101010,#07110d_48%,#050505)]" />
+      <div className="pointer-events-none absolute inset-0 opacity-[0.44] [background-image:linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] [background-size:26px_26px]" />
+      <div className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full border border-[#22C55E]/20" />
+      <div className="pointer-events-none absolute -bottom-16 left-8 h-44 w-44 rounded-full border border-[#14d9c4]/15" />
       <div className="pointer-events-none absolute left-0 top-0 h-full w-px bg-gradient-to-b from-white/12 via-white/[0.06] to-transparent" />
 
-      <div className="relative z-[1] flex h-full w-full flex-col justify-end px-5 pb-6 pt-10 text-left sm:px-6 sm:pb-7 sm:pt-12">
-        <h3 className="font-display text-lg font-semibold leading-snug tracking-tight text-[#f2f2f2] line-clamp-2 sm:text-xl">
-          {cleanTitle}
-        </h3>
-        {lede ? (
-          <p className="mt-2.5 text-[13px] leading-relaxed text-white/45 line-clamp-2 sm:text-sm">{lede}</p>
-        ) : null}
+      <div className="relative z-[1] flex h-full w-full flex-col justify-between px-5 pb-6 pt-5 text-left sm:px-6 sm:pb-7">
+        <div className="flex justify-end">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/25">VCS</span>
+        </div>
+        <div>
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.28em] text-[#22C55E]/70">
+            Editorial brief
+          </p>
+          <h3 className="font-display text-lg font-semibold leading-snug tracking-tight text-[#f2f2f2] line-clamp-2 sm:text-xl">
+            {cleanTitle}
+          </h3>
+          {lede ? (
+            <p className="mt-2.5 text-[13px] leading-relaxed text-white/48 line-clamp-2 sm:text-sm">{lede}</p>
+          ) : null}
+        </div>
       </div>
     </div>
   );
@@ -84,6 +95,7 @@ export function LatestInsights() {
   const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(HOME_PAGE_SIZE);
 
   useEffect(() => {
     const initFetch = async () => {
@@ -91,7 +103,7 @@ export function LatestInsights() {
       try {
         const [pinnedRes, unpinnedRes] = await Promise.all([
           fetch('/api/blogs?pinned=true'),
-          fetch('/api/blogs?skip=0&limit=3'),
+          fetch(`/api/blogs?skip=0&limit=${HOME_PAGE_SIZE}`),
         ]);
 
         const pinnedData = await pinnedRes.json();
@@ -100,7 +112,8 @@ export function LatestInsights() {
         setPinnedBlogs(Array.isArray(pinnedData) ? pinnedData : []);
         setBlogs(Array.isArray(unpinnedData.blogs) ? unpinnedData.blogs : []);
         setHasMore(unpinnedData.hasMore || false);
-        setSkip(3);
+        setSkip(HOME_PAGE_SIZE);
+        setVisibleCount(HOME_PAGE_SIZE);
       } catch (err) {
         console.error('Fetch blogs error:', err);
         setPinnedBlogs([]);
@@ -112,24 +125,36 @@ export function LatestInsights() {
     void initFetch();
   }, []);
 
+  const allLoadedBlogs = [...pinnedBlogs, ...blogs];
+  const allVisibleBlogs = allLoadedBlogs.slice(0, visibleCount);
+  const hasHiddenLoadedBlogs = allLoadedBlogs.length > visibleCount;
+  const canLoadMore = hasMore || hasHiddenLoadedBlogs;
+
   const loadMore = async () => {
+    if (loadingMore) return;
+
+    const nextVisibleCount = visibleCount + HOME_PAGE_SIZE;
+    if (!hasMore || allLoadedBlogs.length >= nextVisibleCount) {
+      setVisibleCount(nextVisibleCount);
+      return;
+    }
+
     setLoadingMore(true);
     try {
-      const res = await fetch(`/api/blogs?skip=${skip}&limit=3`);
+      const res = await fetch(`/api/blogs?skip=${skip}&limit=${HOME_PAGE_SIZE}`);
       const data = await res.json();
       if (Array.isArray(data.blogs)) {
         setBlogs((prev) => [...prev, ...data.blogs]);
       }
       setHasMore(data.hasMore || false);
-      setSkip(skip + 3);
+      setSkip((prev) => prev + HOME_PAGE_SIZE);
+      setVisibleCount(nextVisibleCount);
     } catch (err) {
       console.error('Load more blogs error:', err);
     } finally {
       setLoadingMore(false);
     }
   };
-
-  const allVisibleBlogs = [...pinnedBlogs, ...blogs];
 
   return (
     <section
@@ -242,7 +267,7 @@ export function LatestInsights() {
               )}
             </StaggerChildren>
 
-            {hasMore && (
+            {canLoadMore && (
               <div className="mt-10 flex justify-center px-2 sm:mt-12">
                 <Button
                   onClick={loadMore}
