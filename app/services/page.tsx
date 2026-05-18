@@ -1,7 +1,6 @@
 ﻿import { SiteShell } from '@/components/layout/SiteShell';
 import { OurServices } from '@/components/sections/OurServices';
 import { ServicesPageView } from '@/components/services/ServicesPageView';
-import { SERVICES_PAGE_CATEGORIES } from '@/lib/services-page-data';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -31,10 +30,7 @@ export const metadata: Metadata = {
 export default function ServicesPage() {
   return (
     <SiteShell>
-      <ServicesPageView
-        categories={SERVICES_PAGE_CATEGORIES}
-        belowHero={<OurServices sectionId="offerings" />}
-      />
+      <ServicesPageView belowHero={<OurServices sectionId="offerings" />} />
     </SiteShell>
   );
 }

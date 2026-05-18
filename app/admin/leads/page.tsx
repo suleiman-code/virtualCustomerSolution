@@ -29,7 +29,7 @@ export default async function AdminLeadsPage() {
     country: l.country,
     service: l.service,
     teamSize: l.teamSize,
-    budget: l.budget,
+    companyWebsite: l.companyWebsite ?? (l as { budget?: string }).budget ?? null,
     description: l.description,
     source: l.source,
     status: l.status,

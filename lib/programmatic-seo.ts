@@ -201,7 +201,7 @@ export function generateServiceIndustryContent(
   ];
 
   const ctaTexts = [
-    `Get a free audit and we'll show you exactly where our ${sName.toLowerCase()} can make the biggest impact on your ${iName.toLowerCase()} business.`,
+    `Book a free consultation and we'll show you how our ${sName.toLowerCase()} fits your ${iName.toLowerCase()} operation.`,
     `Book a free growth audit. We'll analyze your current setup and deliver a personalized roadmap for your ${iName.toLowerCase()} company.`,
     `Schedule your free consultation and discover how ${iName.toLowerCase()}-focused ${sName.toLowerCase()} can accelerate your growth.`,
   ];

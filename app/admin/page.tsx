@@ -55,7 +55,7 @@ export default async function AdminDashboardPage() {
 
   return (
     <AdminShell adminUser={admin.user}>
-      <main className="flex-1 overflow-y-auto px-4 py-8 sm:px-6 md:py-10">
+      <div className="mx-auto max-w-4xl px-4 py-8 pb-10 sm:px-6 md:py-10">
         <div className="mx-auto max-w-4xl">
           <h1 className="font-display text-2xl font-bold text-white md:text-3xl">Dashboard</h1>
           <p className="mt-2 max-w-xl text-sm text-white/50">
@@ -107,7 +107,7 @@ export default async function AdminDashboardPage() {
             })}
           </ul>
         </div>
-      </main>
+      </div>
     </AdminShell>
   );
 }

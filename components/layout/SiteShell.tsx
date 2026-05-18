@@ -2,8 +2,6 @@ import type { ReactNode } from 'react';
 import { Navigation } from '@/components/layout/Navigation';
 import { ScrollToHashOnMount } from '@/components/layout/ScrollToHashOnMount';
 import { Footer } from '@/components/layout/footer';
-import { ExitIntentPopup } from '@/components/sections/ExitIntentPopup';
-import { StickyCTABar } from '@/components/sections/StickyCTABar';
 
 export function SiteShell({ children }: { children: ReactNode }) {
   return (
@@ -25,8 +23,6 @@ export function SiteShell({ children }: { children: ReactNode }) {
         <ScrollToHashOnMount />
         <main className="flex-1 pt-[var(--site-header-height)]">{children}</main>
         <Footer />
-        <ExitIntentPopup />
-        <StickyCTABar />
       </div>
     </div>
   );

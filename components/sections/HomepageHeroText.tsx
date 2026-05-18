@@ -19,14 +19,14 @@ export function HomepageHeroText() {
         </LineReveal>
 
         <TextReveal
-          text="Most businesses waste time and money trying to do everything in-house. We plug in the people, systems, and marketing muscle you need — so you stop juggling and start growing."
+          text="Most teams burn budget hiring separate vendors for chat, support, marketing, and web. VCS is one service provider — dedicated people and delivery under one roof, so you stop coordinating and start scaling."
           className="text-xl md:text-2xl lg:text-3xl font-semibold leading-relaxed tracking-tight"
         />
 
         <div className="mt-12 grid grid-cols-3 gap-4 md:gap-6">
           {[
             { value: '40-60%', label: 'Lower Costs' },
-            { value: '8+', label: 'Years Running' },
+            { value: '3+', label: 'Years Running' },
             { value: '<1 week', label: 'Staff Ready' },
           ].map((stat, i) => (
             <LineReveal key={i} delay={0.3 + i * 0.2}>

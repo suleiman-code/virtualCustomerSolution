@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
@@ -306,7 +306,7 @@ export function VirtualWorkforcePage() {
                 onClick={() => navigateTo('free-growth-audit')}
                 className="bg-[#22C55E] hover:bg-[#059669] text-white font-semibold px-8 py-6 group"
               >
-                Request Free Growth Audit
+                Free Consultation
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
             </GlassCard>

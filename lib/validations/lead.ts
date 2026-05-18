@@ -1,11 +1,8 @@
 import { z } from 'zod/v4'
 
-export const SERVICE_OPTIONS = [
-  'IT Staffing',
-  'Digital Marketing Team',
-  'Remote Workforce',
-  'Custom Solution',
-] as const
+import { CONTACT_SERVICE_LABELS } from '@/lib/contact-services'
+
+export const SERVICE_OPTIONS = CONTACT_SERVICE_LABELS
 
 export const TEAM_SIZE_OPTIONS = [
   '1-3',
@@ -13,15 +10,6 @@ export const TEAM_SIZE_OPTIONS = [
   '11-25',
   '25+',
   'Not Sure Yet',
-] as const
-
-export const BUDGET_OPTIONS = [
-  'Under $2K/mo',
-  '$2K-$5K/mo',
-  '$5K-$15K/mo',
-  '$15K+/mo',
-  "Let's Discuss",
-  'Other',
 ] as const
 
 export const SOURCE_OPTIONS = [
@@ -70,7 +58,15 @@ export const leadSchema = z.object({
   country: z.string().max(100).optional().or(z.literal('')),
   service: z.string().min(1, 'Please select a service'),
   teamSize: z.string().min(1, 'Please select a team size'),
-  budget: z.string().min(1, 'Please select a budget range'),
+  companyWebsite: z
+    .string()
+    .max(300)
+    .optional()
+    .or(z.literal(''))
+    .refine(
+      (v) => !v || /^https?:\/\/.+/i.test(v) || /^[\w.-]+\.[a-z]{2,}/i.test(v),
+      'Enter a valid website URL'
+    ),
   description: z.string().max(1000).optional().or(z.literal('')),
   source: z.string().max(200).optional().or(z.literal('')),
 })

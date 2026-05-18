@@ -15,17 +15,17 @@ export function HomepageClosingCTA() {
           id="homepage-closing-heading"
           className="font-display text-2xl font-bold tracking-tight text-[#F5F5F5] md:text-3xl"
         >
-          Ready to grow without the overhead?
+          Need support, staff, or marketing without five different vendors?
         </h2>
         <p className="mt-3 text-[#A1A1AA] md:text-lg">
-          Request a free digital audit or send us a message — we typically reply within a few business hours.
+          Tell us what you need — live chat, customer support, virtual staff, or campaigns. We typically reply within a few business hours.
         </p>
         <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
           <Link
             href={FREE_AUDIT_CONTACT_HREF}
             className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-[#22C55E] px-8 py-3 text-sm font-semibold text-black shadow-lg shadow-[#22C55E]/20 transition hover:bg-[#4ADE80] hover:shadow-[#22C55E]/35"
           >
-            Get your free audit
+            Free Consultation
           </Link>
           <Link
             href="/contact"

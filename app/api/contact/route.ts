@@ -11,7 +11,7 @@ const contactSchema = z.object({
   email: z.email('Invalid email address'),
   phone: z.string().max(50).optional(),
   service: z.string().max(100).optional(),
-  budget: z.string().max(100).optional(),
+  companyWebsite: z.string().max(300).optional(),
   subject: z.string().max(300).optional(),
   message: z.string().min(1, 'Message is required').max(5000),
 })
@@ -57,7 +57,7 @@ export async function POST(request: Request) {
       phone: data.phone ?? null,
       country: null,
       service: data.service?.trim() || 'General inquiry',
-      budget: data.budget?.trim(),
+      companyWebsite: data.companyWebsite?.trim(),
       description: [data.subject?.trim(), data.message.trim()].filter(Boolean).join('\n\n'),
       source: 'Contact form',
     })
@@ -80,7 +80,7 @@ export async function POST(request: Request) {
         email: data.email,
         phone: data.phone,
         service: data.service,
-        budget: data.budget,
+        companyWebsite: data.companyWebsite,
         message: data.subject ? `${data.subject}\n\n${data.message}` : data.message,
         formType: 'contact',
       }),

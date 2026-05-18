@@ -342,13 +342,13 @@ export default async function ComparisonPage({
           </h2>
           <p className="mt-4 text-lg text-[var(--text-secondary)] font-[family-name:var(--font-body)]">
             We help businesses make the right strategic decisions every day.
-            Get a free audit and we&apos;ll give you a personalized recommendation.
+            Get a free consultation and we&apos;ll recommend a practical mix of support, staff, and marketing.
           </p>
           <Link
             href={FREE_AUDIT_CONTACT_HREF}
             className="mt-8 inline-flex items-center gap-2 rounded-xl bg-[var(--red-primary)] px-8 py-3.5 text-sm font-semibold text-black shadow-lg shadow-[#22C55E]/20 transition-[background-color,box-shadow] hover:bg-[var(--red-dark)] hover:shadow-[#22C55E]/30 font-[family-name:var(--font-body)]"
           >
-            Get a Free Growth Audit
+            Free Consultation
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

@@ -75,7 +75,7 @@ export async function POST(request: Request) {
       country: null,
       service: 'Free consultation / audit',
       description: detailParts.length ? detailParts.join('\n\n') : null,
-      source: 'Free audit request',
+      source: 'Free consultation request',
     })
 
     // Send emails + CRM forward (non-blocking)
@@ -98,7 +98,7 @@ export async function POST(request: Request) {
         email: data.email,
         phone: data.phone,
         company: data.company,
-        message: data.message || 'Free audit request',
+        message: data.message || 'Free consultation request',
         service: 'Website Audit',
         formType: 'audit',
         utmSource: data.utmSource,

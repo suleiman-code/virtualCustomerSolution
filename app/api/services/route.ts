@@ -1,17 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDb, mongoUnavailablePayload } from '@/lib/db';
+import { getDb, getLastMongoError, mongoUnavailablePayload } from '@/lib/db';
 import { requireAdminApi } from '@/lib/require-admin-api';
 import { normalizePublicImageUrl } from '@/lib/public-image-url';
-
-function serializeService(s: Record<string, unknown> & { _id: { toString: () => string } }) {
-  const { _id, ...rest } = s;
-  const out = { ...rest, id: _id.toString() } as Record<string, unknown>;
-  if (out.date instanceof Date) out.date = out.date.toISOString();
-  if (out.createdAt instanceof Date) out.createdAt = out.createdAt.toISOString();
-  if (out.updatedAt instanceof Date) out.updatedAt = out.updatedAt.toISOString();
-  if (typeof out.image === 'string') out.image = normalizePublicImageUrl(out.image);
-  return out;
-}
+import { serializeMany, serializeServiceDoc } from '@/lib/serialize-mongo-doc';
 
 function parsePagination(searchParams: URLSearchParams) {
   const rawSkip = Number.parseInt(searchParams.get('skip') || '0', 10);
@@ -27,9 +18,15 @@ function parseOptionalDate(value: unknown): Date | null {
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
+function dbUnavailableResponse(extra: Record<string, unknown>) {
+  return NextResponse.json(mongoUnavailablePayload(extra), { status: 503 });
+}
+
 export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const isPinnedOnly = searchParams.get('pinned') === 'true';
+
   try {
-    const { searchParams } = new URL(req.url);
     const adminList = searchParams.get('admin') === '1';
 
     if (adminList) {
@@ -37,19 +34,26 @@ export async function GET(req: NextRequest) {
       if (!auth.ok) return auth.response;
       const db = await getDb();
       if (!db) {
-        return NextResponse.json(mongoUnavailablePayload({ services: [] }), { status: 503 });
+        return dbUnavailableResponse({ services: [] });
       }
       const rows = await db.collection('services').find({}).sort({ date: -1 }).toArray();
-      return NextResponse.json({ services: rows.map(serializeService) });
+      return NextResponse.json({
+        services: serializeMany(rows as Record<string, unknown>[], serializeServiceDoc),
+      });
     }
 
     const db = await getDb();
     if (!db) {
-      return NextResponse.json({ services: [], hasMore: false }, { status: 200 });
+      if (isPinnedOnly) {
+        return NextResponse.json([], { status: 200 });
+      }
+      return NextResponse.json(
+        { services: [], hasMore: false, ...mongoUnavailablePayload({}) },
+        { status: 503 }
+      );
     }
 
     const { skip, limit } = parsePagination(searchParams);
-    const isPinnedOnly = searchParams.get('pinned') === 'true';
 
     if (isPinnedOnly) {
       const pinnedServices = await db
@@ -58,7 +62,9 @@ export async function GET(req: NextRequest) {
         .sort({ date: -1 })
         .toArray();
 
-      return NextResponse.json(pinnedServices.map(serializeService));
+      return NextResponse.json(
+        serializeMany(pinnedServices as Record<string, unknown>[], serializeServiceDoc)
+      );
     }
 
     const services = await db
@@ -72,14 +78,25 @@ export async function GET(req: NextRequest) {
     const total = await db.collection('services').countDocuments({ isPinned: { $ne: true } });
 
     return NextResponse.json({
-      services: services.map(serializeService),
+      services: serializeMany(services as Record<string, unknown>[], serializeServiceDoc),
       hasMore: skip + limit < total,
     });
   } catch (error) {
-    console.error('Services GET error:', error);
-    const { searchParams } = new URL(req.url);
-    if (searchParams.get('pinned') === 'true') return NextResponse.json([]);
-    return NextResponse.json({ services: [], hasMore: false });
+    console.error('[api/services GET]', error);
+    const detail =
+      error instanceof Error ? error.message : getLastMongoError()?.message ?? 'Unknown error';
+    if (isPinnedOnly) {
+      return NextResponse.json([], { status: 200 });
+    }
+    return NextResponse.json(
+      {
+        services: [],
+        hasMore: false,
+        error: 'Failed to load services',
+        ...(process.env.NODE_ENV === 'development' ? { detail } : {}),
+      },
+      { status: 500 }
+    );
   }
 }
 
@@ -122,9 +139,24 @@ export async function POST(req: NextRequest) {
     };
 
     const result = await db.collection('services').insertOne(newService);
-    return NextResponse.json(serializeService({ ...newService, _id: result.insertedId }));
+    const serialized = serializeServiceDoc({
+      ...newService,
+      _id: result.insertedId,
+    } as Record<string, unknown>);
+    if (!serialized) {
+      return NextResponse.json({ error: 'Failed to serialize created service' }, { status: 500 });
+    }
+    return NextResponse.json(serialized);
   } catch (error) {
-    console.error('Services POST error:', error);
-    return NextResponse.json({ error: 'Failed to create service' }, { status: 500 });
+    console.error('[api/services POST]', error);
+    return NextResponse.json(
+      {
+        error: 'Failed to create service',
+        ...(process.env.NODE_ENV === 'development' && error instanceof Error
+          ? { detail: error.message }
+          : {}),
+      },
+      { status: 500 }
+    );
   }
 }

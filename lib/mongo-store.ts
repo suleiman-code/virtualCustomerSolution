@@ -11,7 +11,9 @@ type LeadInput = {
   country: string | null;
   service: string;
   teamSize: string;
-  budget: string;
+  companyWebsite: string | null;
+  /** @deprecated legacy field — use companyWebsite */
+  budget?: string;
   description: string | null;
   source: string | null;
   status: string;

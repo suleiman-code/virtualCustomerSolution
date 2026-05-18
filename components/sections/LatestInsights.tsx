@@ -106,8 +106,17 @@ export function LatestInsights() {
           fetch(`/api/blogs?skip=0&limit=${HOME_PAGE_SIZE}`),
         ]);
 
-        const pinnedData = await pinnedRes.json();
-        const unpinnedData = await unpinnedRes.json();
+        const pinnedData = pinnedRes.ok ? await pinnedRes.json() : [];
+        const unpinnedData = unpinnedRes.ok
+          ? await unpinnedRes.json()
+          : { blogs: [], hasMore: false };
+
+        if (!pinnedRes.ok) {
+          console.warn('[LatestInsights] pinned fetch failed:', pinnedRes.status);
+        }
+        if (!unpinnedRes.ok) {
+          console.warn('[LatestInsights] list fetch failed:', unpinnedRes.status);
+        }
 
         setPinnedBlogs(Array.isArray(pinnedData) ? pinnedData : []);
         setBlogs(Array.isArray(unpinnedData.blogs) ? unpinnedData.blogs : []);
@@ -195,10 +204,9 @@ export function LatestInsights() {
                   return (
                     <StaggerItem key={blog.id} className="h-full min-h-0">
                       <RevealOnScroll variant="blur-in" duration={0.6} className="h-full min-h-0">
-                        <article
-                          className={cn(
-                            'flex h-full min-w-0 flex-col overflow-hidden rounded-2xl bg-[#111]/95 shadow-[0_8px_40px_rgba(0,0,0,0.5)] ring-1 ring-white/[0.08] transition-shadow duration-300 hover:shadow-[0_12px_48px_rgba(34,197,94,0.12)]'
-                          )}
+                        <Link
+                          href={`/insight/${blog.id}`}
+                          className="group flex h-full min-w-0 cursor-pointer flex-col overflow-hidden rounded-2xl bg-[#111]/95 shadow-[0_8px_40px_rgba(0,0,0,0.5)] ring-1 ring-white/[0.08] transition-shadow duration-300 hover:shadow-[0_12px_48px_rgba(34,197,94,0.12)]"
                         >
                           <div className="relative aspect-[16/10] min-h-[140px] overflow-hidden bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] sm:min-h-0">
                             <BlogCoverMedia
@@ -244,18 +252,13 @@ export function LatestInsights() {
                                 <User className="h-4 w-4 shrink-0 text-[#71717A]" aria-hidden />
                                 <span className="truncate">{blog.authorName}</span>
                               </span>
-                              <Button
-                                asChild
-                                className="h-10 w-full shrink-0 rounded-full border border-[#22C55E]/35 bg-[#22C55E]/15 px-4 text-sm font-semibold text-[#86EFAC] shadow-none hover:bg-[#22C55E]/25 sm:h-9 sm:w-auto"
-                              >
-                                <Link href={`/insight/${blog.id}`} className="inline-flex items-center gap-1.5">
-                                  Details
-                                  <ArrowRight className="h-3.5 w-3.5" />
-                                </Link>
-                              </Button>
+                              <span className="inline-flex h-10 w-full shrink-0 items-center justify-center gap-1.5 rounded-full border border-[#22C55E]/35 bg-[#22C55E]/15 px-4 text-sm font-semibold text-[#86EFAC] transition-colors group-hover:bg-[#22C55E]/25 sm:h-9 sm:w-auto">
+                                Details
+                                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                              </span>
                             </div>
                           </div>
-                        </article>
+                        </Link>
                       </RevealOnScroll>
                     </StaggerItem>
                   );

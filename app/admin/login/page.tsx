@@ -3,8 +3,22 @@
 import { Suspense, useState } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { ArrowLeft, Lock, Loader2, ShieldCheck, User as UserIcon } from 'lucide-react'
+import {
+  ArrowLeft,
+  Eye,
+  EyeOff,
+  Lock,
+  Loader2,
+  ShieldCheck,
+  User as UserIcon,
+} from 'lucide-react'
 import { motion } from 'framer-motion'
+
+const inputClass =
+  'w-full min-h-[44px] rounded-xl border border-white/12 bg-[#141414] py-3 text-sm text-[#F5F5F5] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] placeholder:text-white/40 focus:border-[#22C55E] focus:outline-none focus:ring-2 focus:ring-[#22C55E]/25'
+
+const iconClass =
+  'pointer-events-none absolute left-3 top-1/2 z-10 h-[18px] w-[18px] -translate-y-1/2 text-white/45'
 
 function LoginInner() {
   const router = useRouter()
@@ -13,6 +27,7 @@ function LoginInner() {
 
   const [user, setUser] = useState('')
   const [pass, setPass] = useState('')
+  const [showPass, setShowPass] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -22,9 +37,10 @@ function LoginInner() {
     setError(null)
 
     try {
-      const res = await fetch('/api/admin/login', {
+      const res = await fetch('/api/backoffice/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
         body: JSON.stringify({ user, pass }),
       })
       const json = await res.json()
@@ -79,14 +95,14 @@ function LoginInner() {
                 Username
               </label>
               <div className="relative">
-                <UserIcon className="pointer-events-none absolute left-3.5 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-[#22C55E] drop-shadow-[0_0_8px_rgba(34,197,94,0.35)]" />
+                <UserIcon className={iconClass} aria-hidden />
                 <input
                   type="text"
                   value={user}
                   onChange={(e) => setUser(e.target.value)}
                   autoComplete="username"
                   required
-                  className="relative z-0 w-full rounded-xl border border-white/10 bg-white/[0.02] py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-zinc-400 focus:border-[#22C55E] focus:outline-none focus:ring-2 focus:ring-[#22C55E]/20"
+                  className={`${inputClass} pl-10 pr-4`}
                   placeholder="Enter your username"
                 />
               </div>
@@ -97,16 +113,28 @@ function LoginInner() {
                 Password
               </label>
               <div className="relative">
-                <Lock className="pointer-events-none absolute left-3.5 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-[#22C55E] drop-shadow-[0_0_8px_rgba(34,197,94,0.35)]" />
+                <Lock className={iconClass} aria-hidden />
                 <input
-                  type="password"
+                  type={showPass ? 'text' : 'password'}
                   value={pass}
                   onChange={(e) => setPass(e.target.value)}
                   autoComplete="current-password"
                   required
-                  className="relative z-0 w-full rounded-xl border border-white/10 bg-white/[0.02] py-3.5 pl-12 pr-4 text-sm text-white placeholder:text-zinc-400 focus:border-[#22C55E] focus:outline-none focus:ring-2 focus:ring-[#22C55E]/20"
+                  className={`${inputClass} pl-10 pr-11`}
                   placeholder="Enter your password"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPass((v) => !v)}
+                  className="absolute right-3 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg text-white/45 transition-colors hover:bg-white/[0.06] hover:text-white/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#22C55E]/40"
+                  aria-label={showPass ? 'Hide password' : 'Show password'}
+                >
+                  {showPass ? (
+                    <EyeOff className="h-[18px] w-[18px]" aria-hidden />
+                  ) : (
+                    <Eye className="h-[18px] w-[18px]" aria-hidden />
+                  )}
+                </button>
               </div>
             </div>
 

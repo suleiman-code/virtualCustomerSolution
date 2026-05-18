@@ -271,19 +271,23 @@ interface LeadEmailData {
   country?: string | null
   service: string
   teamSize: string
-  budget: string
+  companyWebsite?: string | null
   description?: string | null
   source?: string | null
 }
 
 export async function sendLeadAdminNotification(data: LeadEmailData): Promise<void> {
   const adminTo = process.env.ADMIN_EMAIL || ADMIN_EMAIL
-  const budgetBadge = `<div style="background-color:${COLORS.accent};color:#ffffff;display:inline-block;padding:6px 14px;border-radius:999px;font-size:13px;font-weight:700;letter-spacing:0.3px;">💰 ${data.budget}</div>`
+  const websiteLine = data.companyWebsite
+    ? paragraph(
+        `<strong>Website:</strong> <a href="${data.companyWebsite.startsWith('http') ? data.companyWebsite : `https://${data.companyWebsite}`}" style="color:${COLORS.accent};">${data.companyWebsite}</a>`
+      )
+    : ''
 
   const body = [
     `<div style="background-color:${COLORS.accent};color:#ffffff;display:inline-block;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:16px;">New Consultation Lead</div>`,
     paragraph(`<strong style="color:${COLORS.text};font-size:17px;">${data.name}</strong> just requested a free consultation for <strong style="color:${COLORS.accent};">${data.service}</strong>.`),
-    `<div style="margin:20px 0;">${budgetBadge}</div>`,
+    websiteLine,
     detailsTable([
       ['Name', data.name],
       ['Email', data.email],
@@ -291,7 +295,7 @@ export async function sendLeadAdminNotification(data: LeadEmailData): Promise<vo
       ['Country', data.country],
       ['Service', data.service],
       ['Team Size', data.teamSize],
-      ['Budget', data.budget],
+      ['Company Website', data.companyWebsite],
       ['Source', data.source],
       ['Description', data.description],
     ]),
@@ -311,7 +315,7 @@ export async function sendLeadAutoReply(data: LeadEmailData): Promise<void> {
     detailsTable([
       ['Service', data.service],
       ['Team Size', data.teamSize],
-      ['Budget Range', data.budget],
+      ['Company Website', data.companyWebsite],
     ]),
     divider(),
     paragraph(`<strong style="color:${COLORS.accent};">What happens next:</strong>`),

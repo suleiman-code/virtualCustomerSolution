@@ -244,29 +244,6 @@ export default async function BlogPage() {
 
           <BlogListClient posts={listPosts} categories={categories} />
 
-          {/* Newsletter CTA */}
-          <div className="glass-panel mt-16 p-8 text-center">
-            <h2 className="font-display mb-4 text-2xl font-bold text-[#F5F5F5]">
-              Subscribe for Marketing Tips & Exclusive Offers
-            </h2>
-            <p className="mx-auto mb-6 max-w-xl text-white/60">
-              Get the latest insights on digital marketing, virtual workforce strategies, and growth tips delivered to
-              your inbox.
-            </p>
-            <form className="mx-auto flex max-w-md flex-col gap-4 sm:flex-row">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="h-12 flex-1 rounded-lg border border-[rgba(255,255,255,0.08)] bg-[rgba(34,197,94,0.04)] px-4 text-[#F5F5F5] placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#22C55E]"
-              />
-              <button
-                type="submit"
-                className="rounded-lg bg-[#22C55E] px-6 py-3 font-semibold text-white transition-all hover:bg-[#059669]"
-              >
-                Subscribe
-              </button>
-            </form>
-          </div>
         </div>
       </div>
     </SiteShell>

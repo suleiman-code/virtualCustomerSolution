@@ -315,7 +315,7 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
               <a href={FREE_AUDIT_CONTACT_HREF} className="btn-primary">
-                Get Your Free Growth Audit
+                Free Consultation
               </a>
               <Link href="/case-studies" className="btn-outline">
                 View More Case Studies

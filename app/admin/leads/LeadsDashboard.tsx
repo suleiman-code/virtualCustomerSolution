@@ -2,7 +2,6 @@
 
 import { Fragment, useMemo, useState } from 'react'
 import {
-  Crown,
   Download,
   Filter,
   Mail,
@@ -28,7 +27,7 @@ interface SerializedLead {
   country: string | null
   service: string
   teamSize: string
-  budget: string
+  companyWebsite: string | null
   description: string | null
   source: string | null
   status: string
@@ -36,8 +35,6 @@ interface SerializedLead {
 }
 
 const PAGE_SIZE = 20
-
-const HIGH_BUDGETS = new Set(['$15K+/mo'])
 
 const STATUS_STYLES: Record<string, string> = {
   New: 'border-blue-500/30 bg-blue-500/10 text-blue-300',
@@ -64,7 +61,7 @@ function toCsv(leads: SerializedLead[]): string {
     'Country',
     'Service',
     'Team Size',
-    'Budget',
+    'Website',
     'Source',
     'Status',
     'Description',
@@ -78,7 +75,7 @@ function toCsv(leads: SerializedLead[]): string {
     l.country || '',
     l.service,
     l.teamSize,
-    l.budget,
+    l.companyWebsite || '',
     l.source || '',
     l.status,
     (l.description || '').replace(/\n/g, ' '),
@@ -201,8 +198,7 @@ export default function LeadsDashboard({
   }
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-[#050505] text-white">
-      <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col overflow-y-auto px-4 py-6 sm:px-6 md:py-8">
+    <div className="mx-auto w-full max-w-7xl px-4 py-6 pb-10 sm:px-6 md:py-8">
         <div className="mb-6 md:mb-8">
           <h1 className="font-display text-xl font-bold md:text-2xl">Leads dashboard</h1>
           <p className="mt-1 text-xs text-white/45 md:hidden">
@@ -328,7 +324,7 @@ export default function LeadsDashboard({
                   <th className="px-4 py-3 font-semibold">Name</th>
                   <th className="px-4 py-3 font-semibold">Contact</th>
                   <th className="px-4 py-3 font-semibold">Service</th>
-                  <th className="px-4 py-3 font-semibold">Budget</th>
+                  <th className="px-4 py-3 font-semibold">Website</th>
                   <th className="px-4 py-3 font-semibold">Country</th>
                   <th className="px-4 py-3 font-semibold">Date</th>
                   <th className="px-4 py-3 font-semibold">Status</th>
@@ -347,17 +343,12 @@ export default function LeadsDashboard({
                   </tr>
                 ) : (
                   paged.map((lead) => {
-                    const isHigh = HIGH_BUDGETS.has(lead.budget)
                     const isExpanded = expandedId === lead.id
                     const busy = busyIds.has(lead.id)
                     return (
                       <Fragment key={lead.id}>
                         <tr
-                          className={cn(
-                            'group transition-colors hover:bg-white/[0.02]',
-                            isHigh &&
-                              'bg-gradient-to-r from-amber-500/[0.04] to-transparent'
-                          )}
+                          className="group transition-colors hover:bg-white/[0.02]"
                         >
                           <td className="px-4 py-4">
                             <button
@@ -366,9 +357,6 @@ export default function LeadsDashboard({
                               }
                               className="flex items-center gap-2 text-left"
                             >
-                              {isHigh && (
-                                <Crown className="h-3.5 w-3.5 shrink-0 text-amber-400" />
-                              )}
                               <span className="font-semibold text-white">
                                 {lead.name}
                               </span>
@@ -403,16 +391,22 @@ export default function LeadsDashboard({
                             </div>
                           </td>
                           <td className="px-4 py-4">
-                            <span
-                              className={cn(
-                                'inline-flex rounded-full px-2 py-1 text-xs font-semibold',
-                                isHigh
-                                  ? 'border border-amber-400/40 bg-amber-400/10 text-amber-300'
-                                  : 'text-white/70'
-                              )}
-                            >
-                              {lead.budget}
-                            </span>
+                            {lead.companyWebsite ? (
+                              <a
+                                href={
+                                  lead.companyWebsite.startsWith('http')
+                                    ? lead.companyWebsite
+                                    : `https://${lead.companyWebsite}`
+                                }
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-xs text-[#22C55E] hover:underline"
+                              >
+                                {lead.companyWebsite}
+                              </a>
+                            ) : (
+                              <span className="text-xs text-white/40">—</span>
+                            )}
                           </td>
                           <td className="px-4 py-4 text-xs text-white/50">
                             {lead.country || '—'}
@@ -525,7 +519,6 @@ export default function LeadsDashboard({
             </button>
           </div>
         )}
-      </main>
     </div>
   )
 }

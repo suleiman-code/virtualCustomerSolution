@@ -9,6 +9,7 @@ import {
   LayoutDashboard,
   LogOut,
   Menu,
+  MessageSquareQuote,
   PanelLeftClose,
   Users,
   X,
@@ -32,7 +33,7 @@ export function AdminShell({
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const logout = async () => {
-    await fetch('/api/admin/logout', { method: 'POST' });
+    await fetch('/api/backoffice/logout', { method: 'POST', credentials: 'same-origin' });
     router.push('/admin/login');
     router.refresh();
   };
@@ -40,6 +41,7 @@ export function AdminShell({
   const nav = [
     { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
     { label: 'Leads', href: '/admin/leads', icon: Users },
+    { label: 'Feedback', href: '/admin/testimonials', icon: MessageSquareQuote },
     { label: 'Services', href: '/admin/services', icon: Layers },
     { label: 'Blog posts', href: '/admin/blogs', icon: FileText },
   ] as const;
@@ -53,7 +55,7 @@ export function AdminShell({
     );
 
   return (
-    <div className="flex min-h-screen bg-[#050505] text-white">
+    <div className="flex h-dvh min-h-screen overflow-hidden bg-[#050505] text-white">
       <aside className="hidden w-56 shrink-0 flex-col border-r border-white/10 bg-[#080808] md:flex lg:w-60">
         <div className="flex h-16 items-center border-b border-white/10 px-4">
           <Link href="/admin" className="font-display text-sm font-bold tracking-tight text-white">
@@ -85,7 +87,7 @@ export function AdminShell({
         </div>
       </aside>
 
-      <div className="flex min-w-0 flex-1 flex-col md:max-h-screen md:overflow-hidden">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
         <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between border-b border-white/10 bg-[#050505]/95 px-4 backdrop-blur-xl md:hidden">
           <button
             type="button"
@@ -155,7 +157,9 @@ export function AdminShell({
           </div>
         )}
 
-        {children}
+        <main className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain">
+          {children}
+        </main>
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Contact Virtual Customer Solution — Free Consultation',
-    description: 'Request a free consultation for digital marketing, virtual workforce, or web development. Based in Lahore, serving 15+ countries.',
+    description: 'Request a consultation for live chat, customer support, virtual staff, marketing, or web. Based in Lahore, serving 10+ countries.',
     url: 'https://virtualcustomersolution.com/contact',
     type: 'website',
     images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'Contact Virtual Customer Solution' }],

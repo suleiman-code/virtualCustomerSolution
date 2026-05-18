@@ -3,6 +3,7 @@
 import { Calendar, Users, Star, Globe } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { CountUpOnView, StaggerChildren, StaggerItem } from '@/components/animations/ScrollAnimations';
+import { SITE_STATS } from '@/lib/site-stats';
 
 interface Metric {
   icon: LucideIcon;
@@ -12,10 +13,10 @@ interface Metric {
 }
 
 const metrics: Metric[] = [
-  { icon: Calendar, value: 8, suffix: '+', label: 'Years in Business' },
-  { icon: Users, value: 200, suffix: '+', label: 'Clients Served' },
-  { icon: Star, value: 97, suffix: '%', label: 'Client Retention' },
-  { icon: Globe, value: 15, suffix: '+', label: 'Countries' },
+  { icon: Calendar, value: SITE_STATS.years.value, suffix: SITE_STATS.years.suffix, label: SITE_STATS.years.label },
+  { icon: Users, value: SITE_STATS.clients.value, suffix: SITE_STATS.clients.suffix, label: SITE_STATS.clients.label },
+  { icon: Star, value: SITE_STATS.retention.value, suffix: SITE_STATS.retention.suffix, label: SITE_STATS.retention.label },
+  { icon: Globe, value: SITE_STATS.countries.value, suffix: SITE_STATS.countries.suffix, label: SITE_STATS.countries.label },
 ];
 
 export function ProofBar() {

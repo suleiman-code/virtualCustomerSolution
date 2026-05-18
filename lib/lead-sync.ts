@@ -2,7 +2,7 @@ import { db } from '@/lib/db'
 
 /** Matches dashboard filters / legacy consultation form defaults when a field doesn’t apply. */
 const FALLBACK_TEAM = 'Not Sure Yet'
-const FALLBACK_BUDGET = "Let's Discuss"
+const FALLBACK_WEBSITE = ''
 
 /**
  * Mirrors inbound form submissions into the `leads` collection so Admin → Leads stays complete.
@@ -18,7 +18,7 @@ export async function mirrorSubmissionToLeads(payload: {
   description: string | null
   source: string
   teamSize?: string
-  budget?: string
+  companyWebsite?: string
 }): Promise<void> {
   try {
     await db.lead.create({
@@ -29,7 +29,7 @@ export async function mirrorSubmissionToLeads(payload: {
         country: payload.country?.trim() || null,
         service: payload.service.trim(),
         teamSize: payload.teamSize ?? FALLBACK_TEAM,
-        budget: payload.budget ?? FALLBACK_BUDGET,
+        companyWebsite: payload.companyWebsite?.trim() || FALLBACK_WEBSITE || null,
         description: payload.description?.trim() || null,
         source: payload.source.trim(),
         status: 'New',

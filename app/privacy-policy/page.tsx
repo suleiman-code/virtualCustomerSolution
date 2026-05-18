@@ -1,6 +1,6 @@
 ﻿import { Metadata } from "next";
 import { SiteShell } from "@/components/layout/SiteShell";
-import { Shield, Mail, MapPin, Calendar, Cookie, Database, UserCheck, Eye, Trash2, Lock } from "lucide-react";
+import { Shield, Mail, MapPin, Calendar, Database, UserCheck, Eye, Trash2, Lock } from "lucide-react";
 import Link from "next/link";
 import { officeLocations } from "@/lib/content";
 
@@ -35,15 +35,13 @@ const sections = [
           "IP address and approximate geographic location",
           "Pages visited, time spent on pages, click patterns, and navigation paths",
           "Referring website or source that directed you to our site",
-          "Cookies and similar tracking technologies (see Section 3 below)",
         ],
       },
       {
         subtitle: "Information from Third Parties",
         items: [
-          "Analytics data from Google Analytics and similar platforms",
-          "Advertising data from platforms such as Google Ads and Meta Ads when you interact with our advertisements",
           "Publicly available business information relevant to our service proposals",
+          "Information from payment processors when you engage our services (we do not store full card details)",
         ],
       },
     ],
@@ -68,40 +66,9 @@ const sections = [
     ],
   },
   {
-    id: "cookies",
-    icon: Cookie,
-    title: "3. Cookies and Tracking Technologies",
-    content: [
-      {
-        subtitle: "Essential Cookies",
-        items: [
-          "Required for basic site functionality, security, and session management. These cannot be disabled without impacting site usability.",
-        ],
-      },
-      {
-        subtitle: "Analytics Cookies",
-        items: [
-          "We use Google Analytics to understand how visitors interact with our website. This includes page views, session duration, and traffic sources. Google Analytics uses cookies to collect this data in an anonymized form.",
-        ],
-      },
-      {
-        subtitle: "Advertising Cookies",
-        items: [
-          "If applicable, Google AdSense or other advertising networks may place cookies to serve relevant advertisements based on your browsing activity. These cookies are managed by the respective ad networks and are subject to their own privacy policies.",
-        ],
-      },
-      {
-        subtitle: "Managing Cookies",
-        items: [
-          "You can control and delete cookies through your browser settings. Most browsers allow you to refuse cookies or alert you when cookies are being sent. Note that disabling certain cookies may affect your experience on our site.",
-        ],
-      },
-    ],
-  },
-  {
     id: "data-sharing",
     icon: UserCheck,
-    title: "4. Data Sharing and Disclosure",
+    title: "3. Data Sharing and Disclosure",
     content: [
       {
         subtitle: null,
@@ -118,16 +85,15 @@ const sections = [
   {
     id: "data-retention",
     icon: Trash2,
-    title: "5. Data Retention",
+    title: "4. Data Retention",
     content: [
       {
         subtitle: null,
         items: [
           "We retain personal data only as long as necessary to fulfill the purposes described in this policy, comply with legal obligations, resolve disputes, and enforce our agreements.",
           "Contact form submissions and inquiry data: retained for up to 3 years after your last interaction with us.",
-          "Analytics data: retained in anonymized form for up to 26 months (as configured in Google Analytics).",
           "Client service data: retained for the duration of the service engagement plus 5 years for legal and compliance purposes.",
-          "You may request deletion of your data at any time (see Section 7).",
+          "You may request deletion of your data at any time (see Section 6).",
         ],
       },
     ],
@@ -135,7 +101,7 @@ const sections = [
   {
     id: "data-security",
     icon: Lock,
-    title: "6. Data Security",
+    title: "5. Data Security",
     content: [
       {
         subtitle: null,
@@ -152,7 +118,7 @@ const sections = [
   {
     id: "your-rights",
     icon: UserCheck,
-    title: "7. Your Rights (GDPR and Applicable Law)",
+    title: "6. Your Rights (GDPR and Applicable Law)",
     content: [
       {
         subtitle: "If you are located in the EU/EEA or a jurisdiction with similar protections, you have the right to:",
@@ -178,7 +144,7 @@ const sections = [
   {
     id: "coppa",
     icon: Shield,
-    title: "8. Children's Privacy (COPPA Compliance)",
+    title: "7. Children's Privacy (COPPA Compliance)",
     content: [
       {
         subtitle: null,
@@ -194,7 +160,7 @@ const sections = [
   {
     id: "international-transfers",
     icon: MapPin,
-    title: "9. International Data Transfers",
+    title: "8. International Data Transfers",
     content: [
       {
         subtitle: null,
@@ -209,7 +175,7 @@ const sections = [
   {
     id: "changes",
     icon: Calendar,
-    title: "10. Changes to This Policy",
+    title: "9. Changes to This Policy",
     content: [
       {
         subtitle: null,

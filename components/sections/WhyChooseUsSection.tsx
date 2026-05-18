@@ -7,8 +7,8 @@ import { Button } from '@/components/ui/button';
 
 const benefits = [
   {
-    title: 'Marketing + Virtual Staff in ONE package',
-    description: 'Unique offering — competitors don\'t offer this combination',
+    title: 'Support, staff & marketing in one package',
+    description: 'Live chat, VAs, SDRs, and campaigns — coordinated by one provider',
     icon: '✅',
   },
   {
@@ -79,8 +79,8 @@ export function WhyChooseUsSection() {
       <Container>
         <SectionHeader
           eyebrow="Why Choose Us"
-          title="The Only Agency That Does This"
-          description="Why businesses choose VCS over other agencies and freelance options."
+          title="One Provider for Support, Staff & Marketing"
+          description="Why companies choose VCS over juggling separate freelancers, agencies, and offshore vendors."
           align="center"
         />
 

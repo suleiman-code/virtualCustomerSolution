@@ -184,7 +184,7 @@ export function ParallaxLayer({
     <motion.div
       ref={ref}
       style={{ y: smoothY, willChange: 'transform' }}
-      className={className}
+      className={`relative ${className}`}
     >
       {children}
     </motion.div>

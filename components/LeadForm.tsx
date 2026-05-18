@@ -18,7 +18,6 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
-  BUDGET_OPTIONS,
   COUNTRY_OPTIONS,
   SERVICE_OPTIONS,
   SOURCE_OPTIONS,
@@ -183,7 +182,7 @@ function RadioCards({
   onChange: (v: string) => void
 }) {
   return (
-    <div className="grid gap-2.5 sm:grid-cols-2">
+    <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
       {options.map((opt) => {
         const isSelected = value === opt
         return (
@@ -192,7 +191,7 @@ function RadioCards({
             type="button"
             onClick={() => onChange(opt)}
             className={cn(
-              'group relative flex items-center gap-3 rounded-xl border px-4 py-3.5 text-left transition-all duration-200',
+              'group relative flex min-w-0 items-center gap-3 rounded-xl border px-3 py-3.5 text-left transition-all duration-200 sm:px-4',
               isSelected
                 ? 'border-[#22C55E] bg-[#22C55E]/10 shadow-[0_0_20px_rgba(34,197,94,0.25)]'
                 : 'border-white/10 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]'
@@ -216,7 +215,7 @@ function RadioCards({
             </div>
             <span
               className={cn(
-                'text-sm font-medium transition-colors',
+                'min-w-0 flex-1 text-sm font-medium leading-snug transition-colors',
                 isSelected ? 'text-white' : 'text-white/70'
               )}
             >
@@ -263,7 +262,7 @@ export default function LeadForm() {
       country: '',
       service: '',
       teamSize: '',
-      budget: '',
+      companyWebsite: '',
       description: '',
       source: '',
     },
@@ -318,8 +317,8 @@ export default function LeadForm() {
   // ── Navigation ────────────────────────────────────────────────────────────
   const goNext = async () => {
     const fieldsByStep: Record<number, (keyof LeadInput)[]> = {
-      1: ['name', 'email'],
-      2: ['service', 'teamSize', 'budget'],
+      1: ['name', 'email', 'companyWebsite'],
+      2: ['service', 'teamSize'],
       3: [],
     }
 
@@ -563,6 +562,18 @@ export default function LeadForm() {
                       <FieldError message={errors.country?.message} />
                     </div>
                   </div>
+
+                  <div>
+                    <FieldLabel>Company website</FieldLabel>
+                    <input
+                      type="url"
+                      placeholder="https://yourcompany.com"
+                      autoComplete="url"
+                      {...register('companyWebsite')}
+                      className="w-full rounded-xl border border-white/10 bg-white/[0.02] py-3.5 px-4 text-sm text-white placeholder:text-white/30 focus:border-[#22C55E] focus:outline-none focus:ring-2 focus:ring-[#22C55E]/20"
+                    />
+                    <FieldError message={errors.companyWebsite?.message} />
+                  </div>
                 </div>
               </div>
             )}
@@ -581,7 +592,7 @@ export default function LeadForm() {
 
                 <div className="space-y-6">
                   <div>
-                    <FieldLabel required>Service Interest</FieldLabel>
+                    <FieldLabel required>Interested Services</FieldLabel>
                     <RadioCards
                       name="service"
                       options={SERVICE_OPTIONS}
@@ -606,18 +617,6 @@ export default function LeadForm() {
                     <FieldError message={errors.teamSize?.message} />
                   </div>
 
-                  <div>
-                    <FieldLabel required>Budget Range</FieldLabel>
-                    <RadioCards
-                      name="budget"
-                      options={BUDGET_OPTIONS}
-                      value={watchedValues.budget || ''}
-                      onChange={(v) =>
-                        setValue('budget', v, { shouldValidate: true })
-                      }
-                    />
-                    <FieldError message={errors.budget?.message} />
-                  </div>
                 </div>
               </div>
             )}
@@ -717,7 +716,7 @@ export default function LeadForm() {
                 ) : (
                   <>
                     <Send className="h-4 w-4" />
-                    Book My Free Consultation
+                    Free Consultation
                   </>
                 )}
               </button>

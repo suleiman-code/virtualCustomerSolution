@@ -19,16 +19,16 @@ const resources: Resource[] = [
   },
   {
     icon: BarChart3,
-    title: 'The 2026 Marketing Playbook for Small Businesses',
+    title: 'The 2026 Service Provider Growth Playbook',
     description:
-      'No fluff — just the ad strategies, budgeting tips, and tracking setups that are working right now for our clients.',
+      'How we plan live chat, support coverage, virtual staff, and marketing for clients — budgets, channels, and reporting without agency fluff.',
     slug: 'performance-marketing-playbook-2025',
   },
   {
     icon: Settings,
-    title: 'How to Set Up Business Reporting That People Actually Use',
+    title: 'Operations Reporting Your Team Will Actually Open',
     description:
-      'The dashboard templates and automation workflows we set up for clients to replace messy spreadsheets and manual updates.',
+      'Dashboards and weekly rhythms we use so support queues, staff utilization, and campaign results stay visible for leadership and clients.',
     slug: 'business-systems-reporting-framework',
   },
 ];
@@ -46,7 +46,7 @@ export function FreeResources() {
             Free Guides
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-white/60">
-            Stuff we actually use with our clients. Download, steal the ideas, and run with them.
+            Playbooks we use when delivering support, virtual staff, and marketing for clients.
           </p>
         </div>
 

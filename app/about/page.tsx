@@ -1,19 +1,20 @@
-﻿import Image from 'next/image';
+import Image from 'next/image';
 import { SiteShell } from '@/components/layout/SiteShell';
 import { Metadata } from 'next';
 import { FREE_AUDIT_CONTACT_HREF } from '@/lib/paths';
 import { Check } from 'lucide-react';
 import { FadeUp, GlassCard } from '@/components/ui-dp/AnimatedElements';
+import { SITE_STATS, SITE_STATS_CLIENTS_COUNTRIES } from '@/lib/site-stats';
 
 export const metadata: Metadata = {
-  title: 'About Us — 8+ Years, 200+ Clients',
-  description: 'Learn about Virtual Customer Solution — 8+ years combining AI-powered digital marketing, virtual teams & web development. 200+ clients across 15+ countries.',
+  title: `About Us — ${SITE_STATS.years.display} Years, ${SITE_STATS.clients.display} Clients`,
+  description: `Virtual Customer Solution — service provider for live chat, customer support, virtual teams, marketing & web. ${SITE_STATS_CLIENTS_COUNTRIES}.`,
   alternates: {
     canonical: 'https://virtualcustomersolution.com/about',
   },
   openGraph: {
     title: 'About Virtual Customer Solution',
-    description: '8+ years combining AI-powered digital marketing, virtual teams & web development. 200+ clients across 15+ countries.',
+    description: `Service provider for live chat, support, virtual staff, marketing & web. ${SITE_STATS_CLIENTS_COUNTRIES}.`,
     url: 'https://virtualcustomersolution.com/about',
     type: 'website',
     images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'About Virtual Customer Solution' }],
@@ -69,35 +70,7 @@ const values = [
   {
     icon: '🌍',
     title: 'Global Reach',
-    description: 'Working with clients across 15+ countries with flexible scheduling.',
-  },
-];
-
-const team = [
-  {
-    name: 'CEO',
-    role: 'Founder & CEO',
-    description: 'Leading Virtual Customer Solution with a vision to help businesses grow smarter.',
-  },
-  {
-    name: 'Marketing Director',
-    role: 'Marketing Director',
-    description: 'Overseeing all digital marketing strategies and campaigns.',
-  },
-  {
-    name: 'Operations Manager',
-    role: 'Operations Manager',
-    description: 'Managing virtual team operations and client relationships.',
-  },
-  {
-    name: 'IT Director',
-    role: 'IT Director',
-    description: 'Leading technology solutions and software development.',
-  },
-  {
-    name: 'Technical Lead',
-    role: 'Engineering & Integrations',
-    description: 'Reliable delivery across systems, integrations, and web projects.',
+    description: `Working with clients across ${SITE_STATS.countries.display} countries with flexible scheduling.`,
   },
 ];
 
@@ -122,23 +95,22 @@ export default function AboutPage() {
           <div className="relative z-10 container-wide flex flex-col gap-10 py-12 md:flex-row md:items-center md:gap-12 md:py-16 lg:gap-16 lg:py-20">
             <div className="min-w-0 flex-1 text-left">
               <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.32em] text-white/50 md:text-xs">
-                Est. 2017
+                Est. {SITE_STATS.foundedYear}
               </p>
               <h1 id="about-hero-heading" className="font-display text-4xl font-extrabold leading-[1.08] tracking-tight text-[#F5F5F5] sm:text-5xl lg:text-6xl">
                 <span className="block text-lg font-semibold tracking-tight text-white/70 sm:text-xl md:mb-1">
                   About Virtual Customer Solution
                 </span>
                 <span className="mt-2 block sm:mt-3">
-                  8+ Years of{' '}
-                  <span className="text-[#22C55E]">Getting It Done</span>
+                  {SITE_STATS.years.display} Years of{' '}
+                  <span className="text-[#22C55E]">Service Delivery</span>
                 </span>
               </h1>
               <p className="mt-5 max-w-xl text-base leading-relaxed text-[#A1A1AA] sm:text-lg">
-                200+ clients across 15+ countries rely on us to handle the work that matters.
+                {SITE_STATS_CLIENTS_COUNTRIES} rely on us for live chat, support, virtual staff, marketing, and web — under one provider.
               </p>
               <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/55 sm:text-base">
-                We were born from a simple idea — businesses shouldn&apos;t have to choose between great marketing and
-                affordable virtual talent. One team, one roof.
+                We started as a virtual staffing and support shop. Today we&apos;re a full service provider — one team for the work that keeps your customers happy and your pipeline moving.
               </p>
             </div>
 
@@ -171,16 +143,16 @@ export default function AboutPage() {
               </h2>
               <div className="space-y-4 text-text-secondary leading-relaxed">
                 <p>
-                  Virtual Customer Solution was born from a simple idea — businesses shouldn't have to choose between great IT solutions and affordable virtual talent. We combined both into one powerful solution.
+                  Virtual Customer Solution started with a simple idea — companies shouldn&apos;t need five different vendors for chat, support, staff, marketing, and web.
                 </p>
                 <p>
-                  What started as a small virtual staffing operation has grown into a full-service agency handling marketing, web development, and operations support for 200+ clients in 15+ countries.
+                  What began as virtual assistants and customer support has grown into a service provider delivering live chat, dedicated reps, SDRs, campaigns, and web builds for {SITE_STATS_CLIENTS_COUNTRIES}.
                 </p>
                 <p>
-                  We saw businesses struggling to manage multiple vendors — one for marketing, another for staff, another for web design. The complexity was killing their growth. We fixed that by bringing everything under one roof.
+                  We saw teams losing time coordinating freelancers, agencies, and offshore shops. Response times slipped. Context got lost between handoffs. We fixed that by delivering everything through one accountable provider.
                 </p>
                 <p>
-                  Today, we're the ONLY agency that offers marketing + virtual staff in one package. Our clients save 50-75% compared to hiring these services separately — and they get better results because everything works together.
+                  Today, clients get support, staff, and marketing in one package — often saving 40–60% versus hiring each service separately, with one team that already knows their tools and tone.
                 </p>
               </div>
             </div>
@@ -198,13 +170,13 @@ export default function AboutPage() {
                 Our Mission
               </h3>
               <p className="text-text-secondary mb-6">
-                Help businesses stop overpaying for marketing and virtual staff by putting both under one roof — with people who actually care about results.
+                Help companies deliver faster support, reliable virtual staff, and steady marketing — without stitching together five different vendors.
               </p>
               <h3 className="font-display text-xl font-bold text-text-primary mb-4">
-                Where We're Headed
+                Where We&apos;re Headed
               </h3>
               <p className="text-text-secondary">
-                We want to be the first call when a business needs to grow but doesn't want to deal with five different agencies to make it happen.
+                We want to be the first call when a team needs live chat, customer support, virtual staff, or marketing — and doesn&apos;t want to juggle five different providers to make it happen.
               </p>
             </div>
           </div>
@@ -260,38 +232,6 @@ export default function AboutPage() {
             </div>
           </div>
 
-          {/* Team Section */}
-          <div className="mb-20">
-            <h2 className="font-display text-3xl font-bold text-text-primary text-center mb-4">
-              Meet Our Team
-            </h2>
-            <p className="text-text-secondary text-center mb-12 max-w-2xl mx-auto">
-              Our dedicated team is committed to your success. Each member brings expertise in their field to deliver exceptional results.
-            </p>
-            <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-              {team.map((member, index) => (
-                <FadeUp key={member.name} delay={index * 0.1}>
-                  <GlassCard className="p-6 text-center">
-                    <div className="w-20 h-20 rounded-full bg-white/[0.06] border border-[#22C55E]/20 flex items-center justify-center mx-auto mb-4">
-                      <span className="text-3xl font-bold text-[#22C55E]">
-                        {member.name.charAt(0)}
-                      </span>
-                    </div>
-                    <h3 className="font-display text-lg font-bold text-text-primary mb-1">
-                      {member.name}
-                    </h3>
-                    <p className="text-[#22C55E] text-sm font-medium mb-2">
-                      {member.role}
-                    </p>
-                    <p className="text-text-muted text-sm">
-                      {member.description}
-                    </p>
-                  </GlassCard>
-                </FadeUp>
-              ))}
-            </div>
-          </div>
-
           {/* CTA */}
           <div className="text-center">
             <h2 className="font-display text-2xl font-bold text-text-primary mb-4">
@@ -304,7 +244,7 @@ export default function AboutPage() {
               href={FREE_AUDIT_CONTACT_HREF}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#22C55E] hover:bg-[#4ADE80] text-black font-semibold px-8 py-4 rounded-lg transition-colors duration-300"
             >
-              🎯 Get Your FREE Digital Audit
+              Free Consultation
             </a>
           </div>
         </div>

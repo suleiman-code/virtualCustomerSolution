@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Inter, IBM_Plex_Mono } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { officeLocations } from "@/lib/content";
+import { SITE_STATS, SITE_STATS_CLIENTS_COUNTRIES } from "@/lib/site-stats";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-display",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     template: "%s | Virtual Customer Solution",
   },
   description:
-    "Save 50-75% with AI-powered digital marketing, virtual teams & web development. 200+ clients in 15+ countries. Get your free consultation today.",
+    `Live chat, customer support, virtual teams & web — one service provider. ${SITE_STATS_CLIENTS_COUNTRIES}. Request a free consultation.`,
   keywords: [
     "IT consulting",
     "digital marketing agency",
@@ -130,7 +130,7 @@ export default function RootLayout({
                   logo: 'https://www.virtualcustomersolution.com/Virtual.png',
                   image: 'https://www.virtualcustomersolution.com/opengraph-image',
                   description:
-                    'AI-powered digital marketing, virtual workforce, and web development solutions for businesses in 15+ countries.',
+                    `Service provider for live chat, customer support, virtual workforce, marketing, and web — ${SITE_STATS_CLIENTS_COUNTRIES}.`,
                   email: 'contact@virtualcustomersolution.com',
                   telephone: officeLocations.usa.phoneTel,
                   priceRange: '$399-$2499/mo',
@@ -196,7 +196,7 @@ export default function RootLayout({
                     name: 'M Faizan Rafiq',
                     jobTitle: 'Founder & CEO',
                   },
-                  foundingDate: '2017',
+                  foundingDate: String(SITE_STATS.foundedYear),
                   numberOfEmployees: {
                     '@type': 'QuantitativeValue',
                     minValue: 50,
@@ -287,11 +287,6 @@ export default function RootLayout({
       >
         {children}
         <Toaster />
-        <Script
-          src="https://alpha-command-center.vercel.app/tracker.js"
-          data-key="cmmsabwlt0003rgw4qj6w0y0e"
-          strategy="afterInteractive"
-        />
       </body>
     </html>
   );

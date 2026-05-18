@@ -19,6 +19,7 @@ export interface CrmLeadPayload {
   email: string;
   phone?: string;
   company?: string;
+  companyWebsite?: string;
   service?: string;
   budget?: string;
   message?: string;

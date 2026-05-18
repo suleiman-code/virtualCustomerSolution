@@ -3,47 +3,56 @@
 import { Quote, Star } from 'lucide-react';
 import { FadeUp, GlassCard, SignalPoint, StaggerContainer, StaggerItem } from '@/components/ui-dp/AnimatedElements';
 import { AnimatedCounter } from '@/components/motion/animated-counter';
+import { SITE_STATS } from '@/lib/site-stats';
 
 const testimonials = [
   {
-    quote: "We were paying $8,000/month to two separate companies. VCS gave us better results for a fraction of that. Honestly didn't expect it.",
+    quote:
+      'Two live chat agents through VCS — $1,650/month total. Shipping and checkout questions get answered in under two minutes now.',
     author: 'Sarah M.',
     company: 'E-Commerce Owner',
     location: 'USA',
-    results: ['50-75% Savings', 'Better Results'],
+    results: ['$1,650/mo', 'Live Chat'],
     rating: 5,
+    timeAgo: '3 weeks ago',
   },
   {
-    quote: "The marketing person they gave us actually understands our product. That's rare for an outsourced team.",
+    quote:
+      'One support rep on email and Intercom for $980/month. Covers our busiest hours without us hiring locally again.',
     author: 'James R.',
     company: 'SaaS Founder',
     location: 'UK',
-    results: ['Dedicated Team', 'Easy Onboarding'],
+    results: ['$980/mo', 'Customer Support'],
     rating: 5,
+    timeAgo: '1 week ago',
   },
   {
-    quote: "Took about 4 months to really see the numbers change, but once they did — wow. We're getting 3x back on what we spend with them.",
+    quote:
+      'SDR placement at $1,200/month. Eleven qualified calls booked in month one — we were not doing outbound ourselves before.',
     author: 'Ahmed K.',
     company: 'Agency Owner',
     location: 'Dubai',
-    results: ['3X ROI', '4 Months'],
+    results: ['$1,200/mo', 'SDR'],
     rating: 5,
+    timeAgo: '5 days ago',
   },
   {
-    quote: "They rebuilt our website as part of the package and it looks way better than the one we paid $3K for before. Didn't expect that.",
+    quote:
+      'VA plus landing-page tweaks — about $2,100/month. After-hours site chat finally gets replies, so fewer leads go cold.',
     author: 'Lisa T.',
-    company: 'Real Estate Agent',
+    company: 'Real Estate Tech',
     location: 'Canada',
-    results: ['Free Redesign', 'Great ROI'],
+    results: ['$2,100/mo', 'VA + Web'],
     rating: 5,
+    timeAgo: '2 weeks ago',
   },
 ];
 
 const stats = [
-  { value: 200, suffix: '+', label: 'Clients Served' },
-  { value: 8, suffix: '+', label: 'Years Running' },
-  { value: 15, suffix: '+', label: 'Countries' },
-  { value: 97, suffix: '%', label: 'Client Retention' },
+  { value: SITE_STATS.clients.value, suffix: SITE_STATS.clients.suffix, label: 'Clients Served' },
+  { value: SITE_STATS.years.value, suffix: SITE_STATS.years.suffix, label: 'Years Running' },
+  { value: SITE_STATS.countries.value, suffix: SITE_STATS.countries.suffix, label: 'Countries' },
+  { value: SITE_STATS.retention.value, suffix: SITE_STATS.retention.suffix, label: 'Client Retention' },
 ];
 
 export function TestimonialsSection() {
@@ -122,6 +131,9 @@ export function TestimonialsSection() {
                     </div>
                     <div className="text-[var(--text-muted)] text-xs">
                       {testimonial.company}, {testimonial.location}
+                    </div>
+                    <div className="text-[var(--text-muted)]/70 text-[10px] mt-0.5">
+                      {testimonial.timeAgo}
                     </div>
                   </div>
                 </div>

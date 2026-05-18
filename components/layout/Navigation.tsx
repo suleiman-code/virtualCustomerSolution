@@ -89,11 +89,12 @@ export function Navigation() {
             >
             <Image
               src="/Virtual.png"
-                alt="Virtual Customer Solution"
-                width={360}
-                height={77}
-                className="h-12 w-auto max-h-12 max-w-[260px] object-contain object-center sm:max-w-[300px] md:h-16 md:max-h-16 md:max-w-[340px]"
+              alt="Virtual Customer Solution"
+              width={360}
+              height={77}
+              className="h-12 w-auto max-h-12 max-w-[260px] object-contain object-center sm:max-w-[300px] md:h-16 md:max-h-16 md:max-w-[340px]"
               priority
+              loading="eager"
             />
               <span className="mt-1.5 max-w-[16rem] font-display text-[10px] font-semibold leading-snug tracking-wide text-[#A1A1AA] sm:max-w-[18rem] sm:text-xs md:text-[13px] md:tracking-tight">
                 Virtual Customer Solution
@@ -159,10 +160,7 @@ export function Navigation() {
               onClick={() => navigateTo('free-audit')}
               className={`${ctaButtonClass} pointer-events-auto hidden lg:inline-flex`}
             >
-              <span className="whitespace-nowrap">
-                <span className="hidden sm:inline">Free Consultation</span>
-                <span className="sm:hidden">Free</span>
-              </span>
+              <span className="whitespace-nowrap">Free Consultation</span>
               <ArrowRight className="h-3 w-3 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4" />
             </button>
 

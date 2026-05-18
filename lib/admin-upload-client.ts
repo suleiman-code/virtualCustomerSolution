@@ -1,4 +1,4 @@
-/** Client-side upload to `/api/admin/upload` (cookie session). */
+/** Client-side upload to `/api/backoffice/upload` (cookie session). */
 
 const MAX_BYTES = 3 * 1024 * 1024;
 const ALLOWED_IMAGE_TYPES = new Set([
@@ -18,7 +18,7 @@ export async function uploadAdminImage(file: File): Promise<string> {
   }
   const fd = new FormData();
   fd.append('file', file);
-  const res = await fetch('/api/admin/upload', {
+  const res = await fetch('/api/backoffice/upload', {
     method: 'POST',
     body: fd,
     credentials: 'same-origin',

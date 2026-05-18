@@ -3,6 +3,7 @@
 import { Linkedin, Mail, ArrowRight } from 'lucide-react';
 import { FadeUp, GlassCard, SignalPoint, StaggerContainer, StaggerItem } from '@/components/ui-dp/AnimatedElements';
 import { useNavigation } from '@/lib/navigation';
+import { SITE_STATS } from '@/lib/site-stats';
 
 const companyValues = [
   {
@@ -20,9 +21,9 @@ const companyValues = [
 ];
 
 const trustMetrics = [
-  { value: '8+', label: 'Years in the Game' },
-  { value: '200+', label: 'Businesses Helped' },
-  { value: '$2M+', label: 'Ad Spend Managed' },
+  { value: SITE_STATS.years.display, label: 'Years in the Game' },
+  { value: SITE_STATS.clients.display, label: 'Clients Served' },
+  { value: SITE_STATS.countries.display, label: 'Countries Served' },
 ];
 
 export function FounderSection() {
@@ -121,7 +122,7 @@ export function FounderSection() {
               onClick={() => navigateTo('free-growth-audit')}
               className="inline-flex items-center gap-2 text-[#22C55E] hover:text-[#059669] font-medium group"
             >
-              Request a Growth Audit
+              Free Consultation
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
           </GlassCard>

@@ -18,7 +18,7 @@ export default async function AdminServicesPage() {
 
   return (
     <AdminShell adminUser={admin.user}>
-      <main className="flex-1 overflow-y-auto px-4 py-8 sm:px-6 md:py-10">
+      <div className="mx-auto max-w-5xl px-4 py-8 pb-10 sm:px-6 md:py-10">
         <div className="mx-auto max-w-5xl space-y-10">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
@@ -47,7 +47,7 @@ export default async function AdminServicesPage() {
             <MongoServicesAdminPanel />
           </section>
         </div>
-      </main>
+      </div>
     </AdminShell>
   );
 }

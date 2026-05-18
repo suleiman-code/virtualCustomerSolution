@@ -513,7 +513,7 @@ export default function RemoteWorkStatisticsPage() {
             while reducing costs by up to 60%.
           </p>
           <Link href={FREE_AUDIT_CONTACT_HREF} className="btn-primary gap-2">
-            Get a Free Growth Audit
+            Free Consultation
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

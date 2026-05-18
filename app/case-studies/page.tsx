@@ -1,4 +1,4 @@
-﻿import { Metadata } from "next";
+import { Metadata } from "next";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { caseStudies, getAllServices, getAllIndustries } from "@/lib/case-studies";
 import { CaseStudyGrid } from "./CaseStudyGrid";
@@ -110,7 +110,7 @@ export default function CaseStudiesPage() {
               for your business.
             </p>
             <a href={FREE_AUDIT_CONTACT_HREF} className="btn-primary">
-              Get Your Free Growth Audit
+              Free Consultation
             </a>
           </div>
         </div>

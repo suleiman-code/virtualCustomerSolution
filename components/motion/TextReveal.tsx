@@ -22,7 +22,10 @@ export function TextReveal({
   const words = text.split(' ');
 
   return (
-    <p ref={ref} className={`relative flex flex-wrap gap-x-[0.3em] gap-y-1 ${className}`}>
+    <p
+      ref={ref}
+      className={`relative flex flex-wrap gap-x-[0.3em] gap-y-1 ${className}`}
+    >
       {words.map((word, i) => {
         const start = i / words.length;
         const end = Math.min(start + 1.5 / words.length, 1);
@@ -104,7 +107,7 @@ export function LineReveal({
   delay?: number;
 }) {
   return (
-    <div className="overflow-hidden">
+    <div className="relative overflow-hidden">
       <motion.div
         initial={{ y: '110%', opacity: 0 }}
         whileInView={{ y: 0, opacity: 1 }}

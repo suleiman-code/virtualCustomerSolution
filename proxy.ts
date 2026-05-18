@@ -3,8 +3,15 @@ import type { NextRequest } from 'next/server';
 
 /** Next.js 16+: `middleware` → `proxy` (same edge behaviour, clearer naming). */
 export function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Never run admin UI auth on API routes (avoids breaking /api/backoffice/*)
+  if (pathname.startsWith('/api/')) {
+    return NextResponse.next();
+  }
+
   // Allow the login page itself (otherwise infinite redirect loop)
-  if (request.nextUrl.pathname === '/admin/login') {
+  if (pathname === '/admin/login') {
     return NextResponse.next();
   }
 
@@ -18,5 +25,12 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin', '/admin/:path*'],
+  matcher: [
+    '/admin',
+    '/admin/dashboard/:path*',
+    '/admin/leads/:path*',
+    '/admin/blogs/:path*',
+    '/admin/services/:path*',
+    '/admin/testimonials/:path*',
+  ],
 };

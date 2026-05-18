@@ -10,10 +10,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { GlassCard, FadeUp } from '@/components/ui-dp/AnimatedElements';
 import { SiteShell } from '@/components/layout/SiteShell';
 import { officeLocations } from '@/lib/content';
+import { CONTACT_SERVICE_OPTIONS, contactServiceLabel } from '@/lib/contact-services';
 
 const AUDIT_INTENT = 'free-audit';
-const AUDIT_MESSAGE_DEFAULT =
-  "I'd like to request a free digital audit for my business. Here's a bit about what I'm looking for:\n\n";
+const CONSULTATION_MESSAGE_DEFAULT =
+  "I'd like to request a free consultation. Here's what we need help with (support, virtual staff, marketing, or web):\n\n";
 
 const formFieldClass =
   'w-full min-h-[44px] rounded-lg border border-white/12 bg-[#121212] px-3 py-2.5 text-sm text-[#F5F5F5] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-[#22C55E] focus:ring-offset-0';
@@ -53,7 +54,7 @@ function ContactPageNav({ auditFlow }: { auditFlow: boolean }) {
           <span className="text-[#3f3f46]" aria-hidden>
             /
           </span>
-          <span className="text-[#71717A]">Free audit</span>
+          <span className="text-[#71717A]">Free Consultation</span>
         </>
       )}
       <span className="text-[#3f3f46]" aria-hidden>
@@ -64,27 +65,11 @@ function ContactPageNav({ auditFlow }: { auditFlow: boolean }) {
   );
 }
 
-const serviceOptions = [
-  { value: 'digital-marketing', label: 'Digital Marketing' },
-  { value: 'remote-workforce', label: 'Virtual Workforce' },
-  { value: 'web-solutions', label: 'Web Solutions' },
-  { value: 'business-growth', label: 'Business Growth' },
-  { value: 'not-sure', label: 'Not Sure / Multiple' },
-];
-
-const budgetOptions = [
-  { value: 'under-1k', label: 'Under $1,000/mo' },
-  { value: '1k-5k', label: '$1,000 - $5,000/mo' },
-  { value: '5k-10k', label: '$5,000 - $10,000/mo' },
-  { value: '10k+', label: '$10,000+/mo' },
-  { value: 'other', label: 'Other' },
-];
-
 function ContactPageFallback() {
   return (
     <SiteShell>
-      <div className="pt-32 pb-20">
-        <div className="container-wide">
+      <div className="pb-16 pt-[calc(var(--site-header-height)+1.5rem)] sm:pb-20">
+        <div className="container-wide max-w-full">
           <div className="h-10 w-64 animate-pulse rounded-lg bg-white/[0.06]" />
           <div className="mx-auto mt-16 max-w-4xl space-y-4 text-center">
             <div className="mx-auto h-12 max-w-md animate-pulse rounded-lg bg-white/[0.06]" />
@@ -105,7 +90,7 @@ function ContactPageInner() {
     email: '',
     phone: '',
     service: '',
-    budget: '',
+    companyWebsite: '',
     message: '',
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -114,7 +99,7 @@ function ContactPageInner() {
     if (!auditFlow) return;
     setFormData((prev) => {
       if (prev.message.trim().length > 0) return prev;
-      return { ...prev, message: AUDIT_MESSAGE_DEFAULT };
+      return { ...prev, message: CONSULTATION_MESSAGE_DEFAULT };
     });
   }, [auditFlow]);
 
@@ -129,10 +114,12 @@ function ContactPageInner() {
           name: formData.name,
           email: formData.email,
           phone: formData.phone || undefined,
-          service: formData.service || undefined,
-          budget: formData.budget || undefined,
+          service: formData.service
+            ? contactServiceLabel(formData.service)
+            : undefined,
+          companyWebsite: formData.companyWebsite || undefined,
           message: auditFlow
-            ? `[Free audit request]\n\n${formData.message}`
+            ? `[Free consultation request]\n\n${formData.message}`
             : formData.message,
         }),
       });
@@ -159,10 +146,10 @@ function ContactPageInner() {
   if (isSubmitted) {
     return (
       <SiteShell>
-        <div className="pt-32 pb-20">
-          <div className="container-narrow">
+        <div className="pb-16 pt-[calc(var(--site-header-height)+1.5rem)] sm:pb-20 sm:pt-[calc(var(--site-header-height)+2rem)]">
+          <div className="container-narrow max-w-full px-4 sm:px-6">
             <ContactPageNav auditFlow={auditFlow} />
-            <GlassCard className="p-12 text-center">
+            <GlassCard className="p-6 text-center sm:p-12">
               <div className="mb-6 text-6xl">✅</div>
               <h1 className="font-display text-3xl font-bold text-text-primary mb-4">
                 Message Sent Successfully!
@@ -190,28 +177,28 @@ function ContactPageInner() {
 
   return (
     <SiteShell>
-      <div className="pt-32 pb-20">
-        <div className="container-wide">
+      <div className="pb-16 pt-[calc(var(--site-header-height)+1.5rem)] sm:pb-20 sm:pt-[calc(var(--site-header-height)+2rem)]">
+        <div className="container-wide max-w-full">
           <ContactPageNav auditFlow={auditFlow} />
 
-          <div className="text-center max-w-4xl mx-auto mb-16">
+          <div className="mx-auto mb-10 max-w-4xl px-1 text-center sm:mb-16">
             {auditFlow && (
               <div className="mb-4 inline-block rounded-full border border-[#22C55E]/30 bg-[#22C55E]/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#22C55E]">
                 Free digital audit
               </div>
             )}
-            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-text-primary mb-4">
-              {auditFlow ? 'Request your free audit' : 'Contact Us'}
+            <h1 className="font-display text-3xl font-bold text-text-primary mb-4 sm:text-4xl md:text-5xl lg:text-6xl">
+              {auditFlow ? 'Free Consultation' : 'Contact Us'}
             </h1>
-            <p className="text-text-secondary text-xl">
+            <p className="text-base text-text-secondary sm:text-lg md:text-xl">
               {auditFlow
                 ? 'Tell us about your business and we will reply with next steps — same form as our main contact page.'
                 : 'Got a question or want to talk about a project? Drop us a message and we will get back to you within a few hours.'}
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12">
-            <div>
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-12">
+            <div className="min-w-0">
               <FadeUp>
                 <h2 className="font-display text-2xl font-bold text-text-primary mb-6">Get In Touch</h2>
 
@@ -224,7 +211,7 @@ function ContactPageInner() {
                       <h3 className="font-semibold text-text-primary">Email</h3>
                       <a
                         href="mailto:contact@virtualcustomersolution.com"
-                        className="text-text-secondary hover:text-[#22C55E]"
+                        className="break-all text-text-secondary hover:text-[#22C55E]"
                       >
                         contact@virtualcustomersolution.com
                       </a>
@@ -344,8 +331,8 @@ function ContactPageInner() {
               </FadeUp>
             </div>
 
-            <FadeUp delay={0.2}>
-              <GlassCard className="p-8">
+            <FadeUp delay={0.2} className="min-w-0">
+              <GlassCard className="p-5 sm:p-8">
                 <h2 className="font-display text-2xl font-bold text-text-primary mb-6">
                   {auditFlow ? 'Your audit request' : 'Send Us a Message'}
                 </h2>
@@ -386,36 +373,33 @@ function ContactPageInner() {
                     />
                   </div>
 
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-text-secondary text-sm mb-2">Service Interest</label>
+                  <div className="grid grid-cols-1 gap-4">
+                    <div className="min-w-0 sm:col-span-2">
+                      <label className="mb-2 block text-sm text-text-secondary">
+                        Interested Services
+                      </label>
                       <select
                         value={formData.service}
                         onChange={(e) => setFormData({ ...formData, service: e.target.value })}
                         className={selectFieldClass}
                       >
                         <option value="">Select a service</option>
-                        {serviceOptions.map((option) => (
+                        {CONTACT_SERVICE_OPTIONS.map((option) => (
                           <option key={option.value} value={option.value}>
                             {option.label}
                           </option>
                         ))}
                       </select>
                     </div>
-                    <div>
-                      <label className="block text-text-secondary text-sm mb-2">Budget Range</label>
-                      <select
-                        value={formData.budget}
-                        onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                        className={selectFieldClass}
-                      >
-                        <option value="">Select your budget</option>
-                        {budgetOptions.map((option) => (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))}
-                      </select>
+                    <div className="min-w-0 sm:col-span-2">
+                      <label className="block text-text-secondary text-sm mb-2">Company website</label>
+                      <Input
+                        type="url"
+                        placeholder="https://yourcompany.com"
+                        value={formData.companyWebsite}
+                        onChange={(e) => setFormData({ ...formData, companyWebsite: e.target.value })}
+                        className={formFieldClass}
+                      />
                     </div>
                   </div>
 

@@ -65,7 +65,7 @@ export const pageNames: Record<PageRoute, string> = {
   about: 'About',
   blog: 'Blog',
   contact: 'Contact',
-  'free-audit': 'Free Audit',
+  'free-audit': 'Free Consultation',
   'performance-marketing': 'Performance Marketing',
   'virtual-workforce': 'Virtual Workforce',
   'systems-reporting': 'Systems & Reporting',
@@ -79,9 +79,13 @@ export function useNavigation() {
 
   const currentPage = useMemo<PageRoute>(() => {
     if (!pathname || pathname === '/') return 'home';
-    if (pathname.startsWith('/blog')) return 'blog';
-    if (pathname.startsWith('/services')) return 'services';
-    return pathToPage[pathname] ?? 'home';
+    const path = pathOnly(pathname);
+    if (path === '/') return 'home';
+    if (path.startsWith('/blog') || path.startsWith('/insight')) return 'blog';
+    if (path.startsWith('/services') || path.startsWith('/offering')) return 'services';
+    if (path.startsWith('/about')) return 'about';
+    if (path.startsWith('/contact')) return 'contact';
+    return pathToPage[path] ?? 'home';
   }, [pathname]);
 
   const navigateTo = useCallback(

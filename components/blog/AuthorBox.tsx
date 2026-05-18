@@ -15,7 +15,7 @@ const AUTHORS: Record<string, AuthorData> = {
     name: 'M Faizan Rafiq',
     initials: 'MF',
     title: 'Founder & CEO',
-    bio: 'Faizan started VCS in 2017 after seeing businesses waste money juggling multiple vendors. Now he runs a team that handles marketing, virtual staffing, and operations for 200+ clients across 15 countries.',
+    bio: 'Faizan started VCS to stop teams from juggling separate vendors for chat, support, staff, and marketing. Today VCS delivers those services for 50+ clients across 10+ countries.',
     expertise: ['Digital Strategy', 'Business Growth', 'Virtual Teams'],
     linkedin: 'https://linkedin.com/in/mfaizanrafiq',
   },

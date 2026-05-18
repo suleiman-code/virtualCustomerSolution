@@ -8,7 +8,7 @@ import { RevealOnScroll } from '@/components/animations/ScrollAnimations';
 
 const faqs = [
   {
-    question: 'What happens after I request a free audit?',
+    question: 'What happens after I request a free consultation?',
     answer: 'We take a look at your website, ads, and online presence. Within 24 hours, you get a report showing what\'s working, what\'s not, and what to fix first. If you want our help after that, great. If not, the report is yours to keep.',
   },
   {

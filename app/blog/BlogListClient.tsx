@@ -190,7 +190,7 @@ export function BlogListClient({ posts, categories }: BlogListClientProps) {
               <Link
                 key={cardKey}
                 href={href}
-                className="glass-panel group flex h-full min-h-0 flex-col overflow-hidden p-0 transition-all hover:border-[rgba(34,197,94,0.2)]"
+                className="glass-panel group flex h-full min-h-0 cursor-pointer flex-col overflow-hidden p-0 transition-all hover:border-[rgba(34,197,94,0.2)]"
               >
                 <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-[#070b09]">
                   <BlogCardMedia

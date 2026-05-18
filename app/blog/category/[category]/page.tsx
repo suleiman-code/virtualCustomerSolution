@@ -16,7 +16,7 @@ const CATEGORY_DESCRIPTIONS: Record<string, string> = {
   'virtual-workforce':
     'Best practices for building, managing, and scaling remote teams that deliver results.',
   'remote-work':
-    'Tips and strategies for building, managing, and scaling remote teams from our 8+ years of experience.',
+    'Tips and strategies for building, managing, and scaling remote teams from our 3+ years of delivery experience.',
   'business-growth':
     'Proven strategies and frameworks to scale your business efficiently while reducing overhead.',
   'seo':

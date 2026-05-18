@@ -1,7 +1,27 @@
-import { cookies } from 'next/headers'
+import { timingSafeEqual } from 'crypto';
+import { cookies } from 'next/headers';
+import type { NextResponse } from 'next/server';
 
-const COOKIE_NAME = 'vcs_admin_session'
-const SESSION_MAX_AGE = 60 * 60 * 8 // 8 hours
+const COOKIE_NAME = 'vcs_admin_session';
+const SESSION_MAX_AGE = 60 * 60 * 8; // 8 hours
+
+export function sessionCookieOptions() {
+  return {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax' as const,
+    path: '/',
+    maxAge: SESSION_MAX_AGE,
+  };
+}
+
+export function attachSessionCookie(response: NextResponse, token: string): void {
+  response.cookies.set(COOKIE_NAME, token, sessionCookieOptions());
+}
+
+export function clearSessionCookieOnResponse(response: NextResponse): void {
+  response.cookies.set(COOKIE_NAME, '', { ...sessionCookieOptions(), maxAge: 0 });
+}
 
 function base64(value: string): string {
   return Buffer.from(value, 'utf-8').toString('base64url')
@@ -39,27 +59,26 @@ export interface AdminCredentials {
 }
 
 export function getAdminCredentials(): AdminCredentials | null {
-  const user = process.env.ADMIN_USER
-  const pass = process.env.ADMIN_PASS
-  if (!user || !pass) return null
-  return { user, pass }
+  const user = process.env.ADMIN_USER?.trim();
+  const pass = process.env.ADMIN_PASS;
+  if (!user || !pass) return null;
+  return { user, pass };
+}
+
+function safeEqual(a: string, b: string): boolean {
+  const left = Buffer.from(a, 'utf8');
+  const right = Buffer.from(b, 'utf8');
+  if (left.length !== right.length) {
+    if (left.length > 0) timingSafeEqual(left, left);
+    return false;
+  }
+  return timingSafeEqual(left, right);
 }
 
 export function verifyCredentials(user: string, pass: string): boolean {
-  const creds = getAdminCredentials()
-  if (!creds) return false
-  // Constant-time-ish equality
-  if (user.length !== creds.user.length || pass.length !== creds.pass.length) {
-    return false
-  }
-  let same = 0
-  for (let i = 0; i < user.length; i++) {
-    same |= user.charCodeAt(i) ^ creds.user.charCodeAt(i)
-  }
-  for (let i = 0; i < pass.length; i++) {
-    same |= pass.charCodeAt(i) ^ creds.pass.charCodeAt(i)
-  }
-  return same === 0
+  const creds = getAdminCredentials();
+  if (!creds) return false;
+  return safeEqual(user.trim(), creds.user) && safeEqual(pass, creds.pass);
 }
 
 export async function createSessionToken(user: string): Promise<string> {
@@ -94,14 +113,8 @@ export async function verifySessionToken(
 }
 
 export async function setSessionCookie(token: string): Promise<void> {
-  const store = await cookies()
-  store.set(COOKIE_NAME, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-    maxAge: SESSION_MAX_AGE,
-  })
+  const store = await cookies();
+  store.set(COOKIE_NAME, token, sessionCookieOptions());
 }
 
 export async function clearSessionCookie(): Promise<void> {

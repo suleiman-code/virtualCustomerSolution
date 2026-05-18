@@ -113,6 +113,20 @@ html {
   scroll-padding-top: var(--site-header-height);
 }
 
+/* Pointer on all interactive controls (consistent across pages) */
+a[href],
+button:not(:disabled),
+select,
+summary,
+[role="button"],
+input[type="submit"],
+input[type="button"],
+input[type="reset"],
+label[for],
+.cursor-pointer {
+  cursor: pointer;
+}
+
 body {
   background-color: var(--bg-primary);
   color: var(--text-secondary);
@@ -299,9 +313,10 @@ h1, h2, h3, h4, h5, h6 {
 .container-wide {
   margin-left: auto;
   margin-right: auto;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
   max-width: 84rem;
+  width: 100%;
 }
 
 @media (min-width: 640px) {

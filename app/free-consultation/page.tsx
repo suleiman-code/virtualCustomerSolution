@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import { SiteShell } from '@/components/layout/SiteShell'
 import LeadForm from '@/components/LeadForm'
+import { SITE_STATS } from '@/lib/site-stats'
 
 // ─── Animated Counter ───────────────────────────────────────────────────────
 
@@ -87,18 +88,18 @@ const whatTheyGet = [
 ]
 
 const trustSignals = [
-  { end: 200, suffix: '+', label: 'Teams Deployed' },
-  { end: 5, suffix: '', label: 'Countries' },
-  { end: 92, suffix: '%', label: 'Client Retention' },
-  { end: 2017, suffix: '', label: 'Since', isYear: true },
+  { end: SITE_STATS.clients.value, suffix: SITE_STATS.clients.suffix, label: 'Teams Deployed' },
+  { end: SITE_STATS.countries.value, suffix: SITE_STATS.countries.suffix, label: 'Countries' },
+  { end: SITE_STATS.retention.value, suffix: SITE_STATS.retention.suffix, label: 'Client Retention' },
+  { end: SITE_STATS.foundedYear, suffix: '', label: 'Since', isYear: true },
 ]
 
 const painPoints = [
   {
     icon: TrendingDown,
     quote:
-      'Spending $8K/month on a local dev when you could pay $2.5K for equal talent?',
-    tag: 'Budget hemorrhage',
+      'Paying $2,400+/month for chat and support across three vendors when one provider could run it?',
+    tag: 'Vendor sprawl',
   },
   {
     icon: Repeat,

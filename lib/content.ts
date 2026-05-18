@@ -1,7 +1,7 @@
 export const siteConfig = {
   name: "Virtual Customer Solution",
   description:
-    "Remote teams, digital marketing, web development, and operations support — all under one roof. Virtual Customer Solution helps businesses grow without the overhead.",
+    "Virtual Customer Solution — your service provider for live chat, customer support, remote staff, digital marketing, and web development under one roof.",
   siteUrl: "https://virtualcustomersolution.com",
   ogImage: "/opengraph-image",
   primaryCtaHref: "#strategy-call-form",

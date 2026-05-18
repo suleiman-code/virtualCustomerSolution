@@ -2,15 +2,11 @@
 
 import Image from 'next/image';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
-import { ArrowRight, Sparkles, Zap, Globe, Cpu } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useNavigation } from '@/lib/navigation';
-import { MagneticHover } from '@/components/animations/ScrollAnimations';
+import { Sparkles, Zap, Globe, Cpu } from 'lucide-react';
 
 const smoothEase = [0.16, 1, 0.3, 1] as const;
 
 export function HeroSection() {
-  const { navigateTo } = useNavigation();
   const { scrollY } = useScroll();
 
   const rawY = useTransform(scrollY, [0, 800], [0, 40]);
@@ -36,7 +32,7 @@ export function HeroSection() {
       <div className="container-wide relative z-10 w-full pb-14 pt-6 sm:pb-16 sm:pt-8">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-12 xl:gap-16">
           <div className="min-w-0 max-w-3xl lg:max-w-none">
-            <motion.div style={{ y, opacity }} className="max-w-xl text-left">
+            <motion.div style={{ y, opacity }} className="relative max-w-xl text-left">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -66,46 +62,20 @@ export function HeroSection() {
               transition={{ duration: 0.7, delay: 0.25, ease: smoothEase }}
               className="mt-6 max-w-md text-lg leading-relaxed text-white/65"
             >
-              Virtual staff, marketing, web development, and operations support &mdash; all under one roof. We handle
-              the work so you can focus on growing your business.
+              Live chat, customer support, virtual staff, marketing, and web builds &mdash; one service provider,
+              one team. We handle delivery so you can focus on your clients and growth.
             </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.4, ease: smoothEase }}
-              className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap"
-            >
-              <MagneticHover strength={0.3}>
-                <Button
-                  onClick={() => navigateTo('free-audit')}
-                  className="neon-box-strong group w-full bg-[#22C55E] px-8 py-6 text-lg font-bold text-black transition-all duration-300 hover:bg-[#4ADE80] hover:shadow-[0_0_40px_rgba(34,197,94,0.4)] sm:w-auto"
-                >
-                  Get Your Free Consultation
-                  <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
-                </Button>
-              </MagneticHover>
-              <MagneticHover strength={0.3}>
-                <Button
-                  onClick={() => navigateTo('services')}
-                  variant="outline"
-                  className="w-full border border-white/20 bg-white/5 px-8 py-6 text-lg text-white backdrop-blur-sm transition-all duration-300 hover:border-[#22C55E] hover:bg-[rgba(34,197,94,0.1)] sm:w-auto"
-                >
-                  Explore Services
-                </Button>
-              </MagneticHover>
-            </motion.div>
 
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.55, ease: smoothEase }}
+              transition={{ duration: 0.8, delay: 0.4, ease: smoothEase }}
               className="mt-10 flex flex-wrap gap-6"
             >
               {[
-                { icon: Zap, label: '200+ Clients Served', color: '#22C55E' },
-                { icon: Globe, label: '15+ Countries', color: '#059669' },
-                { icon: Cpu, label: '8+ Years Experience', color: '#22C55E' },
+                { icon: Zap, label: '50+ Clients Served', color: '#22C55E' },
+                { icon: Globe, label: '10+ Countries', color: '#059669' },
+                { icon: Cpu, label: '3+ Years Delivering', color: '#22C55E' },
               ].map((item) => (
                 <div key={item.label} className="flex items-center gap-2 text-white/50">
                   <item.icon size={14} style={{ color: item.color }} />

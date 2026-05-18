@@ -119,8 +119,17 @@ export function OurServices({ sectionId = 'services' }: OurServicesProps) {
           fetch(`/api/services?skip=0&limit=${HOME_PAGE_SIZE}`),
         ]);
 
-        const pinnedData = await pinnedRes.json();
-        const unpinnedData = await unpinnedRes.json();
+        const pinnedData = pinnedRes.ok ? await pinnedRes.json() : [];
+        const unpinnedData = unpinnedRes.ok
+          ? await unpinnedRes.json()
+          : { services: [], hasMore: false };
+
+        if (!pinnedRes.ok) {
+          console.warn('[OurServices] pinned fetch failed:', pinnedRes.status);
+        }
+        if (!unpinnedRes.ok) {
+          console.warn('[OurServices] list fetch failed:', unpinnedRes.status);
+        }
 
         setPinnedServices(Array.isArray(pinnedData) ? pinnedData : []);
         setServices(Array.isArray(unpinnedData.services) ? unpinnedData.services : []);
@@ -235,9 +244,10 @@ export function OurServices({ sectionId = 'services' }: OurServicesProps) {
                   return (
                     <StaggerItem key={service.id} className="h-full min-h-0">
                       <RevealOnScroll variant="blur-in" duration={0.6} className="h-full min-h-0">
-                        <article
+                        <Link
+                          href={`/offering/${service.id}`}
                           className={cn(
-                            'flex h-full min-w-0 flex-col overflow-hidden rounded-2xl transition-shadow duration-300',
+                            'group flex h-full min-w-0 cursor-pointer flex-col overflow-hidden rounded-2xl transition-shadow duration-300',
                             isHomeServices
                               ? 'bg-[#111]/95 shadow-[0_8px_40px_rgba(0,0,0,0.5)] ring-1 ring-white/[0.08] hover:shadow-[0_12px_48px_rgba(34,197,94,0.12)]'
                               : 'bg-[#101010]/95 shadow-[0_8px_40px_rgba(0,0,0,0.45)] ring-1 ring-white/[0.08] hover:shadow-[0_12px_48px_rgba(20,217,196,0.12)]'
@@ -321,26 +331,20 @@ export function OurServices({ sectionId = 'services' }: OurServicesProps) {
                                 isHomeServices ? 'border-white/[0.08]' : 'border-white/[0.08]'
                               )}
                             >
-                              <Button
-                                asChild
+                              <span
                                 className={cn(
-                                  'h-10 w-full rounded-full px-4 text-sm font-semibold shadow-none sm:h-9 sm:w-auto',
+                                  'inline-flex h-10 w-full items-center justify-center gap-1.5 rounded-full px-4 text-sm font-semibold transition-colors sm:h-9 sm:w-auto',
                                   isHomeServices
-                                    ? 'border border-[#22C55E]/35 bg-[#22C55E]/15 text-[#86EFAC] hover:bg-[#22C55E]/25'
-                                    : 'border border-[#14d9c4]/35 bg-[#14d9c4]/15 text-[#99F6E4] hover:bg-[#14d9c4]/25'
+                                    ? 'border border-[#22C55E]/35 bg-[#22C55E]/15 text-[#86EFAC] group-hover:bg-[#22C55E]/25'
+                                    : 'border border-[#14d9c4]/35 bg-[#14d9c4]/15 text-[#99F6E4] group-hover:bg-[#14d9c4]/25'
                                 )}
                               >
-                                <Link
-                                  href={`/offering/${service.id}`}
-                                  className="inline-flex items-center gap-1.5"
-                                >
-                                  Details
-                                  <ArrowRight className="h-3.5 w-3.5" />
-                                </Link>
-                              </Button>
+                                Details
+                                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                              </span>
                             </div>
                           </div>
-                        </article>
+                        </Link>
                       </RevealOnScroll>
                     </StaggerItem>
                   );
